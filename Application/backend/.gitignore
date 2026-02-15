@@ -1,0 +1,47 @@
+
+# Build results
+bin/
+obj/
+out/
+publish/
+
+# Visual Studio files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+*.log
+
+.DS_Store
+Thumbs.db
+
+packages/
+*.nupkg
+*.snupkg
+.nuget/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+wwwroot/lib/
+appsettings.*.Development.json
+secrets.json
+
+*.Publish.xml
+*.pubxml
+*.azurePubxml
+
+Migrations/*Snapshot.cs
+
+# Dotnet tools
+.dotnet/
+
+*.tmp
+*.temp

@@ -4,6 +4,7 @@ namespace Core.Enums
     {
         Active,
         Paused,
-        GameOver
+        GameOver,
+        Waiting
     }
 }

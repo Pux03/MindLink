@@ -104,7 +104,7 @@ namespace ConsoleTest
 
                 var gameSession = new GameSession
                 {
-                    Name = "Test Partija",
+                    Name = "Test Parr",
                     Board = board,
                     RedTeam = redTeam,
                     BlueTeam = blueTeam,
@@ -193,7 +193,7 @@ namespace ConsoleTest
                     Console.WriteLine($"   - Članovi: {retrievedBlueTeam.Members.Count}");
                     foreach (var member in retrievedBlueTeam.Members)
                     {
-                        Console.WriteLine($"     • {member.Username} (IsMindreader: {member.IsMindreader})");
+                        Console.WriteLine($"     - {member.Username} (IsMindreader: {member.IsMindreader})");
                     }
                 }
 
@@ -204,7 +204,7 @@ namespace ConsoleTest
                     Console.WriteLine($"   - Članovi: {retrievedRedTeam.Members.Count}");
                     foreach (var member in retrievedRedTeam.Members)
                     {
-                        Console.WriteLine($"     • {member.Username} (IsMindreader: {member.IsMindreader})");
+                        Console.WriteLine($"     - {member.Username} (IsMindreader: {member.IsMindreader})");
                     }
                 }
                 Console.WriteLine();
@@ -224,7 +224,7 @@ namespace ConsoleTest
                     Console.WriteLine($"   - Kartice (JSONB): {retrievedBoard.Cards.Count}");
                     foreach (var card in retrievedBoard.Cards)
                     {
-                        Console.WriteLine($"     • Pozicija {card.Position}: {card.Word} ({card.TeamColor}) - Revealed: {card.IsRevealed}");
+                        Console.WriteLine($"     - Pozicija {card.Position}: {card.Word} ({card.TeamColor}) - Revealed: {card.IsRevealed}");
                     }
                 }
                 Console.WriteLine();
@@ -251,7 +251,7 @@ namespace ConsoleTest
                         Console.WriteLine($"   - Plavi tim: {retrievedGame.BlueTeam.Name} ({retrievedGame.BlueTeam.Members.Count} clanova)");
                         foreach (var member in retrievedGame.BlueTeam.Members)
                         {
-                            Console.WriteLine($"     • {member.Username} (IsMindreader: {member.IsMindreader})");
+                            Console.WriteLine($"     - {member.Username} (IsMindreader: {member.IsMindreader})");
                         }
                     }
                     
@@ -260,7 +260,7 @@ namespace ConsoleTest
                         Console.WriteLine($"   - Crveni tim: {retrievedGame.RedTeam.Name} ({retrievedGame.RedTeam.Members.Count} clanova)");
                         foreach (var member in retrievedGame.RedTeam.Members)
                         {
-                            Console.WriteLine($"     • {member.Username} (IsMindreader: {member.IsMindreader})");
+                            Console.WriteLine($"     - {member.Username} (IsMindreader: {member.IsMindreader})");
                         }
                     }
                     
@@ -269,7 +269,7 @@ namespace ConsoleTest
                         Console.WriteLine($"   - Bord kartice (JSONB): {retrievedGame.Board.Cards.Count}");
                         foreach (var card in retrievedGame.Board.Cards)
                         {
-                            Console.WriteLine($"     • Pozicija {card.Position}: {card.Word} ({card.TeamColor})");
+                            Console.WriteLine($"     - Pozicija {card.Position}: {card.Word} ({card.TeamColor})");
                         }
                     }
                     Console.WriteLine();
@@ -311,7 +311,7 @@ namespace ConsoleTest
                 Console.WriteLine($"Aktivne partije: {allActiveGames.Count()}");
                 foreach (var game in allActiveGames)
                 {
-                    Console.WriteLine($"   • {game.Name} (Status: {game.Status})");
+                    Console.WriteLine($"   - {game.Name} (Status: {game.Status})");
                 }
                 Console.WriteLine();
 

@@ -19,6 +19,9 @@ namespace Core.Models
         public DateTime? EndTime { get; set; }
 
         // TODO
+        public List<Player> Players { get; set; } = [];
+
+        // TODO
         public void AddGuess(Guess guess)
         {
             GuessHistory.Add(guess);

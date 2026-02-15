@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Persistence.Data;
 using Persistence.Repositories;
 using Persistence.Mapping;
-using Npgsql;
+using API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +12,13 @@ builder.Services.AddDbContext<MindLinkDbContext>(options =>
 builder.Services.AddAutoMapper(typeof(MappingProfile)); // registruje MappingProfile
 
 
+builder.Services.AddSingleton<IGameSessionManager, GameSessionManager>();
+
+builder.Services.AddScoped<IGameSessionService, GameSessionService>();
+builder.Services.AddScoped<IGameLogicService, GameLogicService>();
+builder.Services.AddScoped<IPlayerService, PlayerService>();
+
+// Repsitoriums
 builder.Services.AddScoped<IBoardRepository, BoardRepository>();
 builder.Services.AddScoped<IGameSessionRepository, GameSessionRepository>();
 builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
