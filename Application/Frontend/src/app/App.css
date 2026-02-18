@@ -1,0 +1,25 @@
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+
+@keyframes glow {
+  0% { text-shadow: 0 0 10px rgba(59,130,246,0.5); }
+  50% { text-shadow: 0 0 25px rgba(20, 74, 160, 0.9); }
+  100% { text-shadow: 0 0 10px rgba(59,130,246,0.5); }
+}
+
+.animate-glow {
+  animation: glow 3s ease-in-out infinite;
+}
