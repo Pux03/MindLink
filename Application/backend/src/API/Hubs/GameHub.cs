@@ -87,11 +87,12 @@ namespace API.Hubs
                 });
 
                 // Consumer će emitovati ostatku klijenata!
+                _logger.LogInformation($"Game {game.Id} created");
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Greška u CreateGame: {ex.Message}");
-                await Clients.Caller.SendAsync("Error", ex.Message);
+                _logger.LogError($"Error in CreateGame: {ex.Message}");
+                await Clients.Caller.Error(ex.Message);
             }
         }
 
@@ -102,13 +103,13 @@ namespace API.Hubs
         {
             try
             {
-                _logger.LogInformation($"JoinGame: igrač {playerName} → partija {gameId}");
+                _logger.LogInformation($"JoinGame: player {playerName} joined game {gameId}");
 
                 var game = _gameSessionManager.GetActiveGame(gameId);
 
                 if (game == null)
                 {
-                    await Clients.Caller.SendAsync("Error", "Partija nije pronađena");
+                    await Clients.Caller.Error("Game not found");
                     return;
                 }
 
@@ -129,7 +130,7 @@ namespace API.Hubs
 
                 // Signalizira samo u toj grupi
                 await Clients.Group($"game_{gameId}")
-                    .SendAsync("PlayerJoined", new
+                    .PlayerJoined( new
                     {
                         PlayerName = playerName,
                         TotalPlayers = game.Players.Count
@@ -137,8 +138,8 @@ namespace API.Hubs
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Greška u JoinGame: {ex.Message}");
-                await Clients.Caller.SendAsync("Error", ex.Message);
+                _logger.LogError($"Error u JoinGame: {ex.Message}");
+                await Clients.Caller.Error(ex.Message);
             }
         }
 
@@ -155,7 +156,7 @@ namespace API.Hubs
 
                 if (game == null)
                 {
-                    await Clients.Caller.SendAsync("Error", "Partija nije pronađena");
+                    await Clients.Caller.Error("Game not found");
                     return;
                 }
 
@@ -164,7 +165,7 @@ namespace API.Hubs
 
                 if (player == null)
                 {
-                    await Clients.Caller.SendAsync("Error", "Igrač nije pronađen");
+                    await Clients.Caller.Error("Player not found");
                     return;
                 }
 
@@ -178,7 +179,7 @@ namespace API.Hubs
                 // Consumer će signalizirati grupi kroz Hub
 
                 // Signalizira pozivajućem igraču odmah
-                await Clients.Caller.SendAsync("GuessResult", new
+                await Clients.Caller.GuessResult(new
                 {
                     IsCorrect = guessEvent.IsCorrect,
                     CardWord = guessEvent.CardWord
@@ -186,8 +187,8 @@ namespace API.Hubs
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Greška u ExecuteGuess: {ex.Message}");
-                await Clients.Caller.SendAsync("Error", ex.Message);
+                _logger.LogError($"Error in ExecuteGuess: {ex.Message}");
+                await Clients.Caller.Error(ex.Message);
             }
         }
 
@@ -204,7 +205,7 @@ namespace API.Hubs
 
                 if (game == null)
                 {
-                    await Clients.Caller.SendAsync("Error", "Partija nije pronađena");
+                    await Clients.Caller.Error("Game not found");
                     return;
                 }
 
@@ -213,7 +214,7 @@ namespace API.Hubs
 
                 if (mindReader == null)
                 {
-                    await Clients.Caller.SendAsync("Error", "Mind Reader nije pronađen");
+                    await Clients.Caller.Error("Mind Reader not found");
                     return;
                 }
 
@@ -225,8 +226,8 @@ namespace API.Hubs
                     wordCount);
 
                 // Signalizira grupi
-                await Clients.Group($"game_{gameId}")
-                    .SendAsync("HintGiven", new
+                 await Clients.Group($"game_{gameId}")
+                    .HintGiven(new
                     {
                         Word = word,
                         WordCount = wordCount
@@ -234,10 +235,37 @@ namespace API.Hubs
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Greška u GiveHint: {ex.Message}");
-                await Clients.Caller.SendAsync("Error", ex.Message);
+                _logger.LogError($"Error u GiveHint: {ex.Message}");
+                await Clients.Caller.Error(ex.Message);
             }
         }
+
+        /// <summary>
+        /// React: connection.invoke("StartGame", gameId)
+        /// </summary>
+        // public async Task StartGame(int gameId)
+        // {
+        //     try
+        //     {
+        //         _logger.LogInformation($"StartGame: {gameId}");
+
+        //         var game = await _gameSessionService.StartGameAsync(gameId);
+
+        //         // GameSessionService ce emitovati event na RabbitMQ!
+
+        //         // Signalizira grupi
+        //         await Clients.Group($"game_{gameId}")
+        //             .SendAsync("GameStarted", new
+        //             {
+        //                 FirstTeam = game.CurrentTeam.ToString()
+        //             });
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         _logger.LogError($"Greška u StartGame: {ex.Message}");
+        //         await Clients.Caller.SendAsync("Error", ex.Message);
+        //     }
+        // }
 
         /// <summary>
         /// React: connection.invoke("StartGame", gameId)
@@ -250,19 +278,73 @@ namespace API.Hubs
 
                 var game = await _gameSessionService.StartGameAsync(gameId);
 
-                // GameSessionService ce emitovati event na RabbitMQ!
-
-                // Signalizira grupi
+                // ← Koristi GameStarted umesto SendAsync!
                 await Clients.Group($"game_{gameId}")
-                    .SendAsync("GameStarted", new
+                    .GameStarted(new
                     {
                         FirstTeam = game.CurrentTeam.ToString()
                     });
+
+                _logger.LogInformation($"✅ Partija {gameId} je počela");
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Greška u StartGame: {ex.Message}");
-                await Clients.Caller.SendAsync("Error", ex.Message);
+                _logger.LogError($"❌ Greška u StartGame: {ex.Message}");
+                await Clients.Caller.Error(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// React: connection.invoke("UpdateTeam", gameId, playerId, teamColor, isMindreader)
+        /// </summary>
+        public async Task UpdateTeam(int gameId, int playerId, string teamColor, bool isMindreader)
+        {
+            try
+            {
+                _logger.LogInformation($"UpdateTeam: {playerId} → {teamColor}");
+
+                var game = _gameSessionManager.GetActiveGame(gameId);
+
+                if (game == null)
+                {
+                    await Clients.Caller.Error("Partija nije pronađena");
+                    return;
+                }
+
+                var player = game.Players.FirstOrDefault(p => p.Id == playerId);
+
+                if (player == null)
+                {
+                    await Clients.Caller.Error("Player not found");
+                    return;
+                }
+
+                // Ukloni iz starog tima
+                game.RedTeam.Members.Remove(player);
+                game.BlueTeam.Members.Remove(player);
+
+                // Dodaj u novi tim
+                var newTeam = teamColor.ToLower() == "red" ? game.RedTeam : game.BlueTeam;
+                newTeam.Members.Add(player);
+                player.Team = newTeam;
+                player.IsMindreader = isMindreader;
+
+                // ← Koristi PlayerTeamChanged umesto SendAsync!
+                await Clients.Group($"game_{gameId}")
+                    .PlayerTeamChanged(new
+                    {
+                        PlayerId = playerId,
+                        PlayerName = player.Username,
+                        NewTeam = teamColor,
+                        IsMindreader = isMindreader
+                    });
+
+                _logger.LogInformation($"Player {player.Username} changed team");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error UpdateTeam: {ex.Message}");
+                await Clients.Caller.Error(ex.Message);
             }
         }
     }

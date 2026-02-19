@@ -112,8 +112,7 @@ namespace API.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse<GameSessionDTO>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ApiResponse<GameSessionDTO>>> CreateGame(
-            [FromBody] CreateGameRequest request)
+        public async Task<ActionResult<ApiResponse<GameSessionDTO>>> CreateGame([FromBody] CreateGameRequest request)
         {
             try
             {

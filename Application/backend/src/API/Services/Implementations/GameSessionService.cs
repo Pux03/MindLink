@@ -4,6 +4,8 @@ using Core.Enums;
 using Core.Models;
 using Persistence.Entities;
 using Persistence.Repositories;
+using System.Text.Json;
+
 
 namespace API.Services
 {
@@ -194,7 +196,73 @@ namespace API.Services
         // TODO make it so it reads from JSON file of all available words
         private Board GenerateBoard()
         {
-            return null;
+            var filePath = Path.GetFullPath(
+                Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "core", "words", "words.json")
+            );
+
+            if (!File.Exists(filePath))
+                throw new FileNotFoundException($"words.json not found at: {filePath}");
+
+            var json = File.ReadAllText(filePath);
+
+            using var doc = JsonDocument.Parse(json);
+
+            var words = doc.RootElement
+                .GetProperty("words")
+                .EnumerateArray()
+                .Select(x => x.GetString())
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Distinct()
+                .ToList()!;
+
+            if (words.Count < 25)
+                throw new Exception("Not enough words in words.json");
+
+            var random = new Random();
+
+            // uzmi 25 random reci
+            var selectedWords = words
+                .OrderBy(x => random.Next())
+                .Take(25)
+                .ToList();
+
+            // odredi koji tim pocinje
+            var startingTeam = random.Next(2) == 0 ? TeamColor.Red : TeamColor.Blue;
+
+            // raspodela boja
+            var colors = new List<TeamColor>();
+
+            if (startingTeam == TeamColor.Red)
+            {
+                colors.AddRange(Enumerable.Repeat(TeamColor.Red, 9));
+                colors.AddRange(Enumerable.Repeat(TeamColor.Blue, 8));
+            }
+            else
+            {
+                colors.AddRange(Enumerable.Repeat(TeamColor.Blue, 9));
+                colors.AddRange(Enumerable.Repeat(TeamColor.Red, 8));
+            }
+
+            colors.AddRange(Enumerable.Repeat(TeamColor.Neutral, 7));
+            colors.Add(TeamColor.Bomb);
+
+            // promesaj boje
+            colors = colors.OrderBy(x => random.Next()).ToList();
+
+            var board = new Board();
+
+            for (int i = 0; i < 25; i++)
+            {
+                board.Cards.Add(new Card
+                {
+                    Position = i,
+                    Word = selectedWords[i]!,
+                    TeamColor = colors[i],
+                    IsRevealed = false
+                });
+            }
+
+            return board;
         }
     }
 }

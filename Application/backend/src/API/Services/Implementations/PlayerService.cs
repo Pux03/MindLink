@@ -81,7 +81,6 @@ namespace API.Services
         {
             try
             {
-
                 var playerEntity = await _playerRepository.GetByIdAsync(playerId);
 
                 if (playerEntity == null)

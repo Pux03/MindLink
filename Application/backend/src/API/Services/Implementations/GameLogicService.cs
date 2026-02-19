@@ -3,6 +3,7 @@ using Core.Enums;
 using Core.Models;
 using Persistence.Repositories;
 using AutoMapper;
+using Core.Events;
 
 namespace API.Services
 {
@@ -51,6 +52,16 @@ namespace API.Services
         }
 
         public TeamColor? DetermineWinner(GameSession game)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<GuessExecutedEvent> ExecuteGuessAsync(GameSession game, Player player, int cardPosition)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<HintGivenEvent> GiveHintAsync(GameSession game, Player mindReader, string word, int wordCount)
         {
             throw new NotImplementedException();
         }

@@ -14,3 +14,19 @@ C:\Users\Lenovo\Desktop\The Vault\Faks\AIPS\MindLink\Application\backend\src\Per
 C:\Users\Lenovo\Desktop\The Vault\Faks\AIPS\MindLink\Application\backend\src\Persistence\obj\Debug\net8.0\refint\Persistence.dll
 C:\Users\Lenovo\Desktop\The Vault\Faks\AIPS\MindLink\Application\backend\src\Persistence\obj\Debug\net8.0\Persistence.pdb
 C:\Users\Lenovo\Desktop\The Vault\Faks\AIPS\MindLink\Application\backend\src\Persistence\obj\Debug\net8.0\ref\Persistence.dll
+C:\Users\LENOVO\Fax\IV\software-architecture\projects\MindLink\Application\backend\src\Persistence\bin\Debug\net8.0\Persistence.deps.json
+C:\Users\LENOVO\Fax\IV\software-architecture\projects\MindLink\Application\backend\src\Persistence\bin\Debug\net8.0\Persistence.dll
+C:\Users\LENOVO\Fax\IV\software-architecture\projects\MindLink\Application\backend\src\Persistence\bin\Debug\net8.0\Persistence.pdb
+C:\Users\LENOVO\Fax\IV\software-architecture\projects\MindLink\Application\backend\src\Persistence\bin\Debug\net8.0\Core.dll
+C:\Users\LENOVO\Fax\IV\software-architecture\projects\MindLink\Application\backend\src\Persistence\bin\Debug\net8.0\Core.pdb
+C:\Users\LENOVO\Fax\IV\software-architecture\projects\MindLink\Application\backend\src\Persistence\obj\Debug\net8.0\Persistence.csproj.AssemblyReference.cache
+C:\Users\LENOVO\Fax\IV\software-architecture\projects\MindLink\Application\backend\src\Persistence\obj\Debug\net8.0\Persistence.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\LENOVO\Fax\IV\software-architecture\projects\MindLink\Application\backend\src\Persistence\obj\Debug\net8.0\Persistence.AssemblyInfoInputs.cache
+C:\Users\LENOVO\Fax\IV\software-architecture\projects\MindLink\Application\backend\src\Persistence\obj\Debug\net8.0\Persistence.AssemblyInfo.cs
+C:\Users\LENOVO\Fax\IV\software-architecture\projects\MindLink\Application\backend\src\Persistence\obj\Debug\net8.0\Persistence.csproj.CoreCompileInputs.cache
+C:\Users\LENOVO\Fax\IV\software-architecture\projects\MindLink\Application\backend\src\Persistence\obj\Debug\net8.0\Persistence.sourcelink.json
+C:\Users\LENOVO\Fax\IV\software-architecture\projects\MindLink\Application\backend\src\Persistence\obj\Debug\net8.0\Persiste.61C28332.Up2Date
+C:\Users\LENOVO\Fax\IV\software-architecture\projects\MindLink\Application\backend\src\Persistence\obj\Debug\net8.0\Persistence.dll
+C:\Users\LENOVO\Fax\IV\software-architecture\projects\MindLink\Application\backend\src\Persistence\obj\Debug\net8.0\refint\Persistence.dll
+C:\Users\LENOVO\Fax\IV\software-architecture\projects\MindLink\Application\backend\src\Persistence\obj\Debug\net8.0\Persistence.pdb
+C:\Users\LENOVO\Fax\IV\software-architecture\projects\MindLink\Application\backend\src\Persistence\obj\Debug\net8.0\ref\Persistence.dll

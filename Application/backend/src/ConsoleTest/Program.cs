@@ -23,7 +23,7 @@ namespace ConsoleTest
                 var services = new ServiceCollection();
 
                 services.AddDbContext<MindLinkDbContext>(options =>
-                    options.UseNpgsql("Host=localhost;Database=mindlinkdb;Username=mindlink;Password=password")
+                    options.UseNpgsql("Host=127.0.0.1;Port=5432;Database=mindlinkdb;Username=mindlink;Password=password")
                 );
 
                 services.AddAutoMapper(typeof(MappingProfile));
