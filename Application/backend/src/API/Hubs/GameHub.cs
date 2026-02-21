@@ -162,35 +162,31 @@ namespace API.Hubs
         /// <summary>
         /// React: connection.invoke("ExecuteGuess", gameCode, cardPosition)
         /// </summary>
-        public async Task ExecuteGuess(string gameCode, int cardPosition)
+        public async Task ExecuteGuess(string gameCode, List<int> cardPositions)
         {
             try
             {
-                _logger.LogInformation($"ExecuteGuess: game={gameCode}, card={cardPosition}");
-
+                _logger.LogInformation($"ExecuteGuess: game={gameCode}, cards={string.Join(",", cardPositions)}");
+                
+                if (cardPositions == null || !cardPositions.Any())
+                {
+                    await Clients.Caller.Error("No cards selected");
+                    return;
+                }
+                
                 var game = _gameSessionManager.GetActiveGame(gameCode);
-
-                if (game == null)
-                {
-                    await Clients.Caller.Error("Game not found");
-                    return;
-                }
-
+                if (game == null) { await Clients.Caller.Error("Game not found"); return; }
+                
                 var currentUserId = GetCurrentUserId();
-                var player = game.Players.FirstOrDefault(p => p.UserId == currentUserId);
+                
+                if (currentUserId == null) { await Clients.Caller.Error("User not authenticated"); return; }
 
-                if (player == null)
-                {
-                    await Clients.Caller.Error("Player not found");
-                    return;
-                }
-
-                var guessEvent = await _gameLogicService.ExecuteGuessAsync(game, player, cardPosition);
+                var guessEvent = await _gameLogicService.ExecuteGuessAsync(game, currentUserId, cardPositions);
 
                 await Clients.Caller.GuessResult(new
                 {
-                    IsCorrect = guessEvent.IsCorrect,
-                    CardWord = guessEvent.CardWord
+                    //guessEvent.IsCorrect,
+                    guessEvent.GuessedCardPositions
                 });
             }
             catch (Exception ex)

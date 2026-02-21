@@ -377,7 +377,7 @@ namespace API.Controllers
 
         private int GetCurrentUserId()
         {
-            var claim = User.FindFirst(ClaimTypes.NameIdentifier);
+            var claim = User.FindFirst("id");
             if (claim == null)
                 throw new UnauthorizedAccessException("User not authenticated");
             return int.Parse(claim.Value);

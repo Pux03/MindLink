@@ -73,9 +73,9 @@ namespace API.Services
 
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Email, user.Email)
+                new Claim("id", user.Id.ToString()),
+                new Claim("username", user.Username),
+                new Claim("email", user.Email)
             };
 
             var token = new JwtSecurityToken(
