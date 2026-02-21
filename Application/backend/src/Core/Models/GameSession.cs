@@ -29,10 +29,16 @@ namespace Core.Models
             return TeamColor.Neutral;
         }
 
+
         // TODO
         public void AddGuess(Guess guess)
         {
             GuessHistory.Add(guess);
+        }
+
+        public void AddHint(Hint hint)
+        {
+            HintHistory.Add(hint);
         }
     }
 

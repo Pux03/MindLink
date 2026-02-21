@@ -6,10 +6,10 @@ namespace API.Services
 {
     public interface IGameLogicService
     {
-        bool isGameOver(GameSession game);
+        bool IsGameOver(GameSession game);
         TeamColor? DetermineWinner(GameSession game);
         bool CanPlayerGuess(GameSession game, Player player);
-        Task<GuessExecutedEvent> ExecuteGuessAsync(GameSession game, Player player, int cardPosition);
+        Task<GuessExecutedEvent> ExecuteGuessAsync(GameSession game, int userId, List<int> cardPositions);
         Task<HintGivenEvent> GiveHintAsync(GameSession game, Player mindReader, string word, int wordCount);
         
     }

@@ -51,14 +51,47 @@ namespace API.Services
             return true;
         }
 
-        public TeamColor? DetermineWinner(GameSession game)
+        public async Task<GuessExecutedEvent> ExecuteGuessAsync(GameSession game, int userId, List<int> cardPositions)
         {
-            throw new NotImplementedException();
-        }
+            var player = game.Players.FirstOrDefault(p => p.UserId == userId);
+            
+            if (player == null)
+                throw new Exception("Player not found");
 
-        public Task<GuessExecutedEvent> ExecuteGuessAsync(GameSession game, Player player, int cardPosition)
-        {
-            throw new NotImplementedException();
+            var guessedCards = game.Board.Cards
+                .Where(c => cardPositions.Contains(c.Position))
+                .ToList();
+
+            if (guessedCards.Count != cardPositions.Count)
+                throw new Exception("One or more card positions are invalid");
+
+            foreach (var card in guessedCards)
+            {
+                card.IsRevealed = true;
+            }
+
+            // Saving guesses to history in game session object
+            foreach (var card in guessedCards)
+            {
+                game.AddGuess(new Guess
+                {
+                    PlayerId = player.Id,
+                    CardPosition = card.Position,
+                    Timestamp = DateTime.UtcNow
+                });
+            }   
+
+            var isGameOver = IsGameOver(game);
+
+            //await _gameRepository.UpdateAsync(game);
+            return new GuessExecutedEvent
+            {
+                UserId = userId,
+                //IsCorrect = isCorrect,
+                GuessedCardPositions = cardPositions,
+                //IsGameOver = isGameOver,
+                //WinnerTeam = game.Winner
+            };
         }
 
         public Task<HintGivenEvent> GiveHintAsync(GameSession game, Player mindReader, string word, int wordCount)
@@ -66,7 +99,36 @@ namespace API.Services
             throw new NotImplementedException();
         }
 
-        public bool isGameOver(GameSession game)
+        public bool IsGameOver(GameSession game)
+        {
+            var redCardsRevealed = game.Board.Cards
+                .Where(c => c.TeamColor == TeamColor.Red)
+                .All(c => c.IsRevealed);
+
+            var blueCardsRevealed = game.Board.Cards
+                .Where(c => c.TeamColor == TeamColor.Blue)
+                .All(c => c.IsRevealed);
+
+            if (redCardsRevealed)
+            {
+                game.Winner = TeamColor.Red;
+                game.Status = GameStatus.GameOver;
+                game.EndTime = DateTime.UtcNow;
+                return true;
+            }
+
+            if (blueCardsRevealed)
+            {
+                game.Winner = TeamColor.Blue;
+                game.Status = GameStatus.GameOver;
+                game.EndTime = DateTime.UtcNow;
+                return true;
+            }
+
+            return false;
+        }
+
+        public TeamColor? DetermineWinner(GameSession game)
         {
             throw new NotImplementedException();
         }

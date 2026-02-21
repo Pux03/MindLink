@@ -156,10 +156,10 @@ namespace API.MessageQueue
                 .Group($"game_{@event.GameSessionId}")
                 .GuessExecuted(new
                 {
-                    CardWord = @event.CardWord,
-                    CardTeam = @event.CardTeam.ToString(),
-                    IsCorrect = @event.IsCorrect,
-                    Index = @event.Index
+                    //CardWord = @event.CardWord,
+                    //CardTeam = @event.CardTeam.ToString(),
+                    //IsCorrect = @event.IsCorrect,
+                    //Index = @event.Index
                 });
         }
 
