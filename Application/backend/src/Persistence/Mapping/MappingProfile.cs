@@ -39,12 +39,12 @@ namespace Persistence.Mapping
             // 3. CARD MAPPING 
             //
             CreateMap<Card, CardEntity>()
-                // TeamColor (enum) → TeamColor? (nullable enum)
+                // TeamColor (enum) GåÆ TeamColor? (nullable enum)
                 .ForMember(dest => dest.TeamColor, 
                     opt => opt.MapFrom(src => src.TeamColor))
                 
                 .ReverseMap()
-                // TeamColor? (nullable enum) → TeamColor (enum)
+                // TeamColor? (nullable enum) GåÆ TeamColor (enum)
                 .ForMember(dest => dest.TeamColor, 
                     opt => opt.MapFrom(src => src.TeamColor ?? TeamColor.Blue));
 
@@ -106,7 +106,7 @@ namespace Persistence.Mapping
                 .ForMember(dest => dest.GameSession, opt => opt.Ignore())
                 .ForMember(dest => dest.Index, opt => opt.Ignore())
                 .ForMember(dest => dest.CardPosition, 
-                    opt => opt.MapFrom(src => src.Card != null ? src.Card.Position : 0))
+                    opt => opt.MapFrom(src => src.CardPosition))  // posto vise nema card
                 .ForMember(dest => dest.ExecutedAt, 
                     opt => opt.MapFrom(src => src.Timestamp))
                 .ForMember(dest => dest.PlayerId, 
@@ -117,8 +117,7 @@ namespace Persistence.Mapping
                 
                 .ReverseMap()
                 .ForMember(dest => dest.Timestamp, 
-                    opt => opt.MapFrom(src => src.ExecutedAt))
-                .ForMember(dest => dest.Card, opt => opt.Ignore());
+                    opt => opt.MapFrom(src => src.ExecutedAt));
 
             // 
             // 7. HINT MAPPING

@@ -6,11 +6,10 @@ namespace Persistence.Entities
     [Table("game_sessions")]
     public class GameSessionEntity : BaseEntity
     {
-        public string Name { get; set; } = string.Empty;
+        public string Code { get; set; } = string.Empty;
 
         // Board
         public BoardEntity? Board { get; set; }
-
         // Teams
         public int RedTeamId { get; set; }
         public TeamEntity? RedTeam { get; set; }

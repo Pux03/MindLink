@@ -28,19 +28,18 @@ namespace API.Services
             //_logger = logger;
         }
 
-        public async Task<GameSession> CreateGameAsync(string gameName, int redTeamId, int blueTeamId)
+        public async Task<GameSession> CreateGameAsync(string? Code = null, string? RedTeamName = null, string? BlueTeamName = null)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(gameName))
+                if (string.IsNullOrWhiteSpace(Code))
                 {
                     throw new ArgumentException("Game Name can't be empty!");
                 }
 
                 var redTeam = new Team
                 {
-                    Id = redTeamId,
-                    Name = "Red Team",
+                    Name = RedTeamName ?? "Red Team",
                     Color = TeamColor.Red,
                     Score = 0,
                     Members = []
@@ -48,8 +47,7 @@ namespace API.Services
 
                 var blueTeam = new Team
                 {
-                    Id = blueTeamId,
-                    Name = "Blue Team",
+                    Name = BlueTeamName ?? "Blue Team",
                     Color = TeamColor.Blue,
                     Score = 0,
                     Members = []
@@ -59,13 +57,13 @@ namespace API.Services
 
                 var gameSession = new GameSession
                 {
-                    Name = gameName,
+                    Code = Code ?? GenerateGameCode(),
                     Status = GameStatus.Waiting,
                     RedTeam = redTeam,
                     BlueTeam = blueTeam,
                     Board = board,
                     StartTime = DateTime.UtcNow,
-                    // Players = new List<Player>(), // TODO razmisli da dodas ovo radi lakse logike
+                    Players = [], // TODO razmisli da dodas ovo radi lakse logike
                     GuessHistory = [],
                     HintHistory = []
                 };
@@ -74,10 +72,11 @@ namespace API.Services
                 await _gameRepository.AddAsync(gameEntity);
                 await _gameRepository.SaveChangesAsync();
 
-                var createdGame = await _gameRepository.GetByIdAsync(gameSession.Id);
-                var result = _mapper.Map<GameSession>(createdGame);
+                //var createdGame = await _gameRepository.GetByIdAsync(gameSession.Id); // TODO
+                //var result = _mapper.Map<GameSession>(createdGame);
 
-                return result;
+                //return result;
+                return null;
             }
             catch(Exception ex)
             {
@@ -85,11 +84,11 @@ namespace API.Services
             }
         }
 
-        public async Task<GameSession> EndGameAsync(int gameId)
+        public async Task<GameSession> EndGameAsync(string gameCode)
         {
             try
             {
-                var game = _gameSessionManager.GetActiveGame(gameId);
+                var game = _gameSessionManager.GetActiveGame(gameCode);
 
                 if (game == null)
                 {
@@ -105,7 +104,7 @@ namespace API.Services
                 await _gameRepository.SaveChangesAsync();
 
                 // Remove from game session manager
-                _gameSessionManager.RemoveActiveGame(gameId);
+                _gameSessionManager.RemoveActiveGame(gameCode);
 
                 return game;
             }
@@ -127,15 +126,15 @@ namespace API.Services
             }
         }
 
-        public async Task<GameSession> GetGameByIdAsync(int gameId)
+        public async Task<GameSession> GetGameByIdAsync(string gameCode)
         {
             try
             {
-                var gameEntity = await _gameRepository.GetGameWithBoardAndTeamsAsync(gameId);
+                var gameEntity = await _gameRepository.GetGameWithBoardAndTeamsAsync(0); // TODO
 
                 if (gameEntity == null)
                 {
-                    throw new InvalidOperationException($"Game with id: '{gameId}' not found");
+                    throw new InvalidOperationException($"Game with id: '{gameCode}' not found");
                 }
 
                 var result = _mapper.Map<GameSession>(gameEntity);
@@ -147,11 +146,11 @@ namespace API.Services
             }
         }
 
-        public async Task<GameSession> StartGameAsync(int gameId)
+        public async Task<GameSession> StartGameAsync(string gameCode)
         {
             try
             {
-                var gameEntity = await _gameRepository.GetGameWithBoardAndTeamsAsync(gameId);
+                var gameEntity = await _gameRepository.GetGameWithBoardAndTeamsAsync(0); // TODO
 
                 if (gameEntity == null)
                 {
@@ -173,10 +172,10 @@ namespace API.Services
 
                 // 2. Postavi prvi tim na redu (random)
                 var random = new Random();
-                game.CurrentTeam = random.Next(2) == 0 ? TeamColor.Red : TeamColor.Blue;
+                game.CurrentTeam = random.Next(2) == 0 ? TeamColor.Red : TeamColor.Blue; // TODO ko prvi igra?
                 game.Status = GameStatus.Active;
 
-                // 3. Čuva u bazi
+                // 3. -îuva u bazi
                 var updatedGameEntity = _mapper.Map<GameSessionEntity>(game);
                 await _gameRepository.UpdateAsync(updatedGameEntity);
                 await _gameRepository.SaveChangesAsync();
@@ -191,7 +190,6 @@ namespace API.Services
                 throw;
             }
         }
-
 
         // TODO make it so it reads from JSON file of all available words
         private Board GenerateBoard()
@@ -263,6 +261,11 @@ namespace API.Services
             }
 
             return board;
+        }
+    
+        private String GenerateGameCode()
+        {
+            return "";
         }
     }
 }

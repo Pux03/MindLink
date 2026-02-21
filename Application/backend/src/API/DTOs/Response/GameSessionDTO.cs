@@ -1,17 +1,14 @@
 using System.ComponentModel.DataAnnotations;
+using Core.Enums;
 
 namespace API.DTOs.Response
 {
     public class GameSessionDTO
     {
-        public int Id { get; set; }
-        
-        [Required]
-        public string Name { get; set; }
-        
+        public string Code { get; set; }
         public string Status { get; set; }  // "Waiting", "Active", "GameOver"
         
-        public string CurrentTeam { get; set; }  // "Red" ili "Blue"
+        public TeamColor CurrentTeam { get; set; }  // "Red" ili "Blue"
         
         public string Winner { get; set; }  // "Red", "Blue" ili null
         

@@ -12,7 +12,7 @@ namespace Persistence.Repositories
         {
             return await _dbSet
                 .Include(p => p.Team)
-                .FirstOrDefaultAsync(p => p.Username.ToLower() == username.ToLower());
+                .FirstOrDefaultAsync(p => p.User!.Username.ToLower() == username.ToLower());
         }
 
         public async Task<PlayerEntity?> GetPlayerWithTeamAsync(int playerId)

@@ -6,9 +6,12 @@ using API.DTOs.Response;
 using API.Services;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     [Produces("application/json")]
@@ -45,7 +48,7 @@ namespace API.Controllers
             {
                 var games = await _gameSessionService.GetAllActiveGamesAsync();
 
-                var dtos = games.Select(g => MapToDTO(g)).ToList();
+                var dtos = games.Select(MapToDTO).ToList();
 
                 return Ok(new ApiResponse<List<GameSessionDTO>>
                 {
@@ -65,18 +68,18 @@ namespace API.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{gameCode}")]
         [ProducesResponseType(typeof(ApiResponse<GameSessionDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ApiResponse<GameSessionDTO>>> GetGameById(int id)
+        public async Task<ActionResult<ApiResponse<GameSessionDTO>>> GetGameById(string gameCode)
         {
             try
             {
-                var game = _gameSessionManager.GetActiveGame(id);
+                var game = _gameSessionManager.GetActiveGame(gameCode);
 
                 if (game == null)
                 {
-                    game = await _gameSessionService.GetGameByIdAsync(id);
+                    game = await _gameSessionService.GetGameByIdAsync(gameCode);
                 }
 
                 if (game == null)
@@ -85,7 +88,7 @@ namespace API.Controllers
                     {
                         Success = false,
                         Message = "Game not found",
-                        Errors = new List<string> { $"Game with id: '{id}' not found" }
+                        Errors = new List<string> { $"Game with id: '{gameCode}' not found" }
                     });
                 }
 
@@ -109,7 +112,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         [ProducesResponseType(typeof(ApiResponse<GameSessionDTO>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<ApiResponse<GameSessionDTO>>> CreateGame([FromBody] CreateGameRequest request)
@@ -129,28 +132,25 @@ namespace API.Controllers
                     });
                 }
 
-                var game = await _gameSessionService.CreateGameAsync(
-                    gameName: request.GameName,
-                    redTeamId: 1,
-                    blueTeamId: 2
-                );
+                var currentUserId = GetCurrentUserId();
+                var game = await _gameSessionService.CreateGameAsync(request.Code, request.RedTeamName, request.BlueTeamName);
+                game.CreatedByUserId = currentUserId;
 
                 var player = new Player
                 {
-                    Username = request.PlayerName,
+                    UserId = currentUserId,
                     IsPlaying = true,
-                    Team = game.RedTeam,  // Default Red tim
+                    Team = null,
                     IsMindreader = false
                 };
 
                 game.Players.Add(player);
-                game.RedTeam.Members.Add(player);
 
                 var dto = MapToDTO(game);
 
                 return CreatedAtAction(
                     nameof(GetGameById),
-                    new { id = game.Id },
+                    new { gameCode = game.Code },
                     new ApiResponse<GameSessionDTO>
                     {
                         Success = true,
@@ -159,7 +159,7 @@ namespace API.Controllers
                     });
             }
             catch (Exception ex)
-            {;
+            {
                 return StatusCode(500, new ApiResponse<GameSessionDTO>
                 {
                     Success = false,
@@ -169,12 +169,12 @@ namespace API.Controllers
             }
         }
 
-        [HttpPost("{gameId}/join")]
+        [HttpPost("{gameCode}/join")]
         [ProducesResponseType(typeof(ApiResponse<GameSessionDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<ApiResponse<GameSessionDTO>>> JoinGame(
-            int gameId,
+            string gameCode,
             [FromBody] JoinGameRequest request)
         {
             try
@@ -189,7 +189,7 @@ namespace API.Controllers
                     });
                 }
 
-                var game = _gameSessionManager.GetActiveGame(gameId);
+                var game = _gameSessionManager.GetActiveGame(gameCode);
 
                 if (game == null)
                 {
@@ -211,14 +211,13 @@ namespace API.Controllers
 
                 var player = new Player
                 {
-                    Username = request.PlayerName,
+                    UserId = GetCurrentUserId(),
                     IsPlaying = true,
-                    Team = game.BlueTeam,  // Default Blue tim
+                    Team = null,
                     IsMindreader = false
                 };
 
                 game.Players.Add(player);
-                game.BlueTeam.Members.Add(player);
 
                 var dto = MapToDTO(game);
 
@@ -240,17 +239,18 @@ namespace API.Controllers
             }
         }
 
-        [HttpPut("{gameId}/update-team")]
+        [HttpPut("{gameCode}/update-team")]
         [ProducesResponseType(typeof(ApiResponse<GameSessionDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ApiResponse<GameSessionDTO>>> UpdatePlayerTeam(
-            int gameId,
+            string gameCode,
             [FromBody] UpdateTeamRequest request)
         {
             try
             {
-                var game = _gameSessionManager.GetActiveGame(gameId);
+                var game = _gameSessionManager.GetActiveGame(gameCode);
 
+                // Game not active
                 if (game == null)
                 {
                     return NotFound(new ApiResponse<GameSessionDTO>
@@ -260,8 +260,18 @@ namespace API.Controllers
                     });
                 }
 
-                var player = game.Players.FirstOrDefault(p => p.Id == request.PlayerId);
+                if (game.Status != GameStatus.Waiting)
+                {
+                    return NotFound(new ApiResponse<GameSessionDTO>
+                    {
+                        Success = false,
+                        Message = "Game has already been started"
+                    });
+                }
 
+                var player = game.Players.FirstOrDefault(p => p.Id == GetCurrentUserId());
+                
+                // If player is not part of the game
                 if (player == null)
                 {
                     return NotFound(new ApiResponse<GameSessionDTO>
@@ -274,9 +284,9 @@ namespace API.Controllers
                 game.RedTeam.Members.Remove(player);
                 game.BlueTeam.Members.Remove(player);
 
-                var newTeam = request.TeamColor.ToLower() == "red" ? game.RedTeam : game.BlueTeam;
-                newTeam.Members.Add(player);
-                player.Team = newTeam;
+                //var newTeam = request.TeamColor ==? game.RedTeam : game.BlueTeam;
+                //newTeam.Members.Add(player);
+                //player.Team = newTeam;
 
                 player.IsMindreader = request.IsMindreader;
 
@@ -285,7 +295,7 @@ namespace API.Controllers
                 return Ok(new ApiResponse<GameSessionDTO>
                 {
                     Success = true,
-                    Message = $"Player with username: '{player.Username}' switched to {request.TeamColor} team",
+                    Message = $"Player with username: '{player.GetUsername()}' switched to {request.TeamColor} team",
                     Data = dto
                 });
             }
@@ -304,16 +314,14 @@ namespace API.Controllers
         {
             return new GameSessionDTO
             {
-                Id = game.Id,
-                Name = game.Name,
+                Code = game.Code,
                 Status = game.Status.ToString(),
-                CurrentTeam = game.CurrentTeam.ToString(),
-                Winner = game.Winner?.ToString(),
+                CurrentTeam = game.CurrentTeam,
+                Winner = game?.Winner.ToString(),
                 StartTime = game.StartTime,
                 EndTime = game.EndTime,
                 RedTeam = new GameTeamDTO
                 {
-                    Id = game.RedTeam.Id,
                     Name = game.RedTeam.Name,
                     Color = game.RedTeam.Color.ToString(),
                     Score = game.RedTeam.Score,
@@ -321,7 +329,7 @@ namespace API.Controllers
                         .Select(p => new PlayerDTO
                         {
                             Id = p.Id,
-                            PlayerName = p.Username,
+                            PlayerName = p.GetUsername(),
                             TeamColor = p.Team?.Color.ToString(),
                             IsMindreader = p.IsMindreader,
                             IsPlaying = p.IsPlaying
@@ -329,7 +337,6 @@ namespace API.Controllers
                 },
                 BlueTeam = new GameTeamDTO
                 {
-                    Id = game.BlueTeam.Id,
                     Name = game.BlueTeam.Name,
                     Color = game.BlueTeam.Color.ToString(),
                     Score = game.BlueTeam.Score,
@@ -337,7 +344,7 @@ namespace API.Controllers
                         .Select(p => new PlayerDTO
                         {
                             Id = p.Id,
-                            PlayerName = p.Username,
+                            PlayerName = p.GetUsername(),
                             TeamColor = p.Team?.Color.ToString(),
                             IsMindreader = p.IsMindreader,
                             IsPlaying = p.IsPlaying
@@ -347,7 +354,7 @@ namespace API.Controllers
                     .Select(p => new PlayerDTO
                     {
                         Id = p.Id,
-                        PlayerName = p.Username,
+                        PlayerName = p.GetUsername(),
                         TeamColor = p.Team?.Color.ToString(),
                         IsMindreader = p.IsMindreader,
                         IsPlaying = p.IsPlaying
@@ -366,6 +373,14 @@ namespace API.Controllers
                         }).ToList()
                 }
             };
+        }
+
+        private int GetCurrentUserId()
+        {
+            var claim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (claim == null)
+                throw new UnauthorizedAccessException("User not authenticated");
+            return int.Parse(claim.Value);
         }
     }
 }

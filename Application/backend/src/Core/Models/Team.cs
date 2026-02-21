@@ -5,8 +5,6 @@ namespace Core.Models
 {
     public class Team
     {
-        public int Id { get; set; }
-
         [StringLength(20, MinimumLength = 3)]
         public string? Name { get; set; }
         public TeamColor Color { get; set; }
@@ -17,6 +15,5 @@ namespace Core.Models
         {
             return Members.FirstOrDefault(p => p.IsMindreader);
         }
-
     }
 }

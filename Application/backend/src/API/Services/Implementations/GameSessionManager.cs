@@ -8,13 +8,13 @@ namespace API.Services
     /// </summary>
     public class GameSessionManager : IGameSessionManager
     {
-        private readonly ConcurrentDictionary<int, GameSession> _activeGames;
+        private readonly ConcurrentDictionary<string, GameSession> _activeGames;
 
         public GameSessionManager(
             // ILogger<GameSessionManager> logger
         )
         {
-            _activeGames = new ConcurrentDictionary<int, GameSession>();
+            _activeGames = new ConcurrentDictionary<string, GameSession>();
             // _logger = logger;
         }
 
@@ -25,7 +25,7 @@ namespace API.Services
                 return;
             }
 
-            if (_activeGames.TryAdd(game.Id, game))
+            if (_activeGames.TryAdd(game.Code, game))
             {
                 // Uspesno
             } 
@@ -35,9 +35,9 @@ namespace API.Services
             }
         }
 
-        public GameSession GetActiveGame(int gameId)
+        public GameSession GetActiveGame(string gameCode)
         {
-            _activeGames.TryGetValue(gameId, out var game);
+            _activeGames.TryGetValue(gameCode, out var game);
 
             if (game != null)
             {
@@ -61,14 +61,14 @@ namespace API.Services
             return _activeGames.Values;
         }
 
-        public bool IsGameActive(int gameId)
+        public bool IsGameActive(string gameCode)
         {
-            return _activeGames.ContainsKey(gameId);
+            return _activeGames.ContainsKey(gameCode);
         }
 
-        public void RemoveActiveGame(int gameId)
+        public void RemoveActiveGame(string gameCode)
         {
-            if (_activeGames.TryRemove(gameId, out var game))
+            if (_activeGames.TryRemove(gameCode, out var game))
             {
                 // Uspesno pronadjena i obrisana
             }
