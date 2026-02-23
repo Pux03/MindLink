@@ -13,6 +13,7 @@ namespace API.Services
     {
         private readonly IGameSessionRepository _gameRepository;
         private readonly IGameSessionManager _gameSessionManager;
+        private static readonly Random _random = new();
         private readonly IMapper _mapper;
     
         public GameSessionService(
@@ -260,7 +261,24 @@ namespace API.Services
     
         private String GenerateGameCode()
         {
-            return "";
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
+    
+            return new string(Enumerable
+                .Repeat(chars, 8)
+                .Select(s => s[_random.Next(s.Length)])
+                .ToArray());
+                
+
+            // TODO
+            // string code;
+            // do
+            // {
+            //     code = GenerateGameCode();
+            // }
+            // while (await _context.Games.AnyAsync(g => g.Code == code));
+
+            // return code;
         }
+            
     }
 }
