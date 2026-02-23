@@ -93,6 +93,8 @@ export interface BoardDTO {
 export interface GameSessionDTO {
     id: number;
 
+    code: string;
+
     name: string;
 
     status: GameStatus;
