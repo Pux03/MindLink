@@ -8,6 +8,8 @@ export const useAuth = () => {
         try {
             setLoading(true);
             const user = await userApi.login(data);
+            setToken(user.data.token);
+            parseToken(user.data.token);
             return user;
         } catch (err) {
             console.error("Failed to login:", err);
@@ -21,12 +23,26 @@ export const useAuth = () => {
         try {
             setLoading(true);
             const user = await userApi.register(data);
+            setToken(user.data.token);
+            parseToken(user.data.token);
             return user;
         } catch (err) {
             console.error("Failed to register:", err);
             return null;
         } finally {
             setLoading(false);
+        }
+    }
+
+    const setToken = (token: string) => {
+        if (token) {
+            localStorage.setItem("token", token);
+        }
+    }
+    const parseToken = (token: string) => {
+        if (token) {
+            const payload = JSON.parse(atob(token.split(".")[1]))
+            localStorage.setItem("user", JSON.stringify(payload));
         }
     }
     return { login, register, loading };

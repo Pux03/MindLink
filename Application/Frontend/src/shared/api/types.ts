@@ -49,8 +49,11 @@ export interface PlayerDTO {
 
 export interface UserDTO {
     token: string;
+
     username: string;
+
     email: string;
+
     expiresAt: string;
 }
 

@@ -1,1 +1,10 @@
 @import "tailwindcss";
+@font-face {
+    font-family: "Balatro";
+    src: url("./assets/fonts/balatro.otf.woff2") format("woff2");
+}
+
+html, body, #root{
+    letter-spacing: 0.05em;
+    font-family: "Balatro";
+}

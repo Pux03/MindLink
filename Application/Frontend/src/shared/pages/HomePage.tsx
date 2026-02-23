@@ -26,7 +26,7 @@ export const HomePage = () => {
       {/* Title */}
       <div className="w-full flex justify-center items-center py-12 drop-shadow-lg text-shadow-xs text-shadow-black">
         <h1 className="text-8xl font-extrabold animate-fadeIn">
-          Mind<span className="text-blue-400 ">Link</span>
+          Mind<span className="text-[#ffe0bd]">Link</span>
         </h1>
       </div>
 
@@ -58,6 +58,17 @@ export const HomePage = () => {
             src="/src/assets/professor.png"
             className="max-h-[70vh] w-auto object-contain -scale-x-100"
           />
+        </div>
+
+        <div className="relative w-[300px] h-[120px]">
+          <img
+            src="/src/assets/card-frame.png"
+            alt="Primer"
+            className="w-full h-full"
+          />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="text-black text-4xl font-bold"></span>
+          </div>
         </div>
       </div>
     </div>

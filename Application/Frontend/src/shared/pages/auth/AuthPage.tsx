@@ -51,13 +51,13 @@ export const AuthPage = () => {
     if (!validate()) return;
     setLoading(true);
     if (mode == "login") {
-      const user = login({
+      const user = await login({
         email: form.email,
         password: form.password,
       });
       console.log(user);
     } else if (mode == "register") {
-      const user = register({
+      const user = await register({
         email: form.email,
         username: form.username,
         password: form.password,
@@ -66,7 +66,7 @@ export const AuthPage = () => {
     }
 
     setLoading(false);
-    // navigate("/");
+    navigate("/");
   };
 
   const switchMode = (newMode: AuthMode) => {
