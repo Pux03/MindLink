@@ -32,11 +32,6 @@ namespace API.Services
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(Code))
-                {
-                    throw new ArgumentException("Game Name can't be empty!");
-                }
-
                 var redTeam = new Team
                 {
                     Name = RedTeamName ?? "Red Team",
@@ -76,7 +71,7 @@ namespace API.Services
                 //var result = _mapper.Map<GameSession>(createdGame);
 
                 //return result;
-                return null;
+                return gameSession;
             }
             catch(Exception ex)
             {

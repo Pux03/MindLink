@@ -145,18 +145,25 @@ namespace API.Controllers
                 };
 
                 game.Players.Add(player);
+                _gameSessionManager.AddActiveGame(game);
 
                 var dto = MapToDTO(game);
 
-                return CreatedAtAction(
-                    nameof(GetGameById),
-                    new { gameCode = game.Code },
-                    new ApiResponse<GameSessionDTO>
-                    {
-                        Success = true,
-                        Message = "Game successfully created",
-                        Data = dto
-                    });
+                // return CreatedAtAction(
+                //     nameof(GetGameById),
+                //     new { gameCode = game.Code },
+                //     new ApiResponse<GameSessionDTO>
+                //     {
+                //         Success = true,
+                //         Message = "Game successfully created",
+                //         Data = dto
+                //     });
+                return StatusCode(201, new ApiResponse<GameSessionDTO>
+                {
+                    Success = true,
+                    Message = "Game successfully created",
+                    Data = dto
+                });
             }
             catch (Exception ex)
             {
@@ -317,7 +324,7 @@ namespace API.Controllers
                 Code = game.Code,
                 Status = game.Status.ToString(),
                 CurrentTeam = game.CurrentTeam,
-                Winner = game?.Winner.ToString(),
+                Winner = game?.Winner?.ToString(),
                 StartTime = game.StartTime,
                 EndTime = game.EndTime,
                 RedTeam = new GameTeamDTO

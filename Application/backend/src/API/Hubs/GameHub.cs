@@ -240,7 +240,7 @@ namespace API.Hubs
 
         private int GetCurrentUserId()
         {
-            var claim = Context.User?.FindFirst(ClaimTypes.NameIdentifier);
+            var claim = Context.User?.FindFirst("id");
             if (claim == null)
                 throw new UnauthorizedAccessException("User not authenticated");
             return int.Parse(claim.Value);
