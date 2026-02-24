@@ -146,38 +146,31 @@ namespace API.Services
         {
             try
             {
-                var gameEntity = await _gameRepository.GetGameWithBoardAndTeamsAsync(0); // TODO
+                var game = _gameSessionManager.GetActiveGame(gameCode);
 
-                if (gameEntity == null)
-                {
+                if (game == null) {
                     throw new InvalidOperationException("Game not found");
                 }
-
-                var game = _mapper.Map<GameSession>(gameEntity);
-
+                
                 // Validation
                 if (game.Status != GameStatus.Waiting)
                 {
                     throw new InvalidOperationException("Game has already started");
                 }
 
-                if (game.RedTeam.Members.Count != 2 || game.BlueTeam.Members.Count != 2)
-                {
-                    throw new InvalidOperationException("Both teams must be full");
-                }
+                // TODO ovo da se odkomentarise kad budemo testirali skroz sve?
 
-                // 2. Postavi prvi tim na redu (random)
-                var random = new Random();
-                game.CurrentTeam = random.Next(2) == 0 ? TeamColor.Red : TeamColor.Blue; // TODO ko prvi igra?
+                // if (game.RedTeam.Members.Count != 2 || game.BlueTeam.Members.Count != 2)
+                // {
+                //     throw new InvalidOperationException("Both teams must be full");
+                // }
+
+                game.CurrentTeam = TeamColor.Red; // TODO ko prvi igra?
                 game.Status = GameStatus.Active;
 
-                // 3. -îuva u bazi
-                var updatedGameEntity = _mapper.Map<GameSessionEntity>(game);
-                await _gameRepository.UpdateAsync(updatedGameEntity);
+                var UpdatedGameEntity = _mapper.Map<GameSessionEntity>(game);
+                await _gameRepository.UpdateAsync(UpdatedGameEntity);
                 await _gameRepository.SaveChangesAsync();
-
-                // Add to game session manager
-                _gameSessionManager.AddActiveGame(game);
 
                 return game;
             }
@@ -187,7 +180,6 @@ namespace API.Services
             }
         }
 
-        // TODO make it so it reads from JSON file of all available words
         private Board GenerateBoard()
         {
             var filePath = Path.GetFullPath(
@@ -220,8 +212,7 @@ namespace API.Services
                 .Take(25)
                 .ToList();
 
-            // odredi koji tim pocinje
-            var startingTeam = random.Next(2) == 0 ? TeamColor.Red : TeamColor.Blue;
+            var startingTeam = TeamColor.Red; // TODO
 
             // raspodela boja
             var colors = new List<TeamColor>();

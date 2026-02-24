@@ -5,6 +5,7 @@ namespace Persistence.Repositories
     public interface IGameSessionRepository : IRepository<GameSessionEntity>
     {
         Task<GameSessionEntity?> GetGameWithBoardAndTeamsAsync(int gameId);
+        // Task<GameSessionEntity?> GetGameByCodeAsync(string code);
 
         Task<GameSessionEntity?> GetGameWithGuessesAsync(int gameId);
 

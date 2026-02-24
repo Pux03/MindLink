@@ -150,11 +150,11 @@ namespace API.Hubs
                         FirstTeam = game.CurrentTeam.ToString()
                     });
 
-                _logger.LogInformation($"Partija {gameCode} je počela");
+                _logger.LogInformation($"Game {gameCode} has started");
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Greška u StartGame: {ex.Message}");
+                _logger.LogError($"Error in StartGame: {ex.Message}");
                 await Clients.Caller.Error(ex.Message);
             }
         }
