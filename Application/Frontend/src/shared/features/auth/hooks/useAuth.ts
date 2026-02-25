@@ -34,6 +34,12 @@ export const useAuth = () => {
         }
     }
 
+    const logout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        localStorage.removeItem("game");
+    };
+
     const setToken = (token: string) => {
         if (token) {
             localStorage.setItem("token", token);
@@ -45,5 +51,5 @@ export const useAuth = () => {
             localStorage.setItem("user", JSON.stringify(payload));
         }
     }
-    return { login, register, loading };
+    return { login, register, logout, loading };
 };

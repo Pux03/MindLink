@@ -1,164 +1,29 @@
 import { useNavigate } from "react-router-dom";
-import { useCreateGame } from "../features/game/hooks/useCreateGame";
-import { useEffect } from "react";
-
-const balatroCss = `
-
-  .home-balatro-root {
-    background: #1a0a2e;
-    min-height: 100vh;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .home-balatro-root::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-      repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(0,0,0,0.07) 2px,
-        rgba(0,0,0,0.07) 4px
-      );
-    pointer-events: none;
-    z-index: 9999;
-  }
-
-  .home-bg-glow {
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse at 30% 40%, rgba(139,92,246,0.18) 0%, transparent 60%),
-      radial-gradient(ellipse at 80% 80%, rgba(99,102,241,0.12) 0%, transparent 55%),
-      radial-gradient(ellipse at 10% 90%, rgba(168,85,247,0.1) 0%, transparent 50%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .home-title {
-    letter-spacing: 0.03em;
-  }
-
-  .home-menu-item {
-    letter-spacing: 0.04em;
-    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    cursor: pointer;
-    position: relative;
-    user-select: none;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
-  .home-menu-item::before {
-    content: '♠';
-    font-size: 0.5em;
-    opacity: 0;
-    transition: all 0.25s ease;
-  }
-
-  .home-menu-item:hover::before {
-    opacity: 0.6;
-  }
-
-  .home-menu-item:hover {
-    transform: scale(1.07);
-    filter: brightness(1.15);
-  }
-
-  .home-menu-item:active {
-    transform: scale(1.03);
-  }
-
-  .home-menu-item-1 { transform: translateX(12px); }
-  .home-menu-item-2 { transform: translateX(48px); }
-  .home-menu-item-3 { transform: translateX(96px); }
-
-  .home-menu-item-1:hover { transform: translateX(12px) scale(1.07); }
-  .home-menu-item-2:hover { transform: translateX(48px) scale(1.07); }
-  .home-menu-item-3:hover { transform: translateX(96px) scale(1.07); }
-
-  .home-menu-item.loading-state {
-    opacity: 0.5;
-    pointer-events: none;
-  }
-
-  .home-card-suit {
-    position: absolute;
-    font-size: 14px;
-    opacity: 0.08;
-    user-select: none;
-    pointer-events: none;
-    color: #c4b5fd;
-  }
-
-  .home-topbar {
-    background: linear-gradient(180deg, rgba(10,4,30,0.9) 0%, transparent 100%);
-    pointer-events: none;
-  }
-
-  @keyframes home-float {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    33% { transform: translateY(-8px) rotate(1deg); }
-    66% { transform: translateY(-4px) rotate(-0.5deg); }
-  }
-
-  @keyframes home-glow-pulse {
-    0%, 100% { text-shadow: 0 0 20px rgba(196,181,253,0.4), 0 0 40px rgba(139,92,246,0.2); }
-    50% { text-shadow: 0 0 30px rgba(196,181,253,0.7), 0 0 60px rgba(139,92,246,0.4); }
-  }
-
-  .home-title-glow {
-    animation: home-glow-pulse 3s ease-in-out infinite;
-  }
-
-  .home-prof-float {
-    animation: home-float 6s ease-in-out infinite;
-    filter: drop-shadow(0 20px 40px rgba(139,92,246,0.3));
-  }
-
-  .home-version {
-    letter-spacing: 0.2em;
-  }
-
-  .home-loading-dots::after {
-    content: '';
-    animation: dots 1.2s steps(4, end) infinite;
-  }
-  @keyframes dots {
-    0%   { content: ''; }
-    25%  { content: '.'; }
-    50%  { content: '..'; }
-    75%  { content: '...'; }
-  }
-`;
+import { useCreateGame } from "../../features/game/hooks/useCreateGame";
+import { useEffect, useState } from "react";
+import { JoinLobby } from "../../components/JoinLobby";
+import { useAuth } from "../../features/auth/hooks/useAuth";
+import "./home.page.css";
 
 export const HomePage = () => {
   const navigate = useNavigate();
   const { createGame, loading } = useCreateGame();
-
-  useEffect(() => {
-    const style = document.createElement("style");
-    style.textContent = balatroCss;
-    document.head.appendChild(style);
-    return () => {
-      document.head.removeChild(style);
-    };
-  }, []);
+  const [joinModalOpen, setJoinModalOpen] = useState(false);
+  const { logout } = useAuth();
 
   const handleCreateLobby = async () => {
     const game = await createGame();
     console.log(game);
-    localStorage.setItem("game", JSON.stringify(game?.data));
     if (game) {
       navigate(`/r/${game.data.code}`);
     }
   };
 
-  // Scattered suit decorations
+  const handleLogout = () => {
+    logout();
+    navigate("/auth");
+  };
+
   const suits = [
     { suit: "♠", top: "12%", left: "5%", size: 28, rot: -15 },
     { suit: "♣", top: "8%", left: "55%", size: 20, rot: 10 },
@@ -198,12 +63,22 @@ export const HomePage = () => {
         >
           ♠ MINDLINK
         </span>
-        <span
-          className="home-version text-xs"
-          style={{ color: "rgba(139,92,246,0.4)", letterSpacing: "0.25em" }}
-        >
-          v0.1
-        </span>
+
+        <div className="flex items-center gap-6">
+          <span
+            className="home-version text-xs"
+            style={{ color: "rgba(139,92,246,0.4)", letterSpacing: "0.25em" }}
+          >
+            v0.1
+          </span>
+
+          <button
+            onClick={handleLogout}
+            className="home-logout-btn text-xs px-4 py-2"
+          >
+            LOGOUT
+          </button>
+        </div>
       </div>
 
       {/* Title */}
@@ -257,10 +132,10 @@ export const HomePage = () => {
             {!loading && <span style={{ color: "#e2e8f0" }}>Lobby</span>}
           </div>
 
-          {/* Join Lobby */}
+          {/* Join Lobby — opens modal */}
           <div
             className="home-menu-item home-menu-item-2"
-            onClick={() => navigate("/join")}
+            onClick={() => setJoinModalOpen(true)}
             style={{ fontSize: "3.8rem", color: "#fca5a5" }}
           >
             <span
@@ -332,6 +207,12 @@ export const HomePage = () => {
           />
         </div>
       </div>
+
+      {/* Join Lobby Modal */}
+      <JoinLobby
+        isOpen={joinModalOpen}
+        onClose={() => setJoinModalOpen(false)}
+      />
     </div>
   );
 };
