@@ -11,6 +11,7 @@ namespace API.Hubs
         Task PlayerJoined(object data);
         Task PlayerTeamChanged(object data);
         Task GuessResult(object data);
+        Task ReceiveCards(object data);
         // FOr errors
         Task Error(string message);
     }

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.SignalR;
 using Core.Models;
 using Core.Events;
+using Core.Enums;
 using API.Services;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
@@ -58,11 +59,19 @@ namespace API.Hubs
                     return;
                 }
 
-                if (game.Players.Count >= game.MaxPlayers)
-                {
-                    await Clients.Caller.Error("Game is full");
-                    return;
-                }
+                // Vec se obradjuje u REST pozivu
+                // if (game.Players.Count >= game.MaxPlayers)
+                // {
+                //     await Clients.Caller.Error("Game is full");
+                //     return;
+                // }
+                var currentUserId = GetCurrentUserId();
+
+                var player = game.Players.FirstOrDefault(p => p.UserId == currentUserId);
+
+                if (player == null) { await Clients.Caller.Error("Player not found"); return; }
+
+                player.ConnectionId = Context.ConnectionId;
 
                 await Groups.AddToGroupAsync(Context.ConnectionId, $"game_{gameCode}");
 
@@ -85,11 +94,11 @@ namespace API.Hubs
         /// <summary>
         /// React: connection.invoke("UpdateTeam", gameCode, playerId, teamColor, isMindreader)
         /// </summary>
-        public async Task UpdateTeam(string gameCode, int playerId, string teamColor, bool isMindreader)
+        public async Task UpdateTeam(string gameCode, string teamColor, bool isMindreader)
         {
             try
             {
-                _logger.LogInformation($"UpdateTeam: {playerId} → {teamColor}");
+                // _logger.LogInformation($"UpdateTeam: {playerId} → {teamColor}");
 
                 var game = _gameSessionManager.GetActiveGame(gameCode);
 
@@ -99,7 +108,14 @@ namespace API.Hubs
                     return;
                 }
 
-                var player = game.Players.FirstOrDefault(p => p.Id == playerId);
+                if (game.Status != GameStatus.Waiting)
+                { 
+                    await Clients.Caller.Error("Game already started");
+                    return; 
+                }
+
+                var currentUserId = GetCurrentUserId();
+                var player = game.Players.FirstOrDefault(p => p.UserId == currentUserId);
 
                 if (player == null)
                 {
@@ -118,7 +134,6 @@ namespace API.Hubs
                 await Clients.Group($"game_{gameCode}")
                     .PlayerTeamChanged(new
                     {
-                        PlayerId = playerId,
                         PlayerName = player.GetUsername(),
                         NewTeam = teamColor,
                         IsMindreader = isMindreader
@@ -149,6 +164,24 @@ namespace API.Hubs
                     {
                         FirstTeam = game.CurrentTeam.ToString()
                     });
+
+                foreach (var player in game.Players)
+                {
+                    if (player.ConnectionId == null) continue;
+
+                    var cards = game.Board.Cards.Select(c => new
+                    {
+                        c.Position,
+                        c.Word,
+                        c.IsRevealed,
+                        TeamColor = (player.IsMindreader || c.IsRevealed)
+                            ? c.TeamColor.ToString()
+                            : null
+                    });
+
+                    await Clients.Client(player.ConnectionId)
+                        .ReceiveCards(new { Cards = cards });
+                }
 
                 _logger.LogInformation($"Game {gameCode} has started");
             }
@@ -183,11 +216,23 @@ namespace API.Hubs
 
                 var guessEvent = await _gameLogicService.ExecuteGuessAsync(game, currentUserId, cardPositions);
 
-                await Clients.Caller.GuessResult(new
-                {
-                    //guessEvent.IsCorrect,
-                    guessEvent.GuessedCardPositions
-                });
+                await Clients.Group($"game_{gameCode}")
+                    .GuessExecuted(new
+                    {
+                        RevealedCards = guessEvent.GuessedCardPositions.Select(pos =>
+                        {
+                            var card = game.Board.Cards.First(c => c.Position == pos);
+                            return new
+                            {
+                                card.Position,
+                                card.Word,
+                                card.TeamColor,
+                                card.IsRevealed
+                            };
+                        }),
+                        IsGameOver = guessEvent.IsGameOver,
+                        Winner = guessEvent.WinnerTeam?.ToString()
+                    });
             }
             catch (Exception ex)
             {

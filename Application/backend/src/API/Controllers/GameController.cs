@@ -149,15 +149,6 @@ namespace API.Controllers
 
                 var dto = MapToDTO(game);
 
-                // return CreatedAtAction(
-                //     nameof(GetGameById),
-                //     new { gameCode = game.Code },
-                //     new ApiResponse<GameSessionDTO>
-                //     {
-                //         Success = true,
-                //         Message = "Game successfully created",
-                //         Data = dto
-                //     });
                 return StatusCode(201, new ApiResponse<GameSessionDTO>
                 {
                     Success = true,
@@ -246,76 +237,77 @@ namespace API.Controllers
             }
         }
 
-        [HttpPut("{gameCode}/update-team")]
-        [ProducesResponseType(typeof(ApiResponse<GameSessionDTO>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ApiResponse<GameSessionDTO>>> UpdatePlayerTeam(
-            string gameCode,
-            [FromBody] UpdateTeamRequest request)
-        {
-            try
-            {
-                var game = _gameSessionManager.GetActiveGame(gameCode);
+        // [HttpPut("{gameCode}/update-team")]
+        // [ProducesResponseType(typeof(ApiResponse<GameSessionDTO>), StatusCodes.Status200OK)]
+        // [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
+        // public async Task<ActionResult<ApiResponse<GameSessionDTO>>> UpdatePlayerTeam(
+        //     string gameCode,
+        //     [FromBody] UpdateTeamRequest request)
+        // {
+        //     try
+        //     {
+        //         var game = _gameSessionManager.GetActiveGame(gameCode);
 
-                // Game not active
-                if (game == null)
-                {
-                    return NotFound(new ApiResponse<GameSessionDTO>
-                    {
-                        Success = false,
-                        Message = "Game not found"
-                    });
-                }
+        //         // Game not active
+        //         if (game == null)
+        //         {
+        //             return NotFound(new ApiResponse<GameSessionDTO>
+        //             {
+        //                 Success = false,
+        //                 Message = "Game not found"
+        //             });
+        //         }
 
-                if (game.Status != GameStatus.Waiting)
-                {
-                    return NotFound(new ApiResponse<GameSessionDTO>
-                    {
-                        Success = false,
-                        Message = "Game has already been started"
-                    });
-                }
+        //         if (game.Status != GameStatus.Waiting)
+        //         {
+        //             return NotFound(new ApiResponse<GameSessionDTO>
+        //             {
+        //                 Success = false,
+        //                 Message = "Game has already been started"
+        //             });
+        //         }
 
-                var player = game.Players.FirstOrDefault(p => p.Id == GetCurrentUserId());
+        //         var player = game.Players.FirstOrDefault(p => p.Id == GetCurrentUserId());
                 
-                // If player is not part of the game
-                if (player == null)
-                {
-                    return NotFound(new ApiResponse<GameSessionDTO>
-                    {
-                        Success = false,
-                        Message = "Player not found"
-                    });
-                }
+        //         // If player is not part of the game
+        //         if (player == null)
+        //         {
+        //             return NotFound(new ApiResponse<GameSessionDTO>
+        //             {
+        //                 Success = false,
+        //                 Message = "Player not found"
+        //             });
+        //         }
 
-                game.RedTeam.Members.Remove(player);
-                game.BlueTeam.Members.Remove(player);
+        //         game.RedTeam.Members.Remove(player);
+        //         game.BlueTeam.Members.Remove(player);
 
-                //var newTeam = request.TeamColor ==? game.RedTeam : game.BlueTeam;
-                //newTeam.Members.Add(player);
-                //player.Team = newTeam;
+        //         var newTeam = request.TeamColor == TeamColor.Red ? game.RedTeam : game.BlueTeam;
+        //         newTeam.Members.Add(player);
+        //         player.Team = newTeam;
+        //         player.IsMindreader = request.IsMindreader;
 
-                player.IsMindreader = request.IsMindreader;
+        //         player.IsMindreader = request.IsMindreader;
 
-                var dto = MapToDTO(game);
+        //         var dto = MapToDTO(game);
 
-                return Ok(new ApiResponse<GameSessionDTO>
-                {
-                    Success = true,
-                    Message = $"Player with username: '{player.GetUsername()}' switched to {request.TeamColor} team",
-                    Data = dto
-                });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new ApiResponse<GameSessionDTO>
-                {
-                    Success = false,
-                    Message = "Error when changing team",
-                    Errors = new List<string> { ex.Message }
-                });
-            }
-        }
+        //         return Ok(new ApiResponse<GameSessionDTO>
+        //         {
+        //             Success = true,
+        //             Message = $"Player with username: '{player.GetUsername()}' switched to {request.TeamColor} team",
+        //             Data = dto
+        //         });
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         return StatusCode(500, new ApiResponse<GameSessionDTO>
+        //         {
+        //             Success = false,
+        //             Message = "Error when changing team",
+        //             Errors = new List<string> { ex.Message }
+        //         });
+        //     }
+        // }
 
         private GameSessionDTO MapToDTO(GameSession game)
         {
@@ -366,19 +358,20 @@ namespace API.Controllers
                         IsMindreader = p.IsMindreader,
                         IsPlaying = p.IsPlaying
                     }).ToList(),
-                Board = new BoardDTO
-                {
-                    Id = game.Board.Id,
-                    Size = game.Board.Size,
-                    Cards = game.Board.Cards
-                        .Select(c => new CardDTO
-                        {
-                            Word = c.Word,
-                            TeamColor = c.TeamColor.ToString(),
-                            IsRevealed = c.IsRevealed,
-                            Position = c.Position
-                        }).ToList()
-                }
+                // Board = new BoardDTO
+                // {
+                //     Id = game.Board.Id,
+                //     Size = game.Board.Size,
+                //     Cards = game.Board.Cards
+                //         .Select(c => new CardDTO
+                //         {
+                //             Word = c.Word,
+                //             TeamColor = c.TeamColor.ToString(),
+                //             IsRevealed = c.IsRevealed,
+                //             Position = c.Position
+                //         }).ToList()
+                // }
+                Board = null
             };
         }
 

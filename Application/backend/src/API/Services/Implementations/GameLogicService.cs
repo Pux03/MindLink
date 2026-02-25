@@ -87,10 +87,9 @@ namespace API.Services
             return new GuessExecutedEvent
             {
                 UserId = userId,
-                //IsCorrect = isCorrect,
                 GuessedCardPositions = cardPositions,
-                //IsGameOver = isGameOver,
-                //WinnerTeam = game.Winner
+                IsGameOver = isGameOver,
+                WinnerTeam = isGameOver ? game.Winner : null
             };
         }
 
@@ -126,11 +125,6 @@ namespace API.Services
             }
 
             return false;
-        }
-
-        public TeamColor? DetermineWinner(GameSession game)
-        {
-            throw new NotImplementedException();
         }
     }
 }

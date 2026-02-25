@@ -7,6 +7,7 @@ namespace Core.Models
     {
         public int Id { get; set; }
         public int UserId { get; set; }
+        public string? ConnectionId { get; set; }
         public User? User { get; set; }
         public Team? Team { get; set; }
         public bool IsMindreader { get; set; } = false;
