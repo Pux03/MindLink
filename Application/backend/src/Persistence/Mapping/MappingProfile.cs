@@ -134,6 +134,10 @@ namespace Persistence.Mapping
                 .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
                 
                 .ReverseMap();
+
+            //
+            // 8. USER MAPPING
+            CreateMap<User, UserEntity>().ReverseMap();
         }
     }
 }
