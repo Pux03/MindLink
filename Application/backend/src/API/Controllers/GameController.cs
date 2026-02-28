@@ -137,7 +137,8 @@ namespace API.Controllers
                 game.CreatedByUserId = currentUserId;
 
                 var player = new Player
-                {
+                {   
+                    User = new User { Id = GetCurrentUserId(), Username = GetCurrentUsername() },
                     UserId = currentUserId,
                     IsPlaying = true,
                     Team = null,
@@ -209,6 +210,7 @@ namespace API.Controllers
 
                 var player = new Player
                 {
+                    User = new User { Id = GetCurrentUserId(), Username = GetCurrentUsername() },
                     UserId = GetCurrentUserId(),
                     IsPlaying = true,
                     Team = null,
@@ -381,6 +383,11 @@ namespace API.Controllers
             if (claim == null)
                 throw new UnauthorizedAccessException("User not authenticated");
             return int.Parse(claim.Value);
+        }
+
+        private string GetCurrentUsername()
+        {
+            return User.FindFirst("username")?.Value ?? "Guest";
         }
     }
 }
