@@ -6,6 +6,7 @@ using API.Services;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using System.Security.Claims;
+using API.MessageQueue;
 
 namespace API.Hubs
 {
@@ -14,6 +15,7 @@ namespace API.Hubs
         private readonly IGameSessionService _gameSessionService;
         private readonly IGameLogicService _gameLogicService;
         private readonly IGameSessionManager _gameSessionManager;
+        private readonly IGameEventPublisher _publisher;
         private readonly IMapper _mapper;
         private readonly ILogger<GameHub> _logger;
 
@@ -22,12 +24,14 @@ namespace API.Hubs
             IGameLogicService gameLogicService,
             IGameSessionManager gameSessionManager,
             IMapper mapper,
+            IGameEventPublisher publisher,
             ILogger<GameHub> logger)
         {
             _gameSessionService = gameSessionService;
             _gameLogicService = gameLogicService;
             _gameSessionManager = gameSessionManager;
             _mapper = mapper;
+            _publisher = publisher;
             _logger = logger;
         }
 
@@ -37,7 +41,7 @@ namespace API.Hubs
             await base.OnConnectedAsync();
         }
 
-        public override async Task OnDisconnectedAsync(Exception exception)
+        public override async Task OnDisconnectedAsync(Exception? exception)
         {
             _logger.LogInformation($"Client {Context.ConnectionId} disconnected");
             await base.OnDisconnectedAsync(exception);
@@ -201,7 +205,7 @@ namespace API.Hubs
             {
                 _logger.LogInformation($"ExecuteGuess: game={gameCode}, cards={string.Join(",", cardPositions)}");
                 
-                if (cardPositions == null || !cardPositions.Any())
+                if (cardPositions == null || cardPositions.Count == 0)
                 {
                     await Clients.Caller.Error("No cards selected");
                     return;
@@ -211,28 +215,35 @@ namespace API.Hubs
                 if (game == null) { await Clients.Caller.Error("Game not found"); return; }
                 
                 var currentUserId = GetCurrentUserId();
-                
-                if (currentUserId == null) { await Clients.Caller.Error("User not authenticated"); return; }
 
-                var guessEvent = await _gameLogicService.ExecuteGuessAsync(game, currentUserId, cardPositions);
+                var guessResult = await _gameLogicService.ExecuteGuessAsync(game, currentUserId, cardPositions);
 
-                await Clients.Group($"game_{gameCode}")
-                    .GuessExecuted(new
-                    {
-                        RevealedCards = guessEvent.GuessedCardPositions.Select(pos =>
-                        {
-                            var card = game.Board.Cards.First(c => c.Position == pos);
-                            return new
-                            {
-                                card.Position,
-                                card.Word,
-                                card.TeamColor,
-                                card.IsRevealed
-                            };
-                        }),
-                        IsGameOver = guessEvent.IsGameOver,
-                        Winner = guessEvent.WinnerTeam?.ToString()
-                    });
+                // await Clients.Group($"game_{gameCode}")
+                //     .GuessExecuted(new
+                //     {
+                //         RevealedCards = guessResult.GuessedCardPositions.Select(pos =>
+                //         {
+                //             var card = game.Board.Cards.First(c => c.Position == pos);
+                //             return new
+                //             {
+                //                 card.Position,
+                //                 card.Word,
+                //                 card.TeamColor,
+                //                 card.IsRevealed
+                //             };
+                //         }),
+                //         IsGameOver = guessResult.IsGameOver,
+                //         Winner = guessResult.WinnerTeam?.ToString()
+                //     });
+            
+                await _publisher.PublishGuessExecutedAsync(new GuessExecutedEvent
+                {
+                    GameCode = gameCode,
+                    IsGameOver = guessResult.IsGameOver,
+                    WinnerTeam = guessResult.WinnerTeam,
+                    RevealedCards = guessResult.RevealedCards
+                });
+
             }
             catch (Exception ex)
             {
@@ -269,12 +280,19 @@ namespace API.Hubs
 
                 var hintEvent = await _gameLogicService.GiveHintAsync(game, mindReader, word, wordCount);
 
-                await Clients.Group($"game_{gameCode}")
-                    .HintGiven(new
-                    {
-                        Word = word,
-                        WordCount = wordCount
-                    });
+                // await Clients.Group($"game_{gameCode}")
+                //     .HintGiven(new
+                //     {
+                //         Word = word,
+                //         WordCount = wordCount
+                //     });
+                await _publisher.PublishHintGivenAsync(new HintGivenEvent
+                {
+                    GameCode = gameCode,
+                    PlayerId = mindReader.Id,
+                    Word = word,
+                    WordCount = wordCount
+                });
             }
             catch (Exception ex)
             {

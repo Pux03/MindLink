@@ -6,7 +6,7 @@ namespace Core.Events
     {
         public TeamColor? Winner { get; set; }
         public DateTime EndTime { get; set; }
-        public string Reason { get; set; }
+        public string? Reason { get; set; }
 
         // public override string ToString() 
         //     => "";

@@ -10,10 +10,10 @@ namespace Persistence.Entities
 
         // FK Player
         public int PlayerId { get; set; }
-        public PlayerEntity Player { get; set; }
+        public PlayerEntity? Player { get; set; }
 
         // FK GameSession
         public int GameSessionId { get; set; }
-        public GameSessionEntity GameSession { get; set; }
+        public GameSessionEntity? GameSession { get; set; }
     }
 }

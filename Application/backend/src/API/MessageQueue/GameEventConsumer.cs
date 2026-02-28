@@ -118,6 +118,12 @@ namespace API.MessageQueue
         {
             var @event = JsonSerializer.Deserialize<GameCreatedEvent>(json);
 
+            if (@event is null)
+            {
+                _logger.LogWarning("Received null GuessExecutedEvent");
+                return;
+            }
+
             _logger.LogInformation($"GameSession {@event.GameSessionId} created");
 
             // Signalizir sve klijente
@@ -134,6 +140,12 @@ namespace API.MessageQueue
         {
             var @event = JsonSerializer.Deserialize<GameStartedEvent>(json);
 
+            if (@event is null)
+            {
+                _logger.LogWarning("Received null GuessExecutedEvent");
+                return;
+            }
+
             _logger.LogInformation($"Game {@event.GameSessionId} started");
 
             // Signalizira samo odredjenoj grupi
@@ -149,17 +161,21 @@ namespace API.MessageQueue
         {
             var @event = JsonSerializer.Deserialize<GuessExecutedEvent>(json);
 
+            if (@event is null)
+            {
+                _logger.LogWarning("Received null GuessExecutedEvent");
+                return;
+            }
+
             _logger.LogInformation($"Guess at game: {@event.GameSessionId}");
 
-            // samo grupi
             await _hubContext.Clients
-                .Group($"game_{@event.GameSessionId}")
+                .Group($"game_{@event.GameCode}")
                 .GuessExecuted(new
                 {
-                    //CardWord = @event.CardWord,
-                    //CardTeam = @event.CardTeam.ToString(),
-                    //IsCorrect = @event.IsCorrect,
-                    //Index = @event.Index
+                    RevealedCards = @event.RevealedCards,
+                    IsGameOver = @event.IsGameOver,
+                    Winner = @event.WinnerTeam?.ToString()
                 });
         }
 
@@ -167,7 +183,13 @@ namespace API.MessageQueue
         {
             var @event = JsonSerializer.Deserialize<HintGivenEvent>(json);
 
-            _logger.LogInformation($"Hint at game: {@event.GameSessionId}");
+            if (@event is null)
+            {
+                _logger.LogWarning("Received null GuessExecutedEvent");
+                return;
+            }
+
+            _logger.LogInformation($"Hint at game: {@event.GameCode}");
 
             // Signalizira grupi
             await _hubContext.Clients
@@ -182,6 +204,12 @@ namespace API.MessageQueue
         private async Task HandleGameEndedAsync(string json)
         {
             var @event = JsonSerializer.Deserialize<GameEndedEvent>(json);
+
+            if (@event is null)
+            {
+                _logger.LogWarning("Received null GuessExecutedEvent");
+                return;
+            }
 
             _logger.LogInformation($"Game {@event.GameSessionId} has ended");
 
