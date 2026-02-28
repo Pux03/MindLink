@@ -87,7 +87,7 @@ namespace API.Services
             return new GuessExecutedEvent
             {
                 UserId = userId,
-                GuessedCardPositions = cardPositions,
+                RevealedCards = guessedCards,
                 IsGameOver = isGameOver,
                 WinnerTeam = isGameOver ? game.Winner : null
             };
@@ -95,7 +95,20 @@ namespace API.Services
 
         public Task<HintGivenEvent> GiveHintAsync(GameSession game, Player mindReader, string word, int wordCount)
         {
-            throw new NotImplementedException();
+            game.AddHint(new Hint
+            {
+                PlayerId = mindReader.Id,
+                Word = word,
+                WordCount = wordCount
+            });
+
+            return Task.FromResult(new HintGivenEvent
+            {
+                GameCode = game.Code,
+                PlayerId = mindReader.Id,
+                Word = word,
+                WordCount = wordCount
+            });
         }
 
         public bool IsGameOver(GameSession game)
