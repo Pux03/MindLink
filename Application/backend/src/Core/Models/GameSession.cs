@@ -5,6 +5,7 @@ namespace Core.Models
 
     public class GameSession
     {
+        public int Id { get; set; }
         public string Code { get; set; } = string.Empty;
         public Board Board { get; set; } = new Board();
         public Team RedTeam { get; set; } = new Team();
