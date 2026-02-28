@@ -193,7 +193,7 @@ namespace API.MessageQueue
 
             // Signalizira grupi
             await _hubContext.Clients
-                .Group($"game_{@event.GameSessionId}")
+                .Group($"game_{@event.GameCode}")
                 .HintGiven(new
                 {
                     Word = @event.Word,
