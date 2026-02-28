@@ -79,13 +79,10 @@ namespace Persistence.Repositories
                 .FirstOrDefaultAsync(g => g.Id == gameId);
         }
 
-        // public async Task<GameSessionEntity?> GetGameByCodeAsync(string code)
-        // {
-        //     return await _context.GameSessions
-        //         .Include(g => g.Board)
-        //         .Include(g => g.RedTeam).ThenInclude(t => t.Players)
-        //         .Include(g => g.BlueTeam).ThenInclude(t => t.Players)
-        //         .FirstOrDefaultAsync(g => g.Code == code);
-        // }
+        public async Task<GameSessionEntity?> GetGameByCodeAsync(string code)
+        {
+            return await _dbSet
+                .FirstOrDefaultAsync(g => g.Code == code);
+        }
     }
 }

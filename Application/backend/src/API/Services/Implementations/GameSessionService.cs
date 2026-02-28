@@ -168,9 +168,14 @@ namespace API.Services
                 game.CurrentTeam = TeamColor.Red; // TODO ko prvi igra?
                 game.Status = GameStatus.Active;
 
-                var UpdatedGameEntity = _mapper.Map<GameSessionEntity>(game);
-                await _gameRepository.UpdateAsync(UpdatedGameEntity);
-                await _gameRepository.SaveChangesAsync();
+                var gameEntity = await _gameRepository.GetGameByCodeAsync(gameCode);
+                if (gameEntity != null)
+                {
+                    gameEntity.Status = GameStatus.Active;
+                    gameEntity.CurrentTeam = TeamColor.Red;
+                    await _gameRepository.UpdateAsync(gameEntity);
+                    await _gameRepository.SaveChangesAsync();
+                }
 
                 return game;
             }
