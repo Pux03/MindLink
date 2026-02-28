@@ -11,6 +11,7 @@ namespace Persistence.Repositories
         public async Task<PlayerEntity?> GetByUsernameAsync(string username)
         {
             return await _dbSet
+                .Include(p => p.User)
                 .Include(p => p.Team)
                 .FirstOrDefaultAsync(p => p.User!.Username.ToLower() == username.ToLower());
         }

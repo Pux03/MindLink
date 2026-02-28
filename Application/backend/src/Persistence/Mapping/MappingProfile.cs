@@ -22,7 +22,9 @@ namespace Persistence.Mapping
                 
                 .ReverseMap()
                 .ForMember(dest => dest.Team, 
-                    opt => opt.MapFrom(src => src.Team));
+                    opt => opt.MapFrom(src => src.Team))
+                .ForMember(dest => dest.User,      
+                    opt => opt.MapFrom(src => src.User));
 
             // 
             // 2. TEAM MAPPING
