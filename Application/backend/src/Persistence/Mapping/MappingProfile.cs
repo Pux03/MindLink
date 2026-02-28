@@ -30,7 +30,7 @@ namespace Persistence.Mapping
             // 2. TEAM MAPPING
             // 
             CreateMap<Team, TeamEntity>()
-                .ForMember(dest => dest.Members, opt => opt.MapFrom(src => src.Members))
+                .ForMember(dest => dest.Members, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
                 .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
                 
