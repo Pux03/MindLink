@@ -67,6 +67,8 @@ namespace Persistence.Mapping
             // 5. GAME SESSION MAPPING
             // 
             CreateMap<GameSession, GameSessionEntity>()
+                .ForMember(dest => dest.RedTeamId, opt => opt.Ignore())
+                .ForMember(dest => dest.BlueTeamId, opt => opt.Ignore()) 
                 .ForMember(dest => dest.CurrentTeam, 
                     opt => opt.MapFrom(src => src.CurrentTeam))
                 .ForMember(dest => dest.Status, 
