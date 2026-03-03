@@ -1,5 +1,5 @@
 import { apiClient } from "./client";
-import type { CreateGameRequest, GameSessionDTO, GameSessionResponse } from "./types";
+import type { CreateGameRequest, GameSessionDTO, GameSessionResponse, JoinGameRequest } from "./types";
 
 export const gameApi = {
     createGame: async (data: CreateGameRequest) => {
@@ -10,17 +10,17 @@ export const gameApi = {
         return response.data;
     },
 
-    joinGame: async (gameId: number, playerName: string) => {
+    joinGame: async (code: string, data: JoinGameRequest) => {
         const response = await apiClient.post(
-            `/game/${gameId}/join`,
-            { playerName }
+            `/Games/${code}/join`,
+            data
         );
         return response.data;
     },
 
-    getGame: async (gameId: number) => {
-        const response = await apiClient.get<GameSessionDTO>(
-            `/game/${gameId}`
+    getGame: async (gameId: string) => {
+        const response = await apiClient.get<GameSessionResponse>(
+            `/Games/${gameId}`
         );
         return response.data;
     },

@@ -3,7 +3,7 @@ import * as signalR from "@microsoft/signalr";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-interface Player {
+export interface Player {
     id: number;
     playerName: string;
     teamColor: string | null;
@@ -11,18 +11,56 @@ interface Player {
     isPlaying: boolean;
 }
 
-// Backend sends camelCase via SignalR JSON serialization
-interface PlayerJoinedPayload { userId: number; totalPlayers: number; }
-interface GameStartedPayload { firstTeam: string; }
-interface HintGivenPayload { word: string; wordCount: number; }
-// GuessResult is sent only to Caller (not the group) — positions of the guessed cards
-interface GuessResultPayload { guessedCardPositions: number[]; }
+export interface CardDTO {
+    word: string;
+    // teamColor is null for operatives on unrevealed cards (backend hides it)
+    teamColor: "Red" | "Blue" | "Neutral" | "Bomb" | null;
+    isRevealed: boolean;
+    position: number;
+}
+
+export interface RevealedCard {
+    position: number;
+    word: string;
+    teamColor: string;
+    isRevealed: boolean;
+}
+
+// ── SignalR payload shapes (camelCase - .NET default serialization) ───────────
+
+interface PlayerJoinedPayload {
+    userId: number;
+    totalPlayers: number;
+}
+
+// Backend sends PlayerName, NewTeam, IsMindreader (no userId)
 interface PlayerTeamChangedPayload {
-    playerId: number;
     playerName: string;
     newTeam: string;
     isMindreader: boolean;
 }
+
+interface GameStartedPayload {
+    firstTeam: string;
+}
+
+interface ReceiveCardsPayload {
+    cards: CardDTO[];
+}
+
+interface HintGivenPayload {
+    word: string;
+    wordCount: number;
+}
+
+// ExecuteGuess broadcasts GuessExecuted to group (not GuessResult)
+interface GuessExecutedPayload {
+    revealedCards: RevealedCard[];
+    isGameOver: boolean;
+    winnerTeam: string | null;
+}
+
+// ── Public types ──────────────────────────────────────────────────────────────
 
 export type LogEntry = {
     id: number;
@@ -35,8 +73,6 @@ export interface GameState {
     started: boolean;
     firstTeam?: string;
     currentHint?: { word: string; count: number };
-    /** Positions that were guessed (from GuessResult — only visible to guesser) */
-    lastGuessedPositions?: number[];
     winner?: string | null;
     ended: boolean;
 }
@@ -61,23 +97,20 @@ const HUB_URL = "/hubs/game";
 
 interface UseGameHubOptions {
     gameCode: string | undefined;
-    /**
-     * Called when the local player's own guess result arrives.
-     * Positions come from GuessResult (Caller-only).
-     * Use this to reveal cards optimistically on the guesser's side.
-     */
-    onGuessResult: (positions: number[]) => void;
-    onPlayersUpdated: (updater: (players: Player[]) => Player[]) => void;
-    onGameStatusChange: (status: "Waiting" | "Playing" | "Ended") => void;
-    onWinner: (winner: string | null) => void;
+    onPlayerTeamChanged: (playerName: string, newTeam: string, isMindreader: boolean) => void;
+    onGameStarted: (firstTeam: string) => void;
+    onReceiveCards: (cards: CardDTO[]) => void;
+    onGuessExecuted: (revealedCards: RevealedCard[], isGameOver: boolean, winner: string | null) => void;
+    onPlayerJoined?: (userId: number, totalPlayers: number) => void;
 }
 
 export const useGameHub = ({
     gameCode,
-    onGuessResult,
-    onPlayersUpdated,
-    onGameStatusChange,
-    onWinner,
+    onPlayerTeamChanged,
+    onGameStarted,
+    onReceiveCards,
+    onGuessExecuted,
+    onPlayerJoined,
 }: UseGameHubOptions) => {
     const [connStatus, setConnStatus] = useState<string>("Disconnected");
     const [logs, setLogs] = useState<LogEntry[]>([]);
@@ -102,11 +135,9 @@ export const useGameHub = ({
 
         connectionRef.current = connection;
 
-        // ── Connection lifecycle ──────────────────────────────────────────────
-
         connection.onreconnecting(() => {
             setConnStatus("Reconnecting");
-            addLog("error", "Connection lost — reconnecting…");
+            addLog("error", "Connection lost - reconnecting...");
         });
 
         connection.onreconnected(async () => {
@@ -120,85 +151,73 @@ export const useGameHub = ({
             addLog("error", "Disconnected from hub");
         });
 
-        // ── Hub event handlers — must match backend Clients.*.MethodName() ───
-
-        /**
-         * Sent to group by JoinGame hub method.
-         * Payload: { UserId, TotalPlayers } — SignalR serializes to camelCase by default.
-         */
+        // JoinGame -> Clients.Group -> PlayerJoined({ UserId, TotalPlayers })
         connection.on("PlayerJoined", (payload: PlayerJoinedPayload) => {
             addLog("info", `Player joined (total: ${payload.totalPlayers})`);
+            onPlayerJoined?.(payload.userId, payload.totalPlayers);
         });
 
-        /**
-         * Sent to group by UpdateTeam hub method.
-         */
+        // UpdateTeam -> Clients.Group -> PlayerTeamChanged({ PlayerName, NewTeam, IsMindreader })
+        // Backend does NOT send PlayerId - match by playerName in consumer
         connection.on("PlayerTeamChanged", (payload: PlayerTeamChangedPayload) => {
             addLog(
                 "info",
-                `${payload.playerName} → ${payload.newTeam} ${payload.isMindreader ? "(Spymaster)" : "(Operative)"}`,
+                `${payload.playerName} joined ${payload.newTeam} as ${payload.isMindreader ? "Spymaster" : "Operative"}`,
             );
-            onPlayersUpdated((players) =>
-                players.map((p) =>
-                    p.id === payload.playerId
-                        ? { ...p, teamColor: payload.newTeam, isMindreader: payload.isMindreader }
-                        : p,
-                ),
-            );
+            onPlayerTeamChanged(payload.playerName, payload.newTeam, payload.isMindreader);
         });
 
-        /**
-         * Sent to group by StartGame hub method.
-         * Payload: { FirstTeam } → camelCase: { firstTeam }
-         */
+        // StartGame -> Clients.Group -> GameStarted({ FirstTeam })
         connection.on("GameStarted", (payload: GameStartedPayload) => {
             setGameState((s) => ({ ...s, started: true, firstTeam: payload.firstTeam }));
-            addLog("success", `♠ Game started! First turn: ${payload.firstTeam}`);
-            onGameStatusChange("Playing");
+            addLog("success", `Game started! First turn: ${payload.firstTeam}`);
+            onGameStarted(payload.firstTeam);
         });
 
-        /**
-         * Sent to group by GiveHint hub method.
-         * Payload: { Word, WordCount } → camelCase: { word, wordCount }
-         */
+        // StartGame -> Clients.Client(connectionId) -> ReceiveCards({ Cards })
+        // Per-player: operatives get null teamColor on unrevealed cards
+        // Spymasters get real colors on all cards
+        connection.on("ReceiveCards", (payload: ReceiveCardsPayload) => {
+            addLog("info", `Board received (${payload.cards?.length ?? 0} cards)`);
+            if (payload.cards) {
+                onReceiveCards(payload.cards);
+            }
+        });
+
+        // GiveHint -> Clients.Group -> HintGiven({ Word, WordCount })
         connection.on("HintGiven", (payload: HintGivenPayload) => {
             setGameState((s) => ({
                 ...s,
                 currentHint: { word: payload.word, count: payload.wordCount },
             }));
-            addLog("hint", `♦ Hint: "${payload.word}" × ${payload.wordCount}`);
+            addLog("hint", `Hint: "${payload.word}" x${payload.wordCount}`);
         });
 
-        /**
-         * Sent ONLY to Caller by ExecuteGuess hub method.
-         * Payload: { GuessedCardPositions } → camelCase: { guessedCardPositions }
-         *
-         * NOTE: The backend currently only sends this to the caller and does NOT
-         * broadcast card reveals to the group. To reveal cards for all players,
-         * the backend needs to emit a group event (e.g. Clients.Group(...).CardRevealed).
-         * For now we handle the caller-side reveal here.
-         */
-        connection.on("GuessResult", (payload: GuessResultPayload) => {
-            addLog("guess", `♣ Your guess: cards [${payload.guessedCardPositions.join(", ")}]`);
-            setGameState((s) => ({ ...s, lastGuessedPositions: payload.guessedCardPositions }));
-            onGuessResult(payload.guessedCardPositions);
+        // ExecuteGuess -> Clients.Group -> GuessExecuted({ RevealedCards, IsGameOver, Winner })
+        connection.on("GuessExecuted", (payload: GuessExecutedPayload) => {
+
+            if (payload.isGameOver && payload.winnerTeam) {
+                setGameState((s) => ({ ...s, ended: true, winner: payload.winnerTeam }));
+            }
+
+            onGuessExecuted(
+                payload.revealedCards ?? [],
+                payload.isGameOver,
+                payload.winnerTeam
+            );
         });
 
-        /**
-         * Generic error from the hub.
-         */
+        // Generic hub error
         connection.on("Error", (message: string) => {
             addLog("error", `Server: ${message}`);
         });
-
-        // ── Start connection ──────────────────────────────────────────────────
 
         const start = async () => {
             try {
                 setConnStatus("Connecting");
                 await connection.start();
                 setConnStatus("Connected");
-                addLog("info", "Connected to SignalR hub");
+                addLog("info", "Connected to hub");
                 await connection.invoke("JoinGame", gameCode);
                 addLog("info", `Joined game ${gameCode}`);
             } catch (err) {
@@ -209,36 +228,33 @@ export const useGameHub = ({
         };
 
         start();
-        return () => {
-            connection.stop();
-        };
+        return () => { connection.stop(); };
     }, [gameCode, addLog]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // ── Exposed actions ───────────────────────────────────────────────────────
 
-    /** Invokes StartGame on the hub. Only the host should call this. */
     const startGame = async (code: string) => {
         if (!connectionRef.current) return;
         try {
             await connectionRef.current.invoke("StartGame", code);
         } catch {
-            addLog("error", "Failed to start game via hub");
+            addLog("error", "Failed to start game");
         }
     };
 
-    /**
-     * Invokes ExecuteGuess on the hub.
-     * The backend accepts List<int> cardPositions — we send an array.
-     */
+    // UpdateTeam(gameCode, teamColor, isMindreader) - only works while Waiting
+    const updateTeam = async (code: string, teamColor: "Red" | "Blue", isMindreader: boolean) => {
+        if (!connectionRef.current) throw new Error("Not connected");
+        await connectionRef.current.invoke("UpdateTeam", code, teamColor, isMindreader);
+    };
+
+    // ExecuteGuess(gameCode, [cardPosition]) - backend takes List<int>
     const executeGuess = async (code: string, cardPosition: number) => {
         if (!connectionRef.current) throw new Error("Not connected");
         await connectionRef.current.invoke("ExecuteGuess", code, [cardPosition]);
     };
 
-    /**
-     * Invokes GiveHint on the hub.
-     * Backend signature: GiveHint(string gameCode, string word, int wordCount)
-     */
+    // GiveHint(gameCode, word, wordCount)
     const giveHint = async (code: string, word: string, count: number) => {
         if (!connectionRef.current) throw new Error("Not connected");
         await connectionRef.current.invoke("GiveHint", code, word, count);
@@ -249,6 +265,7 @@ export const useGameHub = ({
         logs,
         gameState,
         startGame,
+        updateTeam,
         executeGuess,
         giveHint,
     };

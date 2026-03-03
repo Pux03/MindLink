@@ -10,7 +10,10 @@ export interface CreateGameRequest {
     redTeamName: string | null;
     blueTeamName: string | null;
 }
-
+export interface JoinGameRequest {
+    playerName: string;
+    userId: string;
+}
 export interface RegisterRequest {
     username: string;
     email: string;

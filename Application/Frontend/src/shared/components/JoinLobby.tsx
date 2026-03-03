@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, type KeyboardEvent } from "react";
 import { useNavigate } from "react-router-dom";
+import { useJoinGame } from "../features/game/hooks/useJoinGame";
 import "./joinlobby.css";
 
 interface JoinLobbyModalProps {
@@ -11,6 +12,7 @@ const CODE_LENGTH = 8;
 
 export const JoinLobby = ({ isOpen, onClose }: JoinLobbyModalProps) => {
   const navigate = useNavigate();
+  const { joinGame, loading } = useJoinGame();
   const [code, setCode] = useState<string[]>(Array(CODE_LENGTH).fill(""));
   const [error, setError] = useState<string | null>(null);
   const [shaking, setShaking] = useState(false);
@@ -41,12 +43,33 @@ export const JoinLobby = ({ isOpen, onClose }: JoinLobbyModalProps) => {
     setTimeout(() => setShaking(false), 500);
   };
 
-  const handleJoin = () => {
+  const handleJoin = async () => {
     const fullCode = code.join("").toUpperCase();
+
     if (fullCode.length < CODE_LENGTH) {
       triggerShake("Enter the full 8-character code");
       return;
     }
+
+    const storedUser = localStorage.getItem("user");
+    if (!storedUser) {
+      triggerShake("User not found");
+      return;
+    }
+
+    const user = JSON.parse(storedUser);
+    const request = {
+      userId: user.id,
+      playerName: user.username,
+    };
+    console.log(request);
+    const game = await joinGame(fullCode, request);
+
+    if (!game) {
+      triggerShake("Failed to join game");
+      return;
+    }
+
     navigate(`/r/${fullCode}`);
     onClose();
   };
