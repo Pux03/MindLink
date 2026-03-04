@@ -181,6 +181,8 @@ namespace API.MessageQueue
 
         private async Task HandleHintGivenAsync(string json)
         {
+            _logger.LogInformation($"Raw json: {json}"); 
+
             var @event = JsonSerializer.Deserialize<HintGivenEvent>(json);
 
             if (@event is null)
@@ -188,6 +190,9 @@ namespace API.MessageQueue
                 _logger.LogWarning("Received null GuessExecutedEvent");
                 return;
             }
+
+            _logger.LogInformation($"GameCode: {@event.GameCode}"); // ← i ovo
+            _logger.LogInformation($"Word: {@event.Word}");
 
             _logger.LogInformation($"Hint at game: {@event.GameCode}");
 

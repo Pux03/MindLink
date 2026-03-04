@@ -15,7 +15,8 @@ namespace API.MessageQueue
                 Port = 5672,
                 UserName = "guest",
                 Password = "guest",
-                AutomaticRecoveryEnabled = true
+                AutomaticRecoveryEnabled = true,
+                DispatchConsumersAsync = true
             };
 
             return factory.CreateConnection();

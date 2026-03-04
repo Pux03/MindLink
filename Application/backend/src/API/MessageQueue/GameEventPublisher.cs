@@ -83,7 +83,7 @@ namespace API.MessageQueue
                 using var channel = _connection.CreateModel();
 
                 // Serializes them to JSON
-                var json = JsonSerializer.Serialize(@event);
+                var json = JsonSerializer.Serialize(@event, @event.GetType());
                 var body = Encoding.UTF8.GetBytes(json);
 
                 // Makes properties

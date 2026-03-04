@@ -147,6 +147,6 @@ app.MapControllers();
 
 app.MapHub<GameHub>("/hubs/game");
 
-app.MapGet("/", () => "API radi!");
+app.MapGet("/", () => "API works");
 
 app.Run();
