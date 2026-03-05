@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useCreateGame } from "../../features/game/hooks/useCreateGame";
 import { useEffect, useState } from "react";
-import { JoinLobby } from "../../components/JoinLobby";
+import { JoinLobby } from "./components/JoinLobby";
 import { useAuth } from "../../features/auth/hooks/useAuth";
 import "./home.page.css";
 

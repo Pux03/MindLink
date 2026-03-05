@@ -57,7 +57,8 @@ interface HintGivenPayload {
 interface GuessExecutedPayload {
     revealedCards: RevealedCard[];
     isGameOver: boolean;
-    winnerTeam: string | null;
+    winner: string | null;
+    currentTeam: string | null; // updated team after guess (may switch on wrong guess)
 }
 
 // ── Public types ──────────────────────────────────────────────────────────────
@@ -100,7 +101,7 @@ interface UseGameHubOptions {
     onPlayerTeamChanged: (playerName: string, newTeam: string, isMindreader: boolean) => void;
     onGameStarted: (firstTeam: string) => void;
     onReceiveCards: (cards: CardDTO[]) => void;
-    onGuessExecuted: (revealedCards: RevealedCard[], isGameOver: boolean, winner: string | null) => void;
+    onGuessExecuted: (revealedCards: RevealedCard[], isGameOver: boolean, winner: string | null, currentTeam: string | null) => void;
     onPlayerJoined?: (userId: number, totalPlayers: number) => void;
 }
 
@@ -195,16 +196,16 @@ export const useGameHub = ({
 
         // ExecuteGuess -> Clients.Group -> GuessExecuted({ RevealedCards, IsGameOver, Winner })
         connection.on("GuessExecuted", (payload: GuessExecutedPayload) => {
+            const positions = payload.revealedCards?.map((c) => c.position) ?? [];
+            addLog("guess", `Guess revealed positions: [${positions.join(", ")}]`);
+            console.log(payload);
 
-            if (payload.isGameOver && payload.winnerTeam) {
-                setGameState((s) => ({ ...s, ended: true, winner: payload.winnerTeam }));
+            if (payload.isGameOver && payload.winner) {
+                setGameState((s) => ({ ...s, ended: true, winner: payload.winner }));
+                addLog("success", `Game over - ${payload.winner} wins!`);
             }
 
-            onGuessExecuted(
-                payload.revealedCards ?? [],
-                payload.isGameOver,
-                payload.winnerTeam
-            );
+            onGuessExecuted(payload.revealedCards ?? [], payload.isGameOver, payload.winner, payload.currentTeam ?? null);
         });
 
         // Generic hub error
@@ -248,10 +249,10 @@ export const useGameHub = ({
         await connectionRef.current.invoke("UpdateTeam", code, teamColor, isMindreader);
     };
 
-    // ExecuteGuess(gameCode, [cardPosition]) - backend takes List<int>
-    const executeGuess = async (code: string, cardPosition: number) => {
+    // ExecuteGuess(gameCode, cardPositions) - backend takes List<int>
+    const executeGuess = async (code: string, cardPositions: number[]) => {
         if (!connectionRef.current) throw new Error("Not connected");
-        await connectionRef.current.invoke("ExecuteGuess", code, [cardPosition]);
+        await connectionRef.current.invoke("ExecuteGuess", code, cardPositions);
     };
 
     // GiveHint(gameCode, word, wordCount)

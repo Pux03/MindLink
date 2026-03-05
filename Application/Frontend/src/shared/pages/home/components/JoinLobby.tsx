@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, type KeyboardEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { useJoinGame } from "../features/game/hooks/useJoinGame";
+import { useJoinGame } from "../../../features/game/hooks/useJoinGame";
 import "./joinlobby.css";
 
 interface JoinLobbyModalProps {
