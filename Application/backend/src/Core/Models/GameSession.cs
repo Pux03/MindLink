@@ -10,7 +10,7 @@ namespace Core.Models
         public Board Board { get; set; } = new Board();
         public Team RedTeam { get; set; } = new Team();
         public Team BlueTeam { get; set; } = new Team();
-        public TeamColor CurrentTeam { get; set; } = TeamColor.Blue;
+        public TeamColor CurrentTeam { get; set; } = TeamColor.Red;
         public GameStatus Status { get; set; } = GameStatus.Waiting;
         public TeamColor? Winner { get; set; } = null;
         public List<Guess> GuessHistory { get; set; } = [];
@@ -24,13 +24,7 @@ namespace Core.Models
 
         // Who created the GameSession
         public int CreatedByUserId { get; set; }
-
-        public TeamColor GetTeamByPlayer()
-        {
-            return TeamColor.Neutral;
-        }
-
-
+        
         // TODO
         public void AddGuess(Guess guess)
         {
@@ -40,6 +34,12 @@ namespace Core.Models
         public void AddHint(Hint hint)
         {
             HintHistory.Add(hint);
+        }
+
+        public TeamColor SwitchTeam()
+        {
+            CurrentTeam = CurrentTeam == TeamColor.Blue ? TeamColor.Red : TeamColor.Blue;
+            return CurrentTeam;
         }
     }
 

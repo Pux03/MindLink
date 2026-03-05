@@ -175,7 +175,8 @@ namespace API.MessageQueue
                 {
                     RevealedCards = @event.RevealedCards,
                     IsGameOver = @event.IsGameOver,
-                    Winner = @event.WinnerTeam?.ToString()
+                    Winner = @event.WinnerTeam?.ToString(),
+                    CurrentTeam = @event.CurrentTeam.ToString()
                 });
         }
 

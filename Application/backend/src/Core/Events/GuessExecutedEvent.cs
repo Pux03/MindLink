@@ -10,6 +10,7 @@ namespace Core.Events
         public List<Card> RevealedCards { get; set; } = [];
         public bool IsGameOver { get; set; }
         public TeamColor? WinnerTeam { get; set; }
+        public TeamColor CurrentTeam { get; set; }
         // public override string ToString() 
         //     => $"Guess: '{CardWord}' - ";
     }

@@ -83,10 +83,13 @@ namespace API.Services
 
             var isGameOver = IsGameOver(game);
 
+            TeamColor nextTeam = game.SwitchTeam();
+
             //await _gameRepository.UpdateAsync(game);
             return new GuessExecutedEvent
             {
                 UserId = userId,
+                CurrentTeam = nextTeam,
                 RevealedCards = guessedCards,
                 IsGameOver = isGameOver,
                 WinnerTeam = isGameOver ? game.Winner : null
@@ -124,11 +127,11 @@ namespace API.Services
                 return true;
             }
 
-            var redCardsRevealed = game.Board.Cards
+            bool redCardsRevealed = game.Board.Cards
                 .Where(c => c.TeamColor == TeamColor.Red)
                 .All(c => c.IsRevealed);
 
-            var blueCardsRevealed = game.Board.Cards
+            bool blueCardsRevealed = game.Board.Cards
                 .Where(c => c.TeamColor == TeamColor.Blue)
                 .All(c => c.IsRevealed);
 
