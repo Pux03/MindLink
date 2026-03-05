@@ -57,6 +57,7 @@ namespace API.Services
                     Status = GameStatus.Waiting,
                     RedTeam = redTeam,
                     BlueTeam = blueTeam,
+                    CurrentTeam = TeamColor.Red,
                     Board = board,
                     StartTime = DateTime.UtcNow,
                     Players = [], // TODO razmisli da dodas ovo radi lakse logike
