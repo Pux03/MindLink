@@ -113,6 +113,17 @@ namespace API.Services
 
         public bool IsGameOver(GameSession game)
         {
+            var bombRevealed = game.Board.Cards
+                .Any(c => c.TeamColor == TeamColor.Bomb && c.IsRevealed);
+
+            if (bombRevealed)
+            {
+                game.Winner = game.CurrentTeam == TeamColor.Red ? TeamColor.Blue : TeamColor.Red;
+                game.Status = GameStatus.GameOver;
+                game.EndTime = DateTime.UtcNow;
+                return true;
+            }
+
             var redCardsRevealed = game.Board.Cards
                 .Where(c => c.TeamColor == TeamColor.Red)
                 .All(c => c.IsRevealed);
