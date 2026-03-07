@@ -1,11 +1,8 @@
 using Microsoft.AspNetCore.SignalR;
-using Core.Models;
 using Core.Events;
 using Core.Enums;
 using API.Services;
 using AutoMapper;
-using Microsoft.Extensions.Logging;
-using System.Security.Claims;
 using API.MessageQueue;
 
 namespace API.Hubs
@@ -33,8 +30,7 @@ namespace API.Hubs
             _mapper = mapper;
             _publisher = publisher;
             _logger = logger;
-        }
-
+        }                     
         public override async Task OnConnectedAsync()
         {
             _logger.LogInformation($"Client {Context.ConnectionId} connected");
@@ -47,10 +43,6 @@ namespace API.Hubs
             await base.OnDisconnectedAsync(exception);
         }
 
-        /// <summary>
-        /// Poziva se nakon što REST /join uspe — samo notifikacija grupi
-        /// React: connection.invoke("JoinGame", gameCode)
-        /// </summary>
         public async Task JoinGame(string gameCode)
         {
             try
@@ -63,12 +55,6 @@ namespace API.Hubs
                     return;
                 }
 
-                // Vec se obradjuje u REST pozivu
-                // if (game.Players.Count >= game.MaxPlayers)
-                // {
-                //     await Clients.Caller.Error("Game is full");
-                //     return;
-                // }
                 var currentUserId = GetCurrentUserId();
 
                 var player = game.Players.FirstOrDefault(p => p.UserId == currentUserId);
@@ -79,12 +65,19 @@ namespace API.Hubs
 
                 await Groups.AddToGroupAsync(Context.ConnectionId, $"game_{gameCode}");
 
-                await Clients.Group($"game_{gameCode}")
-                    .PlayerJoined(new
-                    {
-                        UserId = GetCurrentUserId(),
-                        TotalPlayers = game.Players.Count
-                    });
+                // await Clients.Group($"game_{gameCode}")
+                //     .PlayerJoined(new
+                //     {
+                //         UserId = GetCurrentUserId(),
+                //         TotalPlayers = game.Players.Count
+                //     });
+
+                await _publisher.PublishPlayerJoinedAsync(new PlayerJoinedEvent
+                {
+                    GameCode = gameCode,
+                    UserId = currentUserId,
+                    TotalPlayers = game.Players.Count
+                });
 
                 _logger.LogInformation($"Player {GetCurrentUserId()} joined game {gameCode}");
             }
@@ -95,9 +88,6 @@ namespace API.Hubs
             }
         }
 
-        /// <summary>
-        /// React: connection.invoke("UpdateTeam", gameCode, playerId, teamColor, isMindreader)
-        /// </summary>
         public async Task UpdateTeam(string gameCode, string teamColor, bool isMindreader)
         {
             try
@@ -135,13 +125,21 @@ namespace API.Hubs
                 player.Team = newTeam;
                 player.IsMindreader = isMindreader;
 
-                await Clients.Group($"game_{gameCode}")
-                    .PlayerTeamChanged(new
-                    {
-                        PlayerName = player.GetUsername(),
-                        NewTeam = teamColor,
-                        IsMindreader = isMindreader
-                    });
+                // await Clients.Group($"game_{gameCode}")
+                //     .PlayerTeamChanged(new
+                //     {
+                //         PlayerName = player.GetUsername(),
+                //         NewTeam = teamColor,
+                //         IsMindreader = isMindreader
+                //     });
+
+                await _publisher.PublishPlayerTeamChangedAsync(new PlayerTeamChangedEvent
+                {
+                    GameCode = gameCode,
+                    PlayerName = player.GetUsername(),
+                    NewTeam = teamColor,
+                    IsMindreader = isMindreader
+                });
 
                 _logger.LogInformation($"Player {player.GetUsername()} changed team to {teamColor}");
             }
@@ -152,9 +150,6 @@ namespace API.Hubs
             }
         }
 
-        /// <summary>
-        /// React: connection.invoke("StartGame", gameCode)
-        /// </summary>
         public async Task StartGame(string gameCode)
         {
             try
@@ -196,9 +191,6 @@ namespace API.Hubs
             }
         }
 
-        /// <summary>
-        /// React: connection.invoke("ExecuteGuess", gameCode, cardPosition)
-        /// </summary>
         public async Task ExecuteGuess(string gameCode, List<int> cardPositions)
         {
             try
@@ -217,31 +209,14 @@ namespace API.Hubs
                 var currentUserId = GetCurrentUserId();
 
                 var guessResult = await _gameLogicService.ExecuteGuessAsync(game, currentUserId, cardPositions);
-
-                // await Clients.Group($"game_{gameCode}")
-                //     .GuessExecuted(new
-                //     {
-                //         RevealedCards = guessResult.GuessedCardPositions.Select(pos =>
-                //         {
-                //             var card = game.Board.Cards.First(c => c.Position == pos);
-                //             return new
-                //             {
-                //                 card.Position,
-                //                 card.Word,
-                //                 card.TeamColor,
-                //                 card.IsRevealed
-                //             };
-                //         }),
-                //         IsGameOver = guessResult.IsGameOver,
-                //         Winner = guessResult.WinnerTeam?.ToString()
-                //     });
             
                 await _publisher.PublishGuessExecutedAsync(new GuessExecutedEvent
                 {
                     GameCode = gameCode,
                     IsGameOver = guessResult.IsGameOver,
                     WinnerTeam = guessResult.WinnerTeam,
-                    RevealedCards = guessResult.RevealedCards
+                    RevealedCards = guessResult.RevealedCards,
+                    CurrentTeam = guessResult.CurrentTeam
                 });
 
             }
@@ -252,9 +227,6 @@ namespace API.Hubs
             }
         }
 
-        /// <summary>
-        /// React: connection.invoke("GiveHint", gameCode, word, wordCount)
-        /// </summary>
         public async Task GiveHint(string gameCode, string word, int wordCount)
         {
             try
@@ -280,12 +252,6 @@ namespace API.Hubs
 
                 var hintEvent = await _gameLogicService.GiveHintAsync(game, mindReader, word, wordCount);
 
-                // await Clients.Group($"game_{gameCode}")
-                //     .HintGiven(new
-                //     {
-                //         Word = word,
-                //         WordCount = wordCount
-                //     });
                 await _publisher.PublishHintGivenAsync(new HintGivenEvent
                 {
                     GameCode = gameCode,

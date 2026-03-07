@@ -58,6 +58,16 @@ namespace API.MessageQueue
             await PublishEventAsync("game.started", @event);
         }
 
+        public async Task PublishPlayerJoinedAsync(PlayerJoinedEvent @event)
+        {
+            await PublishEventAsync("game.player_joined", @event);
+        }
+
+        public async Task PublishPlayerTeamChangedAsync(PlayerTeamChangedEvent @event)
+        {
+            await PublishEventAsync("game.player_team_changed", @event);
+        }
+
         public async Task PublishGuessExecutedAsync(GuessExecutedEvent @event)
         {
             await PublishEventAsync("game.guess_executed", @event);
@@ -88,7 +98,7 @@ namespace API.MessageQueue
 
                 // Makes properties
                 var properties = channel.CreateBasicProperties();
-                properties.Persistent = true;  // Saves if it dips
+                properties.Persistent = true;
                 properties.ContentType = "application/json";
 
                 // Publish

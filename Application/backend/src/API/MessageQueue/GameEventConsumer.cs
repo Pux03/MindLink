@@ -86,6 +86,12 @@ namespace API.MessageQueue
                         case "game.guess_executed":
                             await HandleGuessExecutedAsync(json);
                             break;
+                        case "game.player_joined":
+                            await HandlePlayerJoinedAsync(json);
+                            break;
+                        case "game.player_team_changed":
+                            await HandlePlayerTeamChangedAsync(json);
+                            break;
                         case "game.hint_given":
                             await HandleHintGivenAsync(json);
                             break;
@@ -108,8 +114,7 @@ namespace API.MessageQueue
 
             await Task.Delay(Timeout.Infinite, stoppingToken);
         }
-
-        
+    
         /// <summary>
         /// Handlers are used to tell what happens when certain event comes in
         /// </summary>
@@ -124,14 +129,14 @@ namespace API.MessageQueue
                 return;
             }
 
-            _logger.LogInformation($"GameSession {@event.GameSessionId} created");
+            _logger.LogInformation($"GameSession {@event.GameCode} created");
 
             // Signalizir sve klijente
             await _hubContext.Clients
                 .All
                 .GameCreated(new
                 {
-                    GameId = @event.GameSessionId,
+                    GameId = @event.GameCode,
                     GameName = @event.GameName
                 });
         }
@@ -146,14 +151,51 @@ namespace API.MessageQueue
                 return;
             }
 
-            _logger.LogInformation($"Game {@event.GameSessionId} started");
+            _logger.LogInformation($"Game {@event.GameCode} started");
 
             // Signalizira samo odredjenoj grupi
             await _hubContext.Clients
-                .Group($"game_{@event.GameSessionId}")
+                .Group($"game_{@event.GameCode}")
                 .GameStarted(new
                 {
                     FirstTeam = @event.FirstTeam.ToString()
+                });
+        }
+
+        private async Task HandlePlayerJoinedAsync(string json)
+        {
+            var @event = JsonSerializer.Deserialize<PlayerJoinedEvent>(json);
+
+            if (@event is null) return;
+
+            await _hubContext.Clients
+                .Group($"game_{@event.GameCode}")
+                .PlayerJoined(new
+                {
+                    UserId = @event.UserId,
+                    TotalPlayers = @event.TotalPlayers
+                });
+        }
+
+        private async Task HandlePlayerTeamChangedAsync(string json)
+        {
+            var @event = JsonSerializer.Deserialize<PlayerTeamChangedEvent>(json);
+
+            if (@event is null)
+            {
+                _logger.LogWarning("Received null PlayerTeamChangedEvent");
+                return;
+            }
+
+            _logger.LogInformation($"Player {@event.PlayerName} changed team at game: {@event.GameCode}");
+
+            await _hubContext.Clients
+                .Group($"game_{@event.GameCode}")
+                .PlayerTeamChanged(new
+                {
+                    PlayerName = @event.PlayerName,
+                    NewTeam = @event.NewTeam,
+                    IsMindreader = @event.IsMindreader
                 });
         }
 
@@ -167,7 +209,7 @@ namespace API.MessageQueue
                 return;
             }
 
-            _logger.LogInformation($"Guess at game: {@event.GameSessionId}");
+            _logger.LogInformation($"Guess at game: {@event.GameCode}");
 
             await _hubContext.Clients
                 .Group($"game_{@event.GameCode}")
@@ -192,12 +234,11 @@ namespace API.MessageQueue
                 return;
             }
 
-            _logger.LogInformation($"GameCode: {@event.GameCode}"); // ← i ovo
+            _logger.LogInformation($"GameCode: {@event.GameCode}");
             _logger.LogInformation($"Word: {@event.Word}");
 
             _logger.LogInformation($"Hint at game: {@event.GameCode}");
 
-            // Signalizira grupi
             await _hubContext.Clients
                 .Group($"game_{@event.GameCode}")
                 .HintGiven(new
@@ -217,11 +258,10 @@ namespace API.MessageQueue
                 return;
             }
 
-            _logger.LogInformation($"Game {@event.GameSessionId} has ended");
+            _logger.LogInformation($"Game {@event.GameCode} has ended");
 
-            // Signalizira grupi
             await _hubContext.Clients
-                .Group($"game_{@event.GameSessionId}")
+                .Group($"game_{@event.GameCode}")
                 .GameEnded(new
                 {
                     Winner = @event.Winner?.ToString()

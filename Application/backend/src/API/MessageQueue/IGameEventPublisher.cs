@@ -9,6 +9,8 @@ namespace API.MessageQueue
     {
         Task PublishGameCreatedAsync(GameCreatedEvent @event);
         Task PublishGameStartedAsync(GameStartedEvent @event);
+        Task PublishPlayerJoinedAsync(PlayerJoinedEvent @event);
+        Task PublishPlayerTeamChangedAsync(PlayerTeamChangedEvent @event);
         Task PublishGuessExecutedAsync(GuessExecutedEvent @event);
         Task PublishHintGivenAsync(HintGivenEvent @event);
         Task PublishGameEndedAsync(GameEndedEvent @event);
