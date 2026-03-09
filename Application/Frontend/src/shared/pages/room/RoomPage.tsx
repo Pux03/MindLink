@@ -289,12 +289,20 @@ export const RoomPage = () => {
     isMyTeamsTurn &&
     !!gameState.currentHint;
 
-  const redRemaining =
-    game?.board.cards.filter((c) => c.teamColor === "Red" && !c.isRevealed)
-      .length ?? 0;
-  const blueRemaining =
-    game?.board.cards.filter((c) => c.teamColor === "Blue" && !c.isRevealed)
-      .length ?? 0;
+  // Operatives see teamColor only on revealed cards.
+  // Count revealed per team and subtract from total (known once any card of that color is revealed,
+  // or falls back to standard Codenames count of 8 per team).
+  const cards = game?.board.cards ?? [];
+  const totalRed = cards.filter((c) => c.teamColor === "Red").length || 9;
+  const totalBlue = cards.filter((c) => c.teamColor === "Blue").length || 8;
+  const revealedRed = cards.filter(
+    (c) => c.teamColor === "Red" && c.isRevealed,
+  ).length;
+  const revealedBlue = cards.filter(
+    (c) => c.teamColor === "Blue" && c.isRevealed,
+  ).length;
+  const redRemaining = totalRed - revealedRed;
+  const blueRemaining = totalBlue - revealedBlue;
   const canStart = game?.status === "Waiting" && connStatus === "Connected";
 
   // ── Actions ───────────────────────────────────────────────────────────────
@@ -446,6 +454,7 @@ export const RoomPage = () => {
           <GameLog
             logs={logs as any}
             canStart={canStart}
+            gameStatus={game?.status ?? "Waiting"}
             onStartGame={() => game?.code && startGame(game.code)}
             onLeave={() => navigate(-1)}
           />

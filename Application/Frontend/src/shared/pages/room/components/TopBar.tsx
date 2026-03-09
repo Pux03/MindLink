@@ -103,7 +103,7 @@ export const TopBar = ({
       </span>
 
       {/* Spymaster view toggle */}
-      {game?.status === "Playing" && (
+      {/* {game?.status === "Playing" && (
         <button
           onClick={onToggleSpymasterView}
           className="px-4 py-1.5 text-xs font-bold tracking-widest uppercase transition-all duration-200"
@@ -121,7 +121,7 @@ export const TopBar = ({
         >
           {isSpymasterView ? "SPYMASTER VIEW" : "OPERATIVE VIEW"}
         </button>
-      )}
+      )} */}
     </div>
   </div>
 );
