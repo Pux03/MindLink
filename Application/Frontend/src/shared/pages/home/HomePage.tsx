@@ -1,7 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { useCreateGame } from "../../features/game/hooks/useCreateGame";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { JoinLobby } from "./components/JoinLobby";
+import { HowToPlay } from "./components/HowToPlay";
+import { ProfileModal } from "./components/ProfileModal";
 import { useAuth } from "../../features/auth/hooks/useAuth";
 import "./home.page.css";
 
@@ -9,6 +11,8 @@ export const HomePage = () => {
   const navigate = useNavigate();
   const { createGame, loading } = useCreateGame();
   const [joinModalOpen, setJoinModalOpen] = useState(false);
+  const [howToPlayOpen, setHowToPlayOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const { logout } = useAuth();
 
   const handleCreateLobby = async () => {
@@ -73,6 +77,12 @@ export const HomePage = () => {
           </span>
 
           <button
+            onClick={() => setProfileOpen(true)}
+            className="home-profile-btn text-xs px-4 py-2"
+          >
+            PROFILE
+          </button>
+          <button
             onClick={handleLogout}
             className="home-logout-btn text-xs px-4 py-2"
           >
@@ -132,7 +142,7 @@ export const HomePage = () => {
             {!loading && <span style={{ color: "#e2e8f0" }}>Lobby</span>}
           </div>
 
-          {/* Join Lobby — opens modal */}
+          {/* Join Lobby */}
           <div
             className="home-menu-item home-menu-item-2"
             onClick={() => setJoinModalOpen(true)}
@@ -149,10 +159,11 @@ export const HomePage = () => {
             <span style={{ color: "#e2e8f0" }}>Lobby</span>
           </div>
 
-          {/* How To Play */}
+          {/* How To Play — opens modal */}
           <div
             className="home-menu-item home-menu-item-3"
-            style={{ fontSize: "3.8rem", color: "#fde68a" }}
+            onClick={() => setHowToPlayOpen(true)}
+            style={{ fontSize: "3.8rem", color: "#fde68a", cursor: "pointer" }}
           >
             <span
               style={{
@@ -208,10 +219,18 @@ export const HomePage = () => {
         </div>
       </div>
 
-      {/* Join Lobby Modal */}
+      {/* Modals */}
       <JoinLobby
         isOpen={joinModalOpen}
         onClose={() => setJoinModalOpen(false)}
+      />
+      <HowToPlay
+        isOpen={howToPlayOpen}
+        onClose={() => setHowToPlayOpen(false)}
+      />
+      <ProfileModal
+        isOpen={profileOpen}
+        onClose={() => setProfileOpen(false)}
       />
     </div>
   );

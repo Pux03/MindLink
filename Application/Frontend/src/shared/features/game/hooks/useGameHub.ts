@@ -143,35 +143,33 @@ export const useGameHub = ({
 
         connection.onreconnected(async () => {
             setConnStatus("Connected");
-            addLog("info", "Reconnected to hub");
+            addLog("info", "Reconnected to server");
             await connection.invoke("JoinGame", gameCode).catch(() => { });
         });
 
         connection.onclose(() => {
             setConnStatus("Disconnected");
-            addLog("error", "Disconnected from hub");
+            addLog("error", "Disconnected from server");
         });
 
         // JoinGame -> Clients.Group -> PlayerJoined({ UserId, TotalPlayers })
         connection.on("PlayerJoined", (payload: PlayerJoinedPayload) => {
-            addLog("info", `Player joined (total: ${payload.totalPlayers})`);
+            addLog("info", `${payload.totalPlayers} player${payload.totalPlayers !== 1 ? "s" : ""} in lobby`);
             onPlayerJoined?.(payload.userId, payload.totalPlayers);
         });
 
         // UpdateTeam -> Clients.Group -> PlayerTeamChanged({ PlayerName, NewTeam, IsMindreader })
         // Backend does NOT send PlayerId - match by playerName in consumer
         connection.on("PlayerTeamChanged", (payload: PlayerTeamChangedPayload) => {
-            addLog(
-                "info",
-                `${payload.playerName} joined ${payload.newTeam} as ${payload.isMindreader ? "Spymaster" : "Operative"}`,
-            );
+            addLog("info", `${payload.playerName} → ${payload.newTeam} ${payload.isMindreader ? "Spymaster" : "Operative"}`,);
             onPlayerTeamChanged(payload.playerName, payload.newTeam, payload.isMindreader);
         });
 
         // StartGame -> Clients.Group -> GameStarted({ FirstTeam })
         connection.on("GameStarted", (payload: GameStartedPayload) => {
             setGameState((s) => ({ ...s, started: true, firstTeam: payload.firstTeam }));
-            addLog("success", `Game started! First turn: ${payload.firstTeam}`);
+            addLog("success", `Game started! ${payload.firstTeam} goes first`);
+            console.log(payload);
             onGameStarted(payload.firstTeam);
         });
 
@@ -179,7 +177,7 @@ export const useGameHub = ({
         // Per-player: operatives get null teamColor on unrevealed cards
         // Spymasters get real colors on all cards
         connection.on("ReceiveCards", (payload: ReceiveCardsPayload) => {
-            addLog("info", `Board received (${payload.cards?.length ?? 0} cards)`);
+            // board received silently — no log noise
             if (payload.cards) {
                 onReceiveCards(payload.cards);
             }
@@ -187,22 +185,27 @@ export const useGameHub = ({
 
         // GiveHint -> Clients.Group -> HintGiven({ Word, WordCount })
         connection.on("HintGiven", (payload: HintGivenPayload) => {
+            console.log(payload);
             setGameState((s) => ({
                 ...s,
                 currentHint: { word: payload.word, count: payload.wordCount },
             }));
-            addLog("hint", `Hint: "${payload.word}" x${payload.wordCount}`);
+            addLog("hint", `${payload.word.toUpperCase()} × ${payload.wordCount}`);
         });
 
-        // ExecuteGuess -> Clients.Group -> GuessExecuted({ RevealedCards, IsGameOver, Winner })
+        // ExecuteGuess -> Clients.Group -> GuessExecuted({ RevealedCards, IsGameOver, Winner, CurrentTeam })
         connection.on("GuessExecuted", (payload: GuessExecutedPayload) => {
-            const positions = payload.revealedCards?.map((c) => c.position) ?? [];
-            addLog("guess", `Guess revealed positions: [${positions.join(", ")}]`);
-            console.log(payload);
+            console.log(payload)
+            const words = payload.revealedCards?.map((c) => c.word).join(", ") ?? "?";
+            addLog("guess", words);
 
             if (payload.isGameOver && payload.winner) {
-                setGameState((s) => ({ ...s, ended: true, winner: payload.winner }));
-                addLog("success", `Game over - ${payload.winner} wins!`);
+                setGameState((s) => ({ ...s, ended: true, winner: payload.winner, currentHint: undefined }));
+                addLog("success", `${payload.winner} team wins!`);
+            } else {
+                // Always clear the hint after a guess — the new team's spymaster
+                // must give a fresh hint before operatives can guess again
+                setGameState((s) => ({ ...s, currentHint: undefined }));
             }
 
             onGuessExecuted(payload.revealedCards ?? [], payload.isGameOver, payload.winner, payload.currentTeam ?? null);
@@ -218,13 +221,13 @@ export const useGameHub = ({
                 setConnStatus("Connecting");
                 await connection.start();
                 setConnStatus("Connected");
-                addLog("info", "Connected to hub");
+                // connected silently
                 await connection.invoke("JoinGame", gameCode);
-                addLog("info", `Joined game ${gameCode}`);
+                // joined silently
             } catch (err) {
                 if (connection.state === signalR.HubConnectionState.Connected) return;
                 setConnStatus("Disconnected");
-                addLog("error", `Failed to connect: ${String(err)}`);
+                addLog("error", "Connection failed");
             }
         };
 
