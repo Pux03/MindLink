@@ -98,28 +98,30 @@ namespace API.Hubs
                     return;
                 }
 
-                if (game.Status != GameStatus.Waiting)
-                { 
-                    await Clients.Caller.Error("Game already started");
-                    return; 
-                }
+                // if (game.Status != GameStatus.Waiting)
+                // { 
+                //     await Clients.Caller.Error("Game already started");
+                //     return; 
+                // }
 
-                var currentUserId = GetCurrentUserId();
-                var player = game.Players.FirstOrDefault(p => p.UserId == currentUserId);
+                // var currentUserId = GetCurrentUserId();
+                // var player = game.Players.FirstOrDefault(p => p.UserId == currentUserId);
 
-                if (player == null)
-                {
-                    await Clients.Caller.Error("Player not found");
-                    return;
-                }
+                // if (player == null)
+                // {
+                //     await Clients.Caller.Error("Player not found");
+                //     return;
+                // }
 
-                game.RedTeam.Members.Remove(player);
-                game.BlueTeam.Members.Remove(player);
+                // game.RedTeam.Members.Remove(player);
+                // game.BlueTeam.Members.Remove(player);
 
-                var newTeam = teamColor.ToLower() == "red" ? game.RedTeam : game.BlueTeam;
-                newTeam.Members.Add(player);
-                player.Team = newTeam;
-                player.IsMindreader = isMindreader;
+                // var newTeam = teamColor.ToLower() == "red" ? game.RedTeam : game.BlueTeam;
+                // newTeam.Members.Add(player);
+                // player.Team = newTeam;
+                // player.IsMindreader = isMindreader;
+
+                var PlayerTeamChanged = await _gameLogicService.UpdatePlayerTeam(game, GetCurrentUserId(), teamColor, isMindreader);
 
                 // await Clients.Group($"game_{gameCode}")
                 //     .PlayerTeamChanged(new
@@ -129,15 +131,17 @@ namespace API.Hubs
                 //         IsMindreader = isMindreader
                 //     });
 
-                await _publisher.PublishPlayerTeamChangedAsync(new PlayerTeamChangedEvent
-                {
-                    GameCode = gameCode,
-                    PlayerName = player.GetUsername(),
-                    NewTeam = teamColor,
-                    IsMindreader = isMindreader
-                });
+                // await _publisher.PublishPlayerTeamChangedAsync(new PlayerTeamChangedEvent
+                // {
+                //     GameCode = gameCode,
+                //     PlayerName = player.GetUsername(),
+                //     NewTeam = teamColor,
+                //     IsMindreader = isMindreader
+                // });
 
-                _logger.LogInformation($"Player {player.GetUsername()} changed team to {teamColor}");
+                await _publisher.PublishPlayerTeamChangedAsync(PlayerTeamChanged);
+
+                // _logger.LogInformation($"Player {player.GetUsername()} changed team to {teamColor}");
             }
             catch (Exception ex)
             {

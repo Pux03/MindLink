@@ -246,6 +246,7 @@ namespace API.MessageQueue
                 .Group($"game_{@event.GameCode}")
                 .HintGiven(new
                 {
+                    PlayerUsername = @event.PlayerUsername,
                     Word = @event.Word,
                     WordCount = @event.WordCount
                 });
