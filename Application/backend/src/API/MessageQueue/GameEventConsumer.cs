@@ -217,6 +217,8 @@ namespace API.MessageQueue
                 {
                     RevealedCards = @event.RevealedCards,
                     IsGameOver = @event.IsGameOver,
+                    RedTeamRemainingCardsCount = @event.RedTeamRemainingCardsCount,
+                    BlueTeamRemainingCardsCount = @event.BlueTeamRemainingCardsCount,
                     Winner = @event.WinnerTeam?.ToString(),
                     CurrentTeam = @event.CurrentTeam.ToString()
                 });

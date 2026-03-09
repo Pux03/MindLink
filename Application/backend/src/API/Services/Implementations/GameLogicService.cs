@@ -85,12 +85,16 @@ namespace API.Services
 
             TeamColor nextTeam = game.SwitchTeam();
 
+            var teamCardsRemaining = game.GetTeamPoints();
+
             //await _gameRepository.UpdateAsync(game);
             return new GuessExecutedEvent
             {
                 UserId = userId,
                 CurrentTeam = nextTeam,
                 RevealedCards = guessedCards,
+                RedTeamRemainingCardsCount = teamCardsRemaining.RedTeamRemainingCardsCount,
+                BlueTeamRemainingCardsCount = teamCardsRemaining.BlueTeamRemainingCardsCount,
                 IsGameOver = isGameOver,
                 WinnerTeam = isGameOver ? game.Winner : null
             };

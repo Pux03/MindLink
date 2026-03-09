@@ -41,6 +41,11 @@ namespace Core.Models
             CurrentTeam = CurrentTeam == TeamColor.Blue ? TeamColor.Red : TeamColor.Blue;
             return CurrentTeam;
         }
+
+        public (int RedTeamRemainingCardsCount, int BlueTeamRemainingCardsCount) GetTeamPoints()
+        {
+            return (9 - RedTeam.Score, 8 - BlueTeam.Score);
+        }
     }
 
 }

@@ -8,6 +8,8 @@ namespace Core.Events
         public string? GameCode { get; set; }
         public int UserId { get; set; }
         public List<Card> RevealedCards { get; set; } = [];
+        public int RedTeamRemainingCardsCount;
+        public int BlueTeamRemainingCardsCount;
         public bool IsGameOver { get; set; }
         public TeamColor? WinnerTeam { get; set; }
         public TeamColor CurrentTeam { get; set; }
