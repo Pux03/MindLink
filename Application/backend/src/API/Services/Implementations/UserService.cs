@@ -22,12 +22,10 @@ namespace API.Services
 
         public async Task<AuthResponse> RegisterAsync(RegisterRequest request)
         {
-            // Proveri da li user vec postoji
             var exists = await _userRepository.ExistsAsync(request.Username!, request.Email!);
             if (exists)
                 throw new InvalidOperationException("Username or email already exists");
 
-            // Kreiraj novog usera
             var user = new UserEntity
             {
                 Username = request.Username!,
@@ -43,7 +41,6 @@ namespace API.Services
 
         public async Task<AuthResponse> LoginAsync(LoginRequest request)
         {
-            // Nadji usera po emailu
             var user = await _userRepository.GetByEmailAsync(request.Email!);
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))

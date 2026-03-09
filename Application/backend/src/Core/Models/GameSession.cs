@@ -38,7 +38,7 @@ namespace Core.Models
 
         public string GetPlayerUsernameById(int userId)
         {
-            return Players.FirstOrDefault(p => p.UserId == userId).User.Username;
+            return Players.FirstOrDefault(p => p.UserId == userId).GetUsername();
         }
 
         public TeamColor SwitchTeam()

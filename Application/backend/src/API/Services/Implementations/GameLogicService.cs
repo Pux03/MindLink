@@ -92,7 +92,7 @@ namespace API.Services
             return new GuessExecutedEvent
             {
                 UserId = userId,
-                PlayerUsername = game.GetPlayerUsernameById(userId),
+                PlayerUsername = player.GetUsername(),
                 CurrentTeam = nextTeam,
                 RevealedCards = guessedCards,
                 RedTeamRemainingCardsCount = teamCardsRemaining.RedTeamRemainingCardsCount,
