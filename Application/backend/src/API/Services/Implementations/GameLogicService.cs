@@ -70,6 +70,21 @@ namespace API.Services
                 card.IsRevealed = true;
             }
 
+            foreach (var card in guessedCards)
+            {
+                card.IsRevealed = true;
+
+                if (card.TeamColor == player.Team.Color)
+                {
+                    player.Team.Score++;
+                }
+                else if (card.TeamColor != TeamColor.Neutral && card.TeamColor != TeamColor.Bomb)
+                {
+                    var opposingTeam = game.RedTeam.Color == player.Team.Color ? game.BlueTeam : game.RedTeam;
+                    opposingTeam.Score++;
+                }
+            }
+
             // Saving guesses to history in game session object
             foreach (var card in guessedCards)
             {
@@ -85,18 +100,19 @@ namespace API.Services
 
             TeamColor nextTeam = game.SwitchTeam();
 
-            var teamCardsRemaining = game.GetTeamPoints();
+            var (RedTeamRemainingCardsCount, BlueTeamRemainingCardsCount) = game.GetTeamPoints();
 
             //await _gameRepository.UpdateAsync(game);
 
             return new GuessExecutedEvent
             {
+                GameCode = game.Code,
                 UserId = userId,
                 PlayerUsername = player.GetUsername(),
                 CurrentTeam = nextTeam,
                 RevealedCards = guessedCards,
-                RedTeamRemainingCardsCount = teamCardsRemaining.RedTeamRemainingCardsCount,
-                BlueTeamRemainingCardsCount = teamCardsRemaining.BlueTeamRemainingCardsCount,
+                RedTeamRemainingCardsCount = RedTeamRemainingCardsCount,
+                BlueTeamRemainingCardsCount = BlueTeamRemainingCardsCount,
                 IsGameOver = isGameOver,
                 WinnerTeam = isGameOver ? game.Winner : null
             };
@@ -115,8 +131,36 @@ namespace API.Services
             {
                 GameCode = game.Code,
                 PlayerId = mindReader.Id,
+                PlayerUsername = mindReader.GetUsername(),
                 Word = word,
                 WordCount = wordCount
+            });
+        }
+
+        public Task<PlayerTeamChangedEvent> UpdatePlayerTeam(GameSession game, int userId, string teamColor, bool isMindreader)
+        {
+            if (game.Status != GameStatus.Waiting)
+                throw new Exception("Game already started");
+
+            var player = game.Players.FirstOrDefault(p => p.UserId == userId);
+
+            if (player == null)
+                throw new Exception("Player not found");
+
+            game.RedTeam.Members.Remove(player);
+            game.BlueTeam.Members.Remove(player);
+
+            var newTeam = teamColor.ToLower() == "red" ? game.RedTeam : game.BlueTeam;
+            newTeam.Members.Add(player);
+            player.Team = newTeam;
+            player.IsMindreader = isMindreader;
+
+            return Task.FromResult(new PlayerTeamChangedEvent
+            {
+                GameCode = game.Code,
+                PlayerName = player.GetUsername(),
+                NewTeam = teamColor,
+                IsMindreader = isMindreader
             });
         }
 

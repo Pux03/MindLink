@@ -2,8 +2,9 @@ namespace Core.Events
 {
     public class HintGivenEvent : GameEvent
     {
-        public string? GameCode { get; set; }
+        //public string? GameCode { get; set; }
         public int PlayerId { get; set; }
+        public string PlayerUsername { get; set; } = string.Empty;
         public string? Word { get; set; }
         public int WordCount { get; set; }
         public override string ToString() 

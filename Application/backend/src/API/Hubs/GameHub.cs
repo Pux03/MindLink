@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.SignalR;
 using Core.Events;
 using Core.Enums;
 using API.Services;
-using AutoMapper;
 using API.MessageQueue;
 
 namespace API.Hubs
@@ -13,21 +12,18 @@ namespace API.Hubs
         private readonly IGameLogicService _gameLogicService;
         private readonly IGameSessionManager _gameSessionManager;
         private readonly IGameEventPublisher _publisher;
-        private readonly IMapper _mapper;
         private readonly ILogger<GameHub> _logger;
 
         public GameHub(
             IGameSessionService gameSessionService,
             IGameLogicService gameLogicService,
             IGameSessionManager gameSessionManager,
-            IMapper mapper,
             IGameEventPublisher publisher,
             ILogger<GameHub> logger)
         {
             _gameSessionService = gameSessionService;
             _gameLogicService = gameLogicService;
             _gameSessionManager = gameSessionManager;
-            _mapper = mapper;
             _publisher = publisher;
             _logger = logger;
         }                     
@@ -210,18 +206,19 @@ namespace API.Hubs
 
                 var guessResult = await _gameLogicService.ExecuteGuessAsync(game, currentUserId, cardPositions);
             
-                await _publisher.PublishGuessExecutedAsync(new GuessExecutedEvent
-                {
-                    GameCode = gameCode,
-                    PlayerUsername = guessResult.PlayerUsername, 
-                    IsGameOver = guessResult.IsGameOver,
-                    WinnerTeam = guessResult.WinnerTeam,
-                    RevealedCards = guessResult.RevealedCards,
-                    CurrentTeam = guessResult.CurrentTeam,
-                    RedTeamRemainingCardsCount = guessResult.RedTeamRemainingCardsCount,
-                    BlueTeamRemainingCardsCount = guessResult.BlueTeamRemainingCardsCount
-                });
+                // await _publisher.PublishGuessExecutedAsync(new GuessExecutedEvent
+                // {
+                //     GameCode = gameCode,
+                //     PlayerUsername = guessResult.PlayerUsername, 
+                //     IsGameOver = guessResult.IsGameOver,
+                //     WinnerTeam = guessResult.WinnerTeam,
+                //     RevealedCards = guessResult.RevealedCards,
+                //     CurrentTeam = guessResult.CurrentTeam,
+                //     RedTeamRemainingCardsCount = guessResult.RedTeamRemainingCardsCount,
+                //     BlueTeamRemainingCardsCount = guessResult.BlueTeamRemainingCardsCount
+                // });
 
+                await _publisher.PublishGuessExecutedAsync(guessResult);
             }
             catch (Exception ex)
             {
@@ -255,13 +252,15 @@ namespace API.Hubs
 
                 var hintEvent = await _gameLogicService.GiveHintAsync(game, mindReader, word, wordCount);
 
-                await _publisher.PublishHintGivenAsync(new HintGivenEvent
-                {
-                    GameCode = gameCode,
-                    PlayerId = mindReader.Id,
-                    Word = word,
-                    WordCount = wordCount
-                });
+                // await _publisher.PublishHintGivenAsync(new HintGivenEvent
+                // {
+                //     GameCode = gameCode,
+                //     PlayerId = mindReader.Id,
+                //     Word = word,
+                //     WordCount = wordCount
+                // });
+
+                await _publisher.PublishHintGivenAsync(hintEvent);
             }
             catch (Exception ex)
             {

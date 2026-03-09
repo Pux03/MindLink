@@ -2,7 +2,6 @@ using Core.Enums;
 
 namespace Core.Models
 {
-
     public class GameSession
     {
         public int Id { get; set; }

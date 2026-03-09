@@ -10,5 +10,6 @@ namespace API.Services
         bool CanPlayerGuess(GameSession game, Player player);
         Task<GuessExecutedEvent> ExecuteGuessAsync(GameSession game, int userId, List<int> cardPositions);
         Task<HintGivenEvent> GiveHintAsync(GameSession game, Player mindReader, string word, int wordCount);
+        Task<PlayerTeamChangedEvent> UpdatePlayerTeam(GameSession game, int userId, string teamColor, bool isMindreader);
     }
 }
