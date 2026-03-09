@@ -213,10 +213,13 @@ namespace API.Hubs
                 await _publisher.PublishGuessExecutedAsync(new GuessExecutedEvent
                 {
                     GameCode = gameCode,
+                    PlayerUsername = guessResult.PlayerUsername, 
                     IsGameOver = guessResult.IsGameOver,
                     WinnerTeam = guessResult.WinnerTeam,
                     RevealedCards = guessResult.RevealedCards,
-                    CurrentTeam = guessResult.CurrentTeam
+                    CurrentTeam = guessResult.CurrentTeam,
+                    RedTeamRemainingCardsCount = guessResult.RedTeamRemainingCardsCount,
+                    BlueTeamRemainingCardsCount = guessResult.BlueTeamRemainingCardsCount
                 });
 
             }

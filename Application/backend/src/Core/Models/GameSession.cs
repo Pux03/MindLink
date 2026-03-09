@@ -36,10 +36,10 @@ namespace Core.Models
             HintHistory.Add(hint);
         }
 
-        public string GetPlayerUsernameById(int userId)
-        {
-            return Players.FirstOrDefault(p => p.UserId == userId).GetUsername();
-        }
+        // public string GetPlayerUsernameById(int userId)
+        // {
+        //     return Players.FirstOrDefault(p => p.UserId == userId).GetUsername();
+        // }
 
         public TeamColor SwitchTeam()
         {
