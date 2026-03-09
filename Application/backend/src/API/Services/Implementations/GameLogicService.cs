@@ -88,9 +88,11 @@ namespace API.Services
             var teamCardsRemaining = game.GetTeamPoints();
 
             //await _gameRepository.UpdateAsync(game);
+
             return new GuessExecutedEvent
             {
                 UserId = userId,
+                PlayerUsername = game.GetPlayerUsernameById(userId),
                 CurrentTeam = nextTeam,
                 RevealedCards = guessedCards,
                 RedTeamRemainingCardsCount = teamCardsRemaining.RedTeamRemainingCardsCount,

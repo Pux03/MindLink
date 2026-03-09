@@ -36,6 +36,11 @@ namespace Core.Models
             HintHistory.Add(hint);
         }
 
+        public string GetPlayerUsernameById(int userId)
+        {
+            return Players.FirstOrDefault(p => p.UserId == userId).User.Username;
+        }
+
         public TeamColor SwitchTeam()
         {
             CurrentTeam = CurrentTeam == TeamColor.Blue ? TeamColor.Red : TeamColor.Blue;
