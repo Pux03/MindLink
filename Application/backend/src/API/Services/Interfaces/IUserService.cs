@@ -7,5 +7,7 @@ namespace API.Services
     {
         Task<AuthResponse> RegisterAsync(RegisterRequest request);
         Task<AuthResponse> LoginAsync(LoginRequest request);
+        Task UpdateUsernameAsync(int userId, string newUsername);
+        Task UpdatePasswordAsync(int userId, string currentPassword, string newPassword);
     }
 }

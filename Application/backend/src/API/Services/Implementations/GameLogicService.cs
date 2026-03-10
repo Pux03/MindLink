@@ -55,8 +55,9 @@ namespace API.Services
         {
             var player = game.Players.FirstOrDefault(p => p.UserId == userId);
             
-            if (player == null)
+            if (player == null) {
                 throw new Exception("Player not found");
+            }
 
             var guessedCards = game.Board.Cards
                 .Where(c => cardPositions.Contains(c.Position))
@@ -92,6 +93,7 @@ namespace API.Services
                 {
                     PlayerId = player.Id,
                     CardPosition = card.Position,
+                    IsCorrect = card.TeamColor == player.Team?.Color,
                     Timestamp = DateTime.UtcNow
                 });
             }   

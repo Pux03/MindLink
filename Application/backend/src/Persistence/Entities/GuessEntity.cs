@@ -16,6 +16,7 @@ namespace Persistence.Entities
         // Ako se cuvaju u json-u onda nema potrebe, cuva se samo pozicija kartice u json nizu
         // public int CardId { get; set; }
         // public CardEntity? Card { get; set; }
+        public bool IsCorrect { get; set; }
 
         // FK GameSession
         public int GameSessionId { get; set; }

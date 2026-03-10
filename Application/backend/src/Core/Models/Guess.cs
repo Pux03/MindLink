@@ -7,6 +7,7 @@ namespace Core.Models
         public int PlayerId { get; set; }
         public Player? Player { get; set; }
         public int CardPosition { get; set; }
+        public bool IsCorrect { get; set; }
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
     }
 }

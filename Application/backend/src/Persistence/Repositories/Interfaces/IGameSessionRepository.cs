@@ -6,6 +6,8 @@ namespace Persistence.Repositories
     {
         Task<GameSessionEntity?> GetGameWithBoardAndTeamsAsync(int gameId);
 
+        public Task<IEnumerable<GameSessionEntity>> GetGamesByUserIdAsync(int userId);
+        
         Task<GameSessionEntity?> GetGameByCodeAsync(string code);
 
         Task<GameSessionEntity?> GetGameWithGuessesAsync(int gameId);
@@ -19,5 +21,7 @@ namespace Persistence.Repositories
         Task<IEnumerable<GameSessionEntity>> GetGamesByTeamAsync(int teamId);
 
         Task<GameSessionEntity?> GetFullGameDetailsAsync(int gameId);
+
+        Task<IEnumerable<GameSessionEntity>> GetAllFinishedGamesWithPlayersAndGuessesAsync();
     }
 }

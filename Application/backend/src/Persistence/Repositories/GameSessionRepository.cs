@@ -84,5 +84,34 @@ namespace Persistence.Repositories
             return await _dbSet
                 .FirstOrDefaultAsync(g => g.Code == code);
         }
+
+        public async Task<IEnumerable<GameSessionEntity>> GetGamesByUserIdAsync(int userId)
+        {
+            return await _dbSet
+                .Where(g => g.Status == GameStatus.GameOver &&
+                        (g.RedTeam.Members.Any(p => p.UserId == userId) ||
+                            g.BlueTeam.Members.Any(p => p.UserId == userId)))
+                .Include(g => g.RedTeam)
+                    .ThenInclude(t => t.Members)
+                .Include(g => g.BlueTeam)
+                    .ThenInclude(t => t.Members)
+                .Include(g => g.GuessHistory)
+                .Include(g => g.Hints)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<GameSessionEntity>> GetAllFinishedGamesWithPlayersAndGuessesAsync()
+        {
+            return await _dbSet
+                .Where(g => g.Status == GameStatus.GameOver)
+                .Include(g => g.RedTeam)
+                    .ThenInclude(t => t.Members)
+                        .ThenInclude(p => p.User)
+                .Include(g => g.BlueTeam)
+                    .ThenInclude(t => t.Members)
+                        .ThenInclude(p => p.User)
+                .Include(g => g.GuessHistory)
+                .ToListAsync();
+        }
     }
 }
