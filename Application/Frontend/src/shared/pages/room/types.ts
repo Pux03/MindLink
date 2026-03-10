@@ -43,6 +43,8 @@ export interface GameRoom {
     blueTeam: Team;
     players: Player[];
     board: Board;
+    redRemaining?: number;
+    blueRemaining?: number;
 }
 
 export type LogEntry = {

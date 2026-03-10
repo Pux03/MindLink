@@ -33,10 +33,16 @@ const parseEntry = (log: LogEntry): HistoryEntry | null => {
       time: log.time,
       content: (
         <div className="flex items-center gap-2">
-          <span className="font-bold" style={{ color: "#c4b5fd" }}>
+          <span style={{ color: "rgba(167,139,250,0.5)", fontSize: "0.65rem" }}>
+            GAME
+          </span>
+          <span
+            className="font-bold"
+            style={{ color: "rgba(196,181,253,0.8)" }}
+          >
             Game Started
           </span>
-          <span style={{ color: "rgba(139,92,246,0.4)" }}>·</span>
+          <span style={{ color: "rgba(139,92,246,0.4)" }}>-</span>
           <span className="font-bold" style={{ color: teamColor(team) }}>
             {team}
           </span>
@@ -55,6 +61,9 @@ const parseEntry = (log: LogEntry): HistoryEntry | null => {
       time: log.time,
       content: (
         <div className="flex items-center gap-2">
+          <span style={{ color: "rgba(167,139,250,0.5)", fontSize: "0.65rem" }}>
+            END
+          </span>
           <span
             className="font-bold"
             style={{
@@ -72,9 +81,11 @@ const parseEntry = (log: LogEntry): HistoryEntry | null => {
 
   // Hint: "WORD × N"
   if (log.type === "hint") {
-    const match = msg.match(/^(.+)\s×\s(\d+)$/);
+    // Regex sada traži: "username WORD × count"
+    const match = msg.match(/^(\S+)\s+(.+)\s×\s(\d+)$/);
+
     if (match) {
-      const [, word, count] = match;
+      const [, username, word, count] = match;
       return {
         id: log.id,
         kind: "hint",
@@ -82,13 +93,23 @@ const parseEntry = (log: LogEntry): HistoryEntry | null => {
         content: (
           <div className="flex items-center gap-2 flex-wrap">
             <span
-              className="font-black tracking-widest uppercase"
               style={{
-                color: "#f0abfc",
-                textShadow: "0 0 8px rgba(240,171,252,0.5)",
-                fontSize: "0.85rem",
+                color: "rgba(167,139,250,0.5)",
+                fontSize: "0.65rem",
+                fontWeight: "bold",
               }}
             >
+              HINT
+            </span>
+            <span
+              className="font-bold"
+              style={{ color: "rgba(196,181,253,0.8)" }}
+            >
+              {username}
+            </span>
+            <span style={{ color: "rgba(139,92,246,0.4)" }}>-</span>
+
+            <span className="font-bold" style={{ color: "#c4b5fd" }}>
               {word}
             </span>
             <span
@@ -108,9 +129,12 @@ const parseEntry = (log: LogEntry): HistoryEntry | null => {
     }
   }
 
-  // Guess: "WORD1, WORD2" (comma separated card words)
+  // Guess: "username: WORD1, WORD2" or just "WORD1, WORD2"
   if (log.type === "guess") {
-    const words = msg
+    const colonIdx = msg.indexOf(": ");
+    const player = colonIdx !== -1 ? msg.slice(0, colonIdx) : null;
+    const wordsPart = colonIdx !== -1 ? msg.slice(colonIdx + 2) : msg;
+    const words = wordsPart
       .split(",")
       .map((w) => w.trim())
       .filter(Boolean);
@@ -120,6 +144,19 @@ const parseEntry = (log: LogEntry): HistoryEntry | null => {
       time: log.time,
       content: (
         <div className="flex items-center gap-1.5 flex-wrap">
+          <span style={{ color: "rgba(167,139,250,0.5)", fontSize: "0.65rem" }}>
+            GUESS
+          </span>
+          {player && (
+            <span
+              className="font-bold"
+              style={{ color: "rgba(196,181,253,0.8)" }}
+            >
+              {player}
+            </span>
+          )}
+          <span style={{ color: "rgba(139,92,246,0.4)" }}>-</span>
+
           {words.map((word, i) => (
             <span
               key={i}
@@ -151,6 +188,9 @@ const parseEntry = (log: LogEntry): HistoryEntry | null => {
       time: log.time,
       content: (
         <div className="flex items-center gap-2">
+          <span style={{ color: "rgba(167,139,250,0.5)", fontSize: "0.65rem" }}>
+            JOIN
+          </span>
           <span
             className="font-bold"
             style={{ color: "rgba(196,181,253,0.8)" }}
@@ -222,7 +262,7 @@ export const GameLog = ({
   const isPlaying = gameStatus === "Playing" || gameStatus === "Ended";
 
   return (
-    <div className="flex gap-3" style={{ height: "140px" }}>
+    <div className="flex gap-3" style={{ height: "300px" }}>
       {/* History panel */}
       <div className="balatro-log flex-1 overflow-hidden flex flex-col">
         <div

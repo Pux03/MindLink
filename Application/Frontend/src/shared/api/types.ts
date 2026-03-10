@@ -119,7 +119,40 @@ export interface GameSessionDTO {
     board: BoardDTO;
 }
 
+export interface LeaderboardRow {
+    username: string;
 
+    value: number;
+}
+
+export interface LeaderboardDTO {
+    mostWins: LeaderboardRow[];
+
+    mostCorrectGuesses: LeaderboardRow[];
+}
+
+export interface StatsDTO {
+    gamesPlayed: number;
+
+    wins: number;
+
+    losses: number;
+
+    winRate: number;
+
+    asSpymaster: number;
+
+    asOperative: number;
+
+    correctGuesses: number;
+
+    wrongGuesses: number;
+
+    hintsGiven: number;
+}
+
+export type StatsResponse = BaseApiResponse<StatsDTO>;
 export type GameSessionResponse = BaseApiResponse<GameSessionDTO>;
 export type StringResponse = BaseApiResponse<string>;
 export type UserResponse = BaseApiResponse<UserDTO>;
+export type LeaderboardResponse = BaseApiResponse<LeaderboardDTO>;

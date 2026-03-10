@@ -102,7 +102,7 @@ const DEMO_SETS: DemoSet[] = [
 const STEPS = [
   {
     title: "Spymaster gives a hint",
-    desc: "One word + a number. The number tells your team how many cards on the board relate to that word.",
+    desc: "Spymaster sees all cards value and gives a hint for cards that belong to your team. One word + a number. The number tells your team how many cards on the board relate to that word.",
   },
   {
     title: "Operatives select cards",
@@ -110,16 +110,32 @@ const STEPS = [
   },
   {
     title: "Reveal & score",
-    desc: "Cards flip to show their colour. Find all correct cards to score. Hit a wrong one and your turn ends!",
+    desc: "Cards flip to show their color. Find all cards that belong to your team to score. Hit a bomb one and you lose the game!",
   },
 ];
 
 // ── Build CardData from demo set + current state ──────────────────────────────
 
+// Spymaster color map — correct = Red, others cycle through Neutral/Blue for variety
+const getSpymasterColor = (
+  i: number,
+  correct: number[],
+): CardData["teamColor"] => {
+  if (correct.includes(i)) return "Red";
+  // Sprinkle in a Blue and a Bomb for realism, rest Neutral
+  const extras: Record<number, CardData["teamColor"]> = {
+    1: "Blue",
+    3: "Blue",
+    7: "Bomb",
+  };
+  return extras[i] ?? "Neutral";
+};
+
 const buildCards = (
   set: DemoSet,
   selected: number[],
   revealed: boolean,
+  isSpymasterView: boolean,
 ): CardData[] =>
   set.words.map((word, i) => {
     const isCorrect = set.correct.includes(i);
@@ -130,7 +146,7 @@ const buildCards = (
         word,
         position: i,
         isRevealed: true,
-        teamColor: isCorrect ? "Red" : "Neutral",
+        teamColor: isCorrect ? "Red" : getSpymasterColor(i, set.correct),
       };
     }
 
@@ -138,17 +154,21 @@ const buildCards = (
       word,
       position: i,
       isRevealed: false,
-      teamColor: null, // operatives don't see color before reveal
+      // Spymaster sees all colors; operatives see null on unrevealed
+      teamColor: isSpymasterView ? getSpymasterColor(i, set.correct) : null,
     };
   });
 
 // ── Component ─────────────────────────────────────────────────────────────────
+
+const BOMB_POSITION = 7; // matches getSpymasterColor extras index
 
 export const HowToPlay = ({ isOpen, onClose }: HowToPlayProps) => {
   const [step, setStep] = useState(0);
   const [demoSet, setDemoSet] = useState<DemoSet>(DEMO_SETS[0]);
   const [selected, setSelected] = useState<number[]>([]);
   const [revealed, setRevealed] = useState(false);
+  const [bombHit, setBombHit] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -161,6 +181,7 @@ export const HowToPlay = ({ isOpen, onClose }: HowToPlayProps) => {
     setStep(0);
     setSelected([]);
     setRevealed(false);
+    setBombHit(false);
   };
 
   const tryAgain = () => {
@@ -182,11 +203,14 @@ export const HowToPlay = ({ isOpen, onClose }: HowToPlayProps) => {
 
   const handleReveal = () => {
     if (selected.length === 0) return;
+    const hitBomb = selected.includes(BOMB_POSITION);
+    setBombHit(hitBomb);
     setRevealed(true);
     setStep(2);
   };
 
-  const cards = buildCards(demoSet, selected, revealed);
+  const isSpymasterView = step === 0;
+  const cards = buildCards(demoSet, selected, revealed, isSpymasterView);
   const correctCount = revealed
     ? selected.filter((i) => demoSet.correct.includes(i)).length
     : 0;
@@ -283,6 +307,7 @@ export const HowToPlay = ({ isOpen, onClose }: HowToPlayProps) => {
                 if (i < 2) {
                   setRevealed(false);
                   setSelected([]);
+                  setBombHit(false);
                 }
               }}
               style={{
@@ -397,11 +422,11 @@ export const HowToPlay = ({ isOpen, onClose }: HowToPlayProps) => {
         >
           {cards.map((card) => (
             <FlipCard
-              key={`${demoSet.hint}-${card.position}`}
+              key={`${demoSet.hint}-${step}-${card.position}`}
               card={card}
               isSelected={selected.includes(card.position)}
               isMyTurnToGuess={step === 1 && !revealed}
-              isSpymasterView={false}
+              isSpymasterView={isSpymasterView}
               onClick={() => handleCardClick(card)}
             />
           ))}
@@ -430,19 +455,22 @@ export const HowToPlay = ({ isOpen, onClose }: HowToPlayProps) => {
               <span
                 style={{
                   fontSize: "0.72rem",
-                  color:
-                    correctCount === demoSet.count
+                  color: bombHit
+                    ? "#fb923c"
+                    : correctCount === demoSet.count
                       ? "#6ee7b7"
                       : correctCount > 0
                         ? "#fde047"
                         : "#fca5a5",
                 }}
               >
-                {correctCount === demoSet.count
-                  ? `✓ Perfect! All ${demoSet.count} correct.`
-                  : correctCount > 0
-                    ? `${correctCount}/${demoSet.count} correct — wrong card ends the turn!`
-                    : "✗ No correct cards — turn passes to opponent!"}
+                {bombHit
+                  ? "💥 Bomb hit — instant game over!"
+                  : correctCount === demoSet.count
+                    ? `✓ Perfect! All ${demoSet.count} correct.`
+                    : correctCount > 0
+                      ? `${correctCount}/${demoSet.count} correct — wrong card ends the turn!`
+                      : "✗ No correct cards — turn passes to opponent!"}
               </span>
             )}
           </div>
@@ -539,7 +567,7 @@ export const HowToPlay = ({ isOpen, onClose }: HowToPlayProps) => {
             {
               icon: "♠",
               color: "#818cf8",
-              text: "Operatives only see unrevealed cards",
+              text: "Operatives only see unrevealed cards until guess",
             },
             { icon: "💥", color: "#fb923c", text: "Bomb card = instant loss" },
             {

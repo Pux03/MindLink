@@ -103,12 +103,18 @@ export const RoomPage = () => {
 
   const currentUsername = (() => {
     try {
+      // Prefer localStorage.user (updated on changeUsername) over JWT token (stale after rename)
+      const userJson = localStorage.getItem("user");
+      if (userJson) {
+        const user = JSON.parse(userJson);
+        if (user?.username) return String(user.username);
+      }
       const token = localStorage.getItem("token") ?? "";
       if (!token) return "";
       const payload = JSON.parse(atob(token.split(".")[1]));
       return String(payload["username"] ?? "");
     } catch {
-      return localStorage.getItem("username") ?? "";
+      return "";
     }
   })();
 
@@ -203,6 +209,8 @@ export const RoomPage = () => {
       isGameOver,
       winner,
       currentTeam,
+      redRemaining,
+      blueRemaining,
     ) => {
       setGame((g) => {
         if (!g) return g;
@@ -243,6 +251,8 @@ export const RoomPage = () => {
           status: isGameOver ? "Ended" : g.status,
           winner: winner ?? g.winner,
           currentTeam: (currentTeam as "Red" | "Blue") ?? g.currentTeam,
+          redRemaining: redRemaining ?? g.redRemaining,
+          blueRemaining: blueRemaining ?? g.blueRemaining,
         };
       });
 
@@ -289,9 +299,9 @@ export const RoomPage = () => {
     isMyTeamsTurn &&
     !!gameState.currentHint;
 
-  // Operatives see teamColor only on revealed cards.
-  // Count revealed per team and subtract from total (known once any card of that color is revealed,
-  // or falls back to standard Codenames count of 8 per team).
+  // Use backend-provided remaining counts when available (sent after each GuessExecuted).
+  // Fall back to counting from board for initial load (spymasters see all colors,
+  // operatives fall back to revealed cards only with 9/8 defaults).
   const cards = game?.board.cards ?? [];
   const totalRed = cards.filter((c) => c.teamColor === "Red").length || 9;
   const totalBlue = cards.filter((c) => c.teamColor === "Blue").length || 8;
@@ -301,8 +311,8 @@ export const RoomPage = () => {
   const revealedBlue = cards.filter(
     (c) => c.teamColor === "Blue" && c.isRevealed,
   ).length;
-  const redRemaining = totalRed - revealedRed;
-  const blueRemaining = totalBlue - revealedBlue;
+  const redRemaining = game?.redRemaining ?? totalRed - revealedRed;
+  const blueRemaining = game?.blueRemaining ?? totalBlue - revealedBlue;
   const canStart = game?.status === "Waiting" && connStatus === "Connected";
 
   // ── Actions ───────────────────────────────────────────────────────────────

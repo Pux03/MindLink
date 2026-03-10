@@ -177,7 +177,7 @@ export const TeamPanel = ({
     <div
       className={`w-44 flex flex-col gap-2.5 transition-all duration-500 ${
         isCurrentTurn ? "opacity-100" : "opacity-40"
-      } ${isCurrentTurn ? (isRed ? "current-turn-glow-red" : "current-turn-glow-blue") : ""}`}
+      } `}
       style={{ borderRadius: "14px" }}
     >
       {/* Header */}

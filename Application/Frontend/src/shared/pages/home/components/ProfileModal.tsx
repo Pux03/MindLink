@@ -1,101 +1,22 @@
 import { useState, useEffect } from "react";
+import { useAuth } from "../../../features/auth/hooks/useAuth";
+import { useStats } from "../../../features/profile/hooks/useStats";
+import type { StatsDTO, LeaderboardDTO } from "../../../api/types";
+import { useNavigate } from "react-router-dom";
 
 interface ProfileModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-// ── Mock data ─────────────────────────────────────────────────────────────────
-
-const MOCK_STATS = {
-  gamesPlayed: 47,
-  wins: 29,
-  losses: 18,
-  winRate: 62,
-  asSpymaster: 21,
-  asOperative: 26,
-  correctGuesses: 183,
-  wrongGuesses: 34,
-  hintsGiven: 89,
-};
-
-const MOCK_HISTORY = [
-  {
-    id: 1,
-    date: "Today, 15:42",
-    team: "Red",
-    role: "Spymaster",
-    result: "win",
-    opponent: "Blue",
-    duration: "12min",
-  },
-  {
-    id: 2,
-    date: "Today, 14:10",
-    team: "Blue",
-    role: "Operative",
-    result: "loss",
-    opponent: "Red",
-    duration: "8min",
-  },
-  {
-    id: 3,
-    date: "Yesterday",
-    team: "Red",
-    role: "Operative",
-    result: "win",
-    opponent: "Blue",
-    duration: "15min",
-  },
-  {
-    id: 4,
-    date: "Yesterday",
-    team: "Blue",
-    role: "Spymaster",
-    result: "win",
-    opponent: "Red",
-    duration: "11min",
-  },
-  {
-    id: 5,
-    date: "Mar 8",
-    team: "Red",
-    role: "Operative",
-    result: "loss",
-    opponent: "Blue",
-    duration: "9min",
-  },
-  {
-    id: 6,
-    date: "Mar 8",
-    team: "Blue",
-    role: "Spymaster",
-    result: "win",
-    opponent: "Red",
-    duration: "14min",
-  },
-  {
-    id: 7,
-    date: "Mar 7",
-    team: "Red",
-    role: "Spymaster",
-    result: "win",
-    opponent: "Blue",
-    duration: "10min",
-  },
-];
-
-// ── Helpers ───────────────────────────────────────────────────────────────────
-
-const getCurrentUsername = () => {
+const getCurrentUser = (): { username: string } => {
   try {
-    const token = localStorage.getItem("token") ?? "";
-    if (!token) return "Player";
-    const payload = JSON.parse(atob(token.split(".")[1]));
-    return String(payload["username"] ?? "Player");
+    const userJson = localStorage.getItem("user");
+    if (userJson) return JSON.parse(userJson);
   } catch {
-    return localStorage.getItem("username") ?? "Player";
+    /* noop */
   }
+  return { username: "Player" };
 };
 
 // ── Sub-components ────────────────────────────────────────────────────────────
@@ -254,13 +175,142 @@ const SaveBtn = ({
   </button>
 );
 
+const LeaderboardSection = ({
+  title,
+  icon,
+  rows,
+  valueLabel,
+  color,
+  currentUsername,
+}: {
+  title: string;
+  icon: string;
+  rows: { username: string; value: number }[];
+  valueLabel: string;
+  color: string;
+  currentUsername: string;
+}) => (
+  <div
+    style={{
+      background: "rgba(139,92,246,0.04)",
+      border: "1px solid rgba(139,92,246,0.15)",
+      borderRadius: "12px",
+      overflow: "hidden",
+    }}
+  >
+    <div
+      style={{
+        padding: "10px 14px",
+        borderBottom: "1px solid rgba(139,92,246,0.1)",
+        display: "flex",
+        alignItems: "center",
+        gap: 8,
+        background: "rgba(139,92,246,0.06)",
+      }}
+    >
+      <span style={{ color, fontSize: "0.85rem" }}>{icon}</span>
+      <span
+        style={{
+          color,
+          fontSize: "0.8rem",
+          letterSpacing: "0.05em",
+        }}
+      >
+        {title}
+      </span>
+    </div>
+    {rows.length === 0 && (
+      <div
+        style={{
+          padding: "16px",
+          textAlign: "center",
+          color: "rgba(139,92,246,0.3)",
+          fontSize: "0.72rem",
+        }}
+      >
+        No data yet
+      </div>
+    )}
+    {rows.map((row, i) => {
+      const isMe = row.username === currentUsername;
+      const medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : null;
+      return (
+        <div
+          key={i}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            padding: "9px 14px",
+            borderBottom:
+              i < rows.length - 1 ? "1px solid rgba(139,92,246,0.07)" : "none",
+            background: isMe ? "rgba(139,92,246,0.08)" : "transparent",
+          }}
+        >
+          <div
+            style={{
+              width: 24,
+              flexShrink: 0,
+              textAlign: "center",
+              fontSize: medal ? "0.9rem" : "0.65rem",
+              color: medal ? undefined : "rgba(139,92,246,0.35)",
+              fontWeight: 700,
+            }}
+          >
+            {medal ?? `${i + 1}`}
+          </div>
+          <div
+            style={{
+              flex: 1,
+              fontSize: "0.78rem",
+              fontWeight: isMe ? 700 : 400,
+              color: isMe ? "#c4b5fd" : "rgba(196,181,253,0.7)",
+            }}
+          >
+            {row.username}
+            {isMe && (
+              <span
+                style={{
+                  fontSize: "0.6rem",
+                  color: "rgba(139,92,246,0.5)",
+                  marginLeft: 6,
+                }}
+              >
+                you
+              </span>
+            )}
+          </div>
+          <div
+            style={{
+              fontSize: "0.95rem",
+              color,
+              textShadow: `0 0 10px ${color}55`,
+            }}
+          >
+            {row.value}
+            <span
+              style={{
+                fontSize: "0.55rem",
+                color: "rgba(139,92,246,0.4)",
+                marginLeft: 3,
+              }}
+            >
+              {valueLabel}
+            </span>
+          </div>
+        </div>
+      );
+    })}
+  </div>
+);
+
 // ── Tabs ──────────────────────────────────────────────────────────────────────
 
-type Tab = "stats" | "history" | "username" | "password";
+type Tab = "stats" | "leaderboard" | "username" | "password";
 
 const TABS: { id: Tab; label: string; icon: string }[] = [
   { id: "stats", label: "Stats", icon: "♠" },
-  { id: "history", label: "History", icon: "♣" },
+  { id: "leaderboard", label: "Board", icon: "♣" },
   { id: "username", label: "Username", icon: "♦" },
   { id: "password", label: "Password", icon: "♥" },
 ];
@@ -268,15 +318,22 @@ const TABS: { id: Tab; label: string; icon: string }[] = [
 // ── Main component ────────────────────────────────────────────────────────────
 
 export const ProfileModal = ({ isOpen, onClose }: ProfileModalProps) => {
-  const [tab, setTab] = useState<Tab>("stats");
+  const navigate = useNavigate();
+  const { changeUsername, changePassword, logout } = useAuth();
+  const { getStats, getLeaderboard, loading: statsLoading } = useStats();
 
-  // Username tab
+  const [tab, setTab] = useState<Tab>("stats");
+  const [stats, setStats] = useState<StatsDTO | null>(null);
+  const [statsError, setStatsError] = useState(false);
+  const [leaderboard, setLeaderboard] = useState<LeaderboardDTO | null>(null);
+  const [leaderboardError, setLeaderboardError] = useState(false);
+  const [leaderboardLoaded, setLeaderboardLoaded] = useState(false);
+
   const [newUsername, setNewUsername] = useState("");
   const [usernameError, setUsernameError] = useState("");
   const [usernameSaving, setUsernameSaving] = useState(false);
   const [usernameSaved, setUsernameSaved] = useState(false);
 
-  // Password tab
   const [currentPw, setCurrentPw] = useState("");
   const [newPw, setNewPw] = useState("");
   const [confirmPw, setConfirmPw] = useState("");
@@ -284,7 +341,7 @@ export const ProfileModal = ({ isOpen, onClose }: ProfileModalProps) => {
   const [pwSaving, setPwSaving] = useState(false);
   const [pwSaved, setPwSaved] = useState(false);
 
-  const username = getCurrentUsername();
+  const [currentUser, setCurrentUser] = useState(getCurrentUser());
 
   useEffect(() => {
     if (!isOpen) {
@@ -297,36 +354,55 @@ export const ProfileModal = ({ isOpen, onClose }: ProfileModalProps) => {
       setConfirmPw("");
       setPwError("");
       setPwSaved(false);
+      setLeaderboardLoaded(false);
+      return;
     }
+    setCurrentUser(getCurrentUser());
+    setStatsError(false);
+    getStats().then((res) => {
+      if (res?.success) setStats(res.data);
+      else setStatsError(true);
+    });
   }, [isOpen]);
 
-  // Mock save username
+  // Lazy-load leaderboard only when that tab is first opened
+  useEffect(() => {
+    if (tab !== "leaderboard" || leaderboardLoaded) return;
+    setLeaderboardError(false);
+    getLeaderboard().then((res) => {
+      setLeaderboardLoaded(true);
+      if (res?.success) setLeaderboard(res.data);
+      else setLeaderboardError(true);
+    });
+  }, [tab]);
+
   const handleSaveUsername = async () => {
     setUsernameError("");
     if (newUsername.trim().length < 3) {
       setUsernameError("Username must be at least 3 characters");
       return;
     }
-    if (newUsername.trim() === username) {
+    if (newUsername.trim() === currentUser.username) {
       setUsernameError("That's already your username");
       return;
     }
     setUsernameSaving(true);
-    await new Promise((r) => setTimeout(r, 800)); // mock API
+    const res = await changeUsername(newUsername.trim());
     setUsernameSaving(false);
-    setUsernameSaved(true);
-    setTimeout(() => setUsernameSaved(false), 2500);
+    if (res?.success) {
+      setCurrentUser({ ...currentUser, username: newUsername.trim() });
+      setUsernameSaved(true);
+      setNewUsername("");
+      setTimeout(() => setUsernameSaved(false), 2500);
+    } else {
+      setUsernameError(res?.message ?? "Failed to change username");
+    }
   };
 
-  // Mock save password
   const handleSavePassword = async () => {
     setPwError("");
-    if (!currentPw) {
-      setPwError("Enter your current password");
-      return;
-    }
     if (newPw.length < 6) {
-      setPwError("New password must be at least 6 characters");
+      setPwError("Password must be at least 6 characters");
       return;
     }
     if (newPw !== confirmPw) {
@@ -334,16 +410,23 @@ export const ProfileModal = ({ isOpen, onClose }: ProfileModalProps) => {
       return;
     }
     setPwSaving(true);
-    await new Promise((r) => setTimeout(r, 800));
+    const res = await changePassword(currentPw, newPw);
     setPwSaving(false);
-    setPwSaved(true);
-    setCurrentPw("");
-    setNewPw("");
-    setConfirmPw("");
-    setTimeout(() => setPwSaved(false), 2500);
+    if (res?.success) {
+      setPwSaved(true);
+      setTimeout(() => {
+        onClose();
+        logout();
+        navigate("/auth");
+      }, 1200);
+    } else {
+      setPwError(res?.message ?? "Failed to change password");
+    }
   };
 
   if (!isOpen) return null;
+
+  const winRate = stats?.winRate ?? 0;
 
   return (
     <div
@@ -403,7 +486,6 @@ export const ProfileModal = ({ isOpen, onClose }: ProfileModalProps) => {
 
         {/* Header */}
         <div style={{ padding: "28px 32px 0", textAlign: "center" }}>
-          {/* Avatar circle */}
           <div
             style={{
               width: 64,
@@ -421,7 +503,7 @@ export const ProfileModal = ({ isOpen, onClose }: ProfileModalProps) => {
               color: "#c4b5fd",
             }}
           >
-            {username.charAt(0).toUpperCase()}
+            {currentUser.username.charAt(0).toUpperCase()}
           </div>
           <div
             style={{
@@ -430,7 +512,7 @@ export const ProfileModal = ({ isOpen, onClose }: ProfileModalProps) => {
               letterSpacing: "0.05em",
             }}
           >
-            {username}
+            {currentUser.username}
           </div>
           <div
             style={{
@@ -454,9 +536,9 @@ export const ProfileModal = ({ isOpen, onClose }: ProfileModalProps) => {
                 flex: 1,
                 padding: "8px 4px",
                 borderRadius: "10px",
-                fontSize: "0.65rem",
+                fontSize: "0.62rem",
                 fontWeight: 700,
-                letterSpacing: "0.08em",
+                letterSpacing: "0.06em",
                 textTransform: "uppercase",
                 cursor: "pointer",
                 transition: "all 0.2s",
@@ -468,15 +550,12 @@ export const ProfileModal = ({ isOpen, onClose }: ProfileModalProps) => {
                   tab === t.id ? "0 0 12px rgba(139,92,246,0.15)" : "none",
               }}
             >
-              <span style={{ marginRight: 4, fontSize: "0.7rem" }}>
-                {t.icon}
-              </span>
+              <span style={{ marginRight: 3 }}>{t.icon}</span>
               {t.label}
             </button>
           ))}
         </div>
 
-        {/* Divider */}
         <div
           style={{
             height: 1,
@@ -485,7 +564,7 @@ export const ProfileModal = ({ isOpen, onClose }: ProfileModalProps) => {
           }}
         />
 
-        {/* Tab content */}
+        {/* Content */}
         <div
           style={{
             flex: 1,
@@ -497,215 +576,194 @@ export const ProfileModal = ({ isOpen, onClose }: ProfileModalProps) => {
         >
           {/* ── Stats ── */}
           {tab === "stats" && (
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr 1fr",
-                  gap: 10,
-                }}
-              >
-                <StatCard
-                  label="Games"
-                  value={MOCK_STATS.gamesPlayed}
-                  color="#c4b5fd"
-                />
-                <StatCard
-                  label="Wins"
-                  value={MOCK_STATS.wins}
-                  color="#6ee7b7"
-                />
-                <StatCard
-                  label="Losses"
-                  value={MOCK_STATS.losses}
-                  color="#f87171"
-                />
-              </div>
-
-              {/* Win rate bar */}
-              <div
-                style={{
-                  background: "rgba(139,92,246,0.05)",
-                  border: "1px solid rgba(139,92,246,0.15)",
-                  borderRadius: 12,
-                  padding: 14,
-                }}
-              >
+            <>
+              {statsLoading && (
                 <div
                   style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    marginBottom: 8,
+                    textAlign: "center",
+                    padding: "40px 0",
+                    color: "rgba(139,92,246,0.4)",
+                    fontSize: "0.8rem",
                   }}
                 >
-                  <span
-                    style={{
-                      fontSize: "0.68rem",
-                      color: "rgba(196,181,253,0.5)",
-                      letterSpacing: "0.1em",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    Win Rate
-                  </span>
-                  <span
-                    style={{
-                      color: "#a78bfa",
-                      fontSize: "1rem",
-                    }}
-                  >
-                    {MOCK_STATS.winRate}%
-                  </span>
+                  Loading stats...
                 </div>
+              )}
+              {!statsLoading && statsError && (
                 <div
                   style={{
-                    height: 6,
-                    background: "rgba(139,92,246,0.15)",
-                    borderRadius: 3,
-                    overflow: "hidden",
+                    textAlign: "center",
+                    padding: "40px 0",
+                    color: "#f87171",
+                    fontSize: "0.8rem",
                   }}
+                >
+                  Failed to load stats.
+                </div>
+              )}
+              {!statsLoading && stats && (
+                <div
+                  style={{ display: "flex", flexDirection: "column", gap: 16 }}
                 >
                   <div
                     style={{
-                      height: "100%",
-                      width: `${MOCK_STATS.winRate}%`,
-                      background: "linear-gradient(90deg, #7c3aed, #a78bfa)",
-                      borderRadius: 3,
-                      boxShadow: "0 0 8px rgba(167,139,250,0.4)",
-                      transition: "width 0.8s ease",
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: 10,
-                }}
-              >
-                <StatCard
-                  label="As Spymaster"
-                  value={MOCK_STATS.asSpymaster}
-                  sub="games"
-                  color="#f0abfc"
-                />
-                <StatCard
-                  label="As Operative"
-                  value={MOCK_STATS.asOperative}
-                  sub="games"
-                  color="#818cf8"
-                />
-                <StatCard
-                  label="Correct Guesses"
-                  value={MOCK_STATS.correctGuesses}
-                  color="#6ee7b7"
-                />
-                <StatCard
-                  label="Wrong Guesses"
-                  value={MOCK_STATS.wrongGuesses}
-                  color="#fca5a5"
-                />
-              </div>
-            </div>
-          )}
-
-          {/* ── History ── */}
-          {tab === "history" && (
-            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              {MOCK_HISTORY.map((game) => (
-                <div
-                  key={game.id}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 10,
-                    padding: "10px 14px",
-                    borderRadius: 10,
-                    background:
-                      game.result === "win"
-                        ? "rgba(16,185,129,0.06)"
-                        : "rgba(239,68,68,0.06)",
-                    border: `1px solid ${game.result === "win" ? "rgba(52,211,153,0.2)" : "rgba(248,113,113,0.15)"}`,
-                  }}
-                >
-                  {/* Result badge */}
-                  <div
-                    style={{
-                      width: 32,
-                      height: 32,
-                      borderRadius: 8,
-                      flexShrink: 0,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      background:
-                        game.result === "win"
-                          ? "rgba(16,185,129,0.15)"
-                          : "rgba(239,68,68,0.15)",
-                      border: `1px solid ${game.result === "win" ? "rgba(52,211,153,0.3)" : "rgba(248,113,113,0.3)"}`,
-                      fontSize: "0.75rem",
-                      fontWeight: 900,
-                      color: game.result === "win" ? "#6ee7b7" : "#fca5a5",
+                      display: "grid",
+                      gridTemplateColumns: "1fr 1fr 1fr",
+                      gap: 10,
                     }}
                   >
-                    {game.result === "win" ? "W" : "L"}
+                    <StatCard
+                      label="Games"
+                      value={stats.gamesPlayed}
+                      color="#c4b5fd"
+                    />
+                    <StatCard label="Wins" value={stats.wins} color="#6ee7b7" />
+                    <StatCard
+                      label="Losses"
+                      value={stats.losses}
+                      color="#f87171"
+                    />
                   </div>
-
-                  <div style={{ flex: 1, minWidth: 0 }}>
+                  <div
+                    style={{
+                      background: "rgba(139,92,246,0.05)",
+                      border: "1px solid rgba(139,92,246,0.15)",
+                      borderRadius: 12,
+                      padding: 14,
+                    }}
+                  >
                     <div
-                      style={{ display: "flex", alignItems: "center", gap: 6 }}
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        marginBottom: 8,
+                      }}
                     >
                       <span
                         style={{
-                          fontSize: "0.72rem",
-                          fontWeight: 700,
-                          color: game.team === "Red" ? "#f87171" : "#818cf8",
-                        }}
-                      >
-                        {game.team}
-                      </span>
-                      <span
-                        style={{
-                          fontSize: "0.65rem",
-                          color: "rgba(139,92,246,0.4)",
-                        }}
-                      >
-                        ·
-                      </span>
-                      <span
-                        style={{
                           fontSize: "0.68rem",
-                          color: "rgba(196,181,253,0.55)",
+                          color: "rgba(196,181,253,0.5)",
+                          letterSpacing: "0.1em",
+                          textTransform: "uppercase",
                         }}
                       >
-                        {game.role}
+                        Win Rate
+                      </span>
+                      <span
+                        style={{
+                          color: "#a78bfa",
+                          fontSize: "1rem",
+                        }}
+                      >
+                        {winRate}%
                       </span>
                     </div>
                     <div
                       style={{
-                        fontSize: "0.62rem",
-                        color: "rgba(139,92,246,0.35)",
-                        marginTop: 1,
+                        height: 6,
+                        background: "rgba(139,92,246,0.15)",
+                        borderRadius: 3,
+                        overflow: "hidden",
                       }}
                     >
-                      {game.date}
+                      <div
+                        style={{
+                          height: "100%",
+                          width: `${winRate}%`,
+                          background:
+                            "linear-gradient(90deg, #7c3aed, #a78bfa)",
+                          borderRadius: 3,
+                          boxShadow: "0 0 8px rgba(167,139,250,0.4)",
+                          transition: "width 0.8s ease",
+                        }}
+                      />
                     </div>
                   </div>
-
                   <div
                     style={{
-                      fontSize: "0.62rem",
-                      color: "rgba(139,92,246,0.35)",
-                      flexShrink: 0,
+                      display: "grid",
+                      gridTemplateColumns: "1fr 1fr",
+                      gap: 10,
                     }}
                   >
-                    {game.duration}
+                    <StatCard
+                      label="As Spymaster"
+                      value={stats.asSpymaster}
+                      sub="games"
+                      color="#f0abfc"
+                    />
+                    <StatCard
+                      label="As Operative"
+                      value={stats.asOperative}
+                      sub="games"
+                      color="#818cf8"
+                    />
+                    <StatCard
+                      label="Correct Guesses"
+                      value={stats.correctGuesses}
+                      color="#6ee7b7"
+                    />
+                    <StatCard
+                      label="Wrong Guesses"
+                      value={stats.wrongGuesses}
+                      color="#fca5a5"
+                    />
                   </div>
                 </div>
-              ))}
-            </div>
+              )}
+            </>
+          )}
+
+          {/* ── Leaderboard ── */}
+          {tab === "leaderboard" && (
+            <>
+              {statsLoading && !leaderboardLoaded && (
+                <div
+                  style={{
+                    textAlign: "center",
+                    padding: "40px 0",
+                    color: "rgba(139,92,246,0.4)",
+                    fontSize: "0.8rem",
+                  }}
+                >
+                  Loading leaderboard...
+                </div>
+              )}
+              {!statsLoading && leaderboardError && (
+                <div
+                  style={{
+                    textAlign: "center",
+                    padding: "40px 0",
+                    color: "#f87171",
+                    fontSize: "0.8rem",
+                  }}
+                >
+                  Failed to load leaderboard.
+                </div>
+              )}
+              {leaderboardLoaded && leaderboard && (
+                <div
+                  style={{ display: "flex", flexDirection: "column", gap: 14 }}
+                >
+                  <LeaderboardSection
+                    title="Most Wins"
+                    icon="♠"
+                    rows={leaderboard.mostWins}
+                    valueLabel="wins"
+                    color="#6ee7b7"
+                    currentUsername={currentUser.username}
+                  />
+                  <LeaderboardSection
+                    title="Most Correct Guesses"
+                    icon="♣"
+                    rows={leaderboard.mostCorrectGuesses}
+                    valueLabel="guesses"
+                    color="#fbbf24"
+                    currentUsername={currentUser.username}
+                  />
+                </div>
+              )}
+            </>
           )}
 
           {/* ── Username ── */}
@@ -736,10 +794,9 @@ export const ProfileModal = ({ isOpen, onClose }: ProfileModalProps) => {
                     marginTop: 2,
                   }}
                 >
-                  {username}
+                  {currentUser.username}
                 </div>
               </div>
-
               <InputField
                 label="New Username"
                 value={newUsername}
@@ -751,7 +808,6 @@ export const ProfileModal = ({ isOpen, onClose }: ProfileModalProps) => {
                 placeholder="Enter new username..."
                 error={usernameError}
               />
-
               <SaveBtn
                 onClick={handleSaveUsername}
                 loading={usernameSaving}
@@ -764,6 +820,18 @@ export const ProfileModal = ({ isOpen, onClose }: ProfileModalProps) => {
           {/* ── Password ── */}
           {tab === "password" && (
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              <div
+                style={{
+                  padding: "10px 14px",
+                  background: "rgba(251,191,36,0.05)",
+                  border: "1px solid rgba(251,191,36,0.2)",
+                  borderRadius: 10,
+                  fontSize: "0.7rem",
+                  color: "rgba(253,224,71,0.6)",
+                }}
+              >
+                ⚠ Changing your password will log you out.
+              </div>
               <InputField
                 label="Current Password"
                 value={currentPw}
@@ -798,7 +866,6 @@ export const ProfileModal = ({ isOpen, onClose }: ProfileModalProps) => {
                 type="password"
                 placeholder="Repeat new password..."
               />
-
               <SaveBtn
                 onClick={handleSavePassword}
                 loading={pwSaving}

@@ -76,7 +76,7 @@ export const HintInput = ({ onGiveHint }: HintInputProps) => {
           {hintCount}
         </span>
         <button
-          onClick={() => setHintCount((n) => n + 1)}
+          onClick={() => setHintCount((n) => Math.min(3, n + 1))}
           className="w-6 h-6 flex items-center justify-center text-sm font-bold"
           style={{
             background: "rgba(88,28,135,0.4)",

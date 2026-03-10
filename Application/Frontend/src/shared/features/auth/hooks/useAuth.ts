@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { LoginRequest, RegisterRequest, UserResponse } from "../../../api/types";
+import type { BaseApiResponse, LoginRequest, RegisterRequest, UserResponse } from "../../../api/types";
 import { userApi } from "../../../api/user.api";
 export const useAuth = () => {
     const [loading, setLoading] = useState(false);
@@ -34,6 +34,41 @@ export const useAuth = () => {
         }
     }
 
+    const changeUsername = async (data: string): Promise<BaseApiResponse | null> => {
+        try {
+            setLoading(true);
+            const response = await userApi.changeUsername(data);
+            const userJson = localStorage.getItem("user");
+            if (userJson) {
+                const userObj = JSON.parse(userJson);
+
+                userObj.username = data;
+
+                localStorage.setItem("user", JSON.stringify(userObj));
+            }
+            return response;
+        } catch (err) {
+            console.error("Failed to change username: ", err);
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const changePassword = async (currentPassword: string, newPassword: string): Promise<BaseApiResponse | null> => {
+        try {
+            setLoading(true);
+            const response = await userApi.changePassword(currentPassword, newPassword);
+            logout();
+            return response;
+        } catch (err) {
+            console.error("Failed to change username: ", err);
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    }
+
     const logout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
@@ -51,5 +86,5 @@ export const useAuth = () => {
             localStorage.setItem("user", JSON.stringify(payload));
         }
     }
-    return { login, register, logout, loading };
+    return { login, register, logout, changeUsername, changePassword, loading };
 };
