@@ -11,16 +11,19 @@ namespace API.Services
     public class GameLogicService : IGameLogicService
     {
         private readonly IGameSessionRepository _gameRepository;
+        private readonly IPlayerRepository _playerRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<GameLogicService> _logger;
 
         public GameLogicService(
             IGameSessionRepository gameRepository,
+            IPlayerRepository playerRepository,
             IMapper mapper,
             ILogger<GameLogicService> logger
             )
         {
             _gameRepository = gameRepository;
+            _playerRepository = playerRepository;
             _mapper = mapper;
             _logger = logger;
         }
@@ -255,7 +258,7 @@ namespace API.Services
             };
         }
 
-        public Task<PlayerTeamChangedEvent> UpdatePlayerTeam(GameSession game, int userId, string teamColor, bool isMindreader)
+        public async Task<PlayerTeamChangedEvent> UpdatePlayerTeam(GameSession game, int userId, string teamColor, bool isMindreader)
         {
             if (game.Status != GameStatus.Waiting)
                 throw new Exception("Game already started");
@@ -276,13 +279,30 @@ namespace API.Services
             player.Team = newTeam;
             player.IsMindreader = isMindreader;
 
-            return Task.FromResult(new PlayerTeamChangedEvent
+            var playerEntity = await _playerRepository.GetByIdAsync(player.Id);
+            if (playerEntity != null)
+            {
+                playerEntity.TeamId = newTeam.Id;
+                playerEntity.IsMindreader = isMindreader;
+                await _playerRepository.UpdateAsync(playerEntity);
+                await _playerRepository.SaveChangesAsync();
+            }
+
+            _logger.LogInformation("Player team updated {@Data}", new 
+            { 
+                GameCode = game.Code, 
+                Player = player.GetUsername(), 
+                Team = teamColor, 
+                IsMindreader = isMindreader 
+            });
+
+            return new PlayerTeamChangedEvent
             {
                 GameCode = game.Code,
                 PlayerName = player.GetUsername(),
                 NewTeam = teamColor,
                 IsMindreader = isMindreader
-            });
+            };
         }
 
         public bool IsGameOver(GameSession game)

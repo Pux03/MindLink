@@ -31,7 +31,9 @@ namespace API.Services
 
             gamesPlayed++;
 
-            var playerTeam = game.RedTeam.Members.Contains(player) ? game.RedTeam : game.BlueTeam;
+            //var playerTeam = game.RedTeam.Members.Contains(player) ? game.RedTeam : game.BlueTeam;
+            var playerTeam = game.RedTeam.Members.Any(p => p.Id == player.Id) ? game.RedTeam : game.BlueTeam;
+            
             if (game.Winner == playerTeam.Color) wins++;
 
             if (player.IsMindreader) asSpymaster++;
@@ -76,7 +78,8 @@ namespace API.Services
 
                 var userId = player.UserId;
                 var username = player.User.Username ?? "Guest";
-                var playerTeam = game.RedTeam.Members.Contains(player) ? game.RedTeam : game.BlueTeam;
+                //var playerTeam = game.RedTeam.Members.Contains(player) ? game.RedTeam : game.BlueTeam;
+                var playerTeam = game.RedTeam.Members.Any(p => p.Id == player.Id) ? game.RedTeam : game.BlueTeam;
                 var won = game.Winner == playerTeam.Color ? 1 : 0;
                 var correctGuesses = game.GuessHistory.Count(g => g.PlayerId == player.Id && g.IsCorrect);
 
