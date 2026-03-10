@@ -1,0 +1,770 @@
+[01:49:08 INF]  - Starting MindLink API
+[01:49:09 INF] API.MessageQueue.GameEventConsumer - GameEventConsumer started - listening to RabbitMQ...
+[01:49:09 INF] API.MessageQueue.GameEventConsumer - Queue 'game_events_queue' is binded
+[09:48:01 WRN] Microsoft.EntityFrameworkCore.Model.Validation - The property 'BoardEntity.Cards' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+[09:48:02 WRN] Microsoft.EntityFrameworkCore.Model.Validation - The property 'BoardEntity.Cards' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+[09:49:00 WRN] Microsoft.EntityFrameworkCore.Model.Validation - The property 'BoardEntity.Cards' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+[09:49:00 ERR] Microsoft.EntityFrameworkCore.Database.Command - Failed executing DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE players DROP COLUMN "Username";
+[09:53:36 WRN] Microsoft.EntityFrameworkCore.Model.Validation - The property 'BoardEntity.Cards' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+[09:57:30 WRN] Microsoft.EntityFrameworkCore.Model.Validation - The property 'BoardEntity.Cards' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+[09:57:50 WRN] Microsoft.EntityFrameworkCore.Model.Validation - The property 'BoardEntity.Cards' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+[10:03:17 WRN] Microsoft.EntityFrameworkCore.Model.Validation - The property 'BoardEntity.Cards' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+[10:04:04 INF]  - Starting MindLink API
+[10:04:05 INF] API.MessageQueue.GameEventConsumer - GameEventConsumer started - listening to RabbitMQ...
+[10:04:05 INF] API.MessageQueue.GameEventConsumer - Queue 'game_events_queue' is binded
+[10:04:26 WRN] Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware - Failed to determine the https port for redirect.
+[10:04:27 WRN] Microsoft.EntityFrameworkCore.Model.Validation - The property 'BoardEntity.Cards' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+[10:04:30 INF] API.Services.GameSessionService - Game created {"GameCode":"VJ2MNNRX"}
+[10:04:30 INF] API.Services.GameSessionManager - Game added {"GameCode":"VJ2MNNRX","ActiveGames":1}
+[10:04:30 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:04:30 INF] API.Hubs.GameHub - Client C_pP9mkACw5WcwSSPUVxCQ connected
+[10:04:30 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:04:30 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_joined
+[10:04:30 INF] API.Hubs.GameHub - Player 2 joined game VJ2MNNRX
+[10:04:30 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_joined
+[10:04:35 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:04:35 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_team_changed
+[10:04:35 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_team_changed
+[10:04:35 INF] API.MessageQueue.GameEventConsumer - Player john.doe changed team at game: VJ2MNNRX
+[10:05:03 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:05:03 INF] API.Hubs.GameHub - Client vVdr_dOhPY2vAbd-nCY3XQ connected
+[10:05:03 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:05:03 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_joined
+[10:05:03 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_joined
+[10:05:03 INF] API.Hubs.GameHub - Player 3 joined game VJ2MNNRX
+[10:05:04 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:05:04 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_team_changed
+[10:05:04 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_team_changed
+[10:05:04 INF] API.MessageQueue.GameEventConsumer - Player jane.doe changed team at game: VJ2MNNRX
+[10:05:06 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:05:06 INF] API.Hubs.GameHub - StartGame: VJ2MNNRX
+[10:05:06 INF] API.Services.GameSessionService - Game started {"GameCode":"VJ2MNNRX"}
+[10:05:06 INF] API.Hubs.GameHub - Game VJ2MNNRX has started
+[10:05:11 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:05:11 INF] API.Hubs.GameHub - GiveHint: DAS (3)
+[10:05:11 WRN] Microsoft.EntityFrameworkCore.Query - Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+[10:05:11 ERR] Microsoft.EntityFrameworkCore.Database.Command - Failed executing DbCommand (11ms) [Parameters=[@p10='?' (DbType = Int32), @p0='?' (DbType = Int32), @p1='?', @p2='?' (DbType = DateTime), @p3='?', @p4='?' (DbType = DateTime), @p5='?' (DbType = Int32), @p6='?' (DbType = DateTime), @p7='?', @p8='?' (DbType = DateTime), @p9='?', @p11='?' (DbType = DateTime), @p12='?' (DbType = Int32), @p13='?' (DbType = Int32), @p14='?' (DbType = DateTime), @p15='?', @p16='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+UPDATE game_sessions SET "BlueTeamId" = @p0, "Code" = @p1, "CreatedAt" = @p2, "CurrentTeam" = @p3, "EndTime" = @p4, "RedTeamId" = @p5, "StartTime" = @p6, "Status" = @p7, "UpdatedAt" = @p8, "Winner" = @p9
+WHERE "Id" = @p10;
+INSERT INTO hints ("CreatedAt", "GameSessionId", "PlayerId", "UpdatedAt", "Word", "WordCount")
+VALUES (@p11, @p12, @p13, @p14, @p15, @p16)
+RETURNING "Id";
+[10:05:11 ERR] Microsoft.EntityFrameworkCore.Update - An exception occurred in the database while saving changes for context type 'Persistence.Data.MindLinkDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23503: insert or update on table "hints" violates foreign key constraint "FK_hints_players_PlayerId"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "hints" violates foreign key constraint "FK_hints_players_PlayerId"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: hints
+    ConstraintName: FK_hints_players_PlayerId
+    File: ri_triggers.c
+    Line: 2596
+    Routine: ri_ReportViolation
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23503: insert or update on table "hints" violates foreign key constraint "FK_hints_players_PlayerId"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "hints" violates foreign key constraint "FK_hints_players_PlayerId"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: hints
+    ConstraintName: FK_hints_players_PlayerId
+    File: ri_triggers.c
+    Line: 2596
+    Routine: ri_ReportViolation
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+[10:05:11 ERR] API.Hubs.GameHub - Error u GiveHint: An error occurred while saving the entity changes. See the inner exception for details.
+[10:31:38 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:31:38 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:31:38 INF] API.Hubs.GameHub - Client C_pP9mkACw5WcwSSPUVxCQ disconnected
+[10:31:38 INF] API.Hubs.GameHub - Client vVdr_dOhPY2vAbd-nCY3XQ disconnected
+[10:32:04 INF]  - Starting MindLink API
+[10:32:04 INF] API.MessageQueue.GameEventConsumer - GameEventConsumer started - listening to RabbitMQ...
+[10:32:04 INF] API.MessageQueue.GameEventConsumer - Queue 'game_events_queue' is binded
+[10:32:55 WRN] Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware - Failed to determine the https port for redirect.
+[10:32:55 WRN] Microsoft.EntityFrameworkCore.Model.Validation - The property 'BoardEntity.Cards' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+[10:32:57 INF] API.Services.GameSessionService - Game created {"GameCode":"J7PV4FN2"}
+[10:32:57 INF] API.Services.GameSessionManager - Game added {"GameCode":"J7PV4FN2","ActiveGames":1}
+[10:32:57 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:32:57 INF] API.Hubs.GameHub - Client GnLf6cItgjuE6b0Zt1oC4Q connected
+[10:32:57 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:32:57 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_joined
+[10:32:57 INF] API.Hubs.GameHub - Player 2 joined game J7PV4FN2
+[10:32:57 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_joined
+[10:33:04 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:33:04 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_team_changed
+[10:33:04 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_team_changed
+[10:33:04 INF] API.MessageQueue.GameEventConsumer - Player john.doe changed team at game: J7PV4FN2
+[10:33:12 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:33:12 INF] API.Hubs.GameHub - Client 2X7ZDWbTIp2dp4iR9jmuEA connected
+[10:33:12 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:33:12 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_joined
+[10:33:12 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_joined
+[10:33:12 INF] API.Hubs.GameHub - Player 3 joined game J7PV4FN2
+[10:33:16 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:33:16 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_team_changed
+[10:33:16 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_team_changed
+[10:33:16 INF] API.MessageQueue.GameEventConsumer - Player jane.doe changed team at game: J7PV4FN2
+[10:33:22 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:33:22 INF] API.Hubs.GameHub - StartGame: J7PV4FN2
+[10:33:22 INF] API.Services.GameSessionService - Game started {"GameCode":"J7PV4FN2"}
+[10:33:22 INF] API.Hubs.GameHub - Game J7PV4FN2 has started
+[10:33:30 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:33:30 INF] API.Hubs.GameHub - GiveHint: asd (2)
+[10:33:30 WRN] Microsoft.EntityFrameworkCore.Query - Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+[10:33:30 ERR] Microsoft.EntityFrameworkCore.Database.Command - Failed executing DbCommand (9ms) [Parameters=[@p10='?' (DbType = Int32), @p0='?' (DbType = Int32), @p1='?', @p2='?' (DbType = DateTime), @p3='?', @p4='?' (DbType = DateTime), @p5='?' (DbType = Int32), @p6='?' (DbType = DateTime), @p7='?', @p8='?' (DbType = DateTime), @p9='?', @p11='?' (DbType = DateTime), @p12='?' (DbType = Int32), @p13='?' (DbType = Int32), @p14='?' (DbType = DateTime), @p15='?', @p16='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+UPDATE game_sessions SET "BlueTeamId" = @p0, "Code" = @p1, "CreatedAt" = @p2, "CurrentTeam" = @p3, "EndTime" = @p4, "RedTeamId" = @p5, "StartTime" = @p6, "Status" = @p7, "UpdatedAt" = @p8, "Winner" = @p9
+WHERE "Id" = @p10;
+INSERT INTO hints ("CreatedAt", "GameSessionId", "PlayerId", "UpdatedAt", "Word", "WordCount")
+VALUES (@p11, @p12, @p13, @p14, @p15, @p16)
+RETURNING "Id";
+[10:33:30 ERR] Microsoft.EntityFrameworkCore.Update - An exception occurred in the database while saving changes for context type 'Persistence.Data.MindLinkDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23503: insert or update on table "hints" violates foreign key constraint "FK_hints_players_PlayerId"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "hints" violates foreign key constraint "FK_hints_players_PlayerId"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: hints
+    ConstraintName: FK_hints_players_PlayerId
+    File: ri_triggers.c
+    Line: 2596
+    Routine: ri_ReportViolation
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23503: insert or update on table "hints" violates foreign key constraint "FK_hints_players_PlayerId"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "hints" violates foreign key constraint "FK_hints_players_PlayerId"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: hints
+    ConstraintName: FK_hints_players_PlayerId
+    File: ri_triggers.c
+    Line: 2596
+    Routine: ri_ReportViolation
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+[10:33:30 ERR] API.Hubs.GameHub - Error u GiveHint: An error occurred while saving the entity changes. See the inner exception for details.
+[10:34:39 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:34:39 INF] API.Hubs.GameHub - GiveHint: dasa (2)
+[10:34:39 INF] API.Services.GameLogicService - GiveHint debug {"MindReaderId":1,"MindReaderUserId":2,"GameCode":"J7PV4FN2"}
+[10:34:39 ERR] Microsoft.EntityFrameworkCore.Database.Command - Failed executing DbCommand (2ms) [Parameters=[@p10='?' (DbType = Int32), @p0='?' (DbType = Int32), @p1='?', @p2='?' (DbType = DateTime), @p3='?', @p4='?' (DbType = DateTime), @p5='?' (DbType = Int32), @p6='?' (DbType = DateTime), @p7='?', @p8='?' (DbType = DateTime), @p9='?', @p11='?' (DbType = DateTime), @p12='?' (DbType = Int32), @p13='?' (DbType = Int32), @p14='?' (DbType = DateTime), @p15='?', @p16='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+UPDATE game_sessions SET "BlueTeamId" = @p0, "Code" = @p1, "CreatedAt" = @p2, "CurrentTeam" = @p3, "EndTime" = @p4, "RedTeamId" = @p5, "StartTime" = @p6, "Status" = @p7, "UpdatedAt" = @p8, "Winner" = @p9
+WHERE "Id" = @p10;
+INSERT INTO hints ("CreatedAt", "GameSessionId", "PlayerId", "UpdatedAt", "Word", "WordCount")
+VALUES (@p11, @p12, @p13, @p14, @p15, @p16)
+RETURNING "Id";
+[10:34:39 ERR] Microsoft.EntityFrameworkCore.Update - An exception occurred in the database while saving changes for context type 'Persistence.Data.MindLinkDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23503: insert or update on table "hints" violates foreign key constraint "FK_hints_players_PlayerId"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "hints" violates foreign key constraint "FK_hints_players_PlayerId"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: hints
+    ConstraintName: FK_hints_players_PlayerId
+    File: ri_triggers.c
+    Line: 2596
+    Routine: ri_ReportViolation
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23503: insert or update on table "hints" violates foreign key constraint "FK_hints_players_PlayerId"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "hints" violates foreign key constraint "FK_hints_players_PlayerId"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: hints
+    ConstraintName: FK_hints_players_PlayerId
+    File: ri_triggers.c
+    Line: 2596
+    Routine: ri_ReportViolation
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+[10:34:39 ERR] API.Hubs.GameHub - Error u GiveHint: An error occurred while saving the entity changes. See the inner exception for details.
+[10:37:21 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:37:21 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:37:21 INF] API.Hubs.GameHub - Client 2X7ZDWbTIp2dp4iR9jmuEA disconnected
+[10:37:21 INF] API.Hubs.GameHub - Client GnLf6cItgjuE6b0Zt1oC4Q disconnected
+[10:37:39 INF]  - Starting MindLink API
+[10:37:39 INF] API.MessageQueue.GameEventConsumer - GameEventConsumer started - listening to RabbitMQ...
+[10:37:39 INF] API.MessageQueue.GameEventConsumer - Queue 'game_events_queue' is binded
+[10:37:42 WRN] Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware - Failed to determine the https port for redirect.
+[10:37:43 WRN] Microsoft.EntityFrameworkCore.Model.Validation - The property 'BoardEntity.Cards' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+[10:37:45 INF] API.Services.GameSessionService - Game created {"GameCode":"OI3W9DE8"}
+[10:37:45 INF] API.Services.GameSessionManager - Game added {"GameCode":"OI3W9DE8","ActiveGames":1}
+[10:37:45 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:37:45 INF] API.Hubs.GameHub - Client vV1scMxgZASWe8PtjIkWzw connected
+[10:37:45 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:37:45 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_joined
+[10:37:45 INF] API.Hubs.GameHub - Player 2 joined game OI3W9DE8
+[10:37:45 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_joined
+[10:37:59 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:37:59 INF] API.Hubs.GameHub - Client z2W2-oXKiFue5mpTOUfPlw connected
+[10:37:59 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:37:59 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_joined
+[10:37:59 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_joined
+[10:37:59 INF] API.Hubs.GameHub - Player 3 joined game OI3W9DE8
+[10:38:01 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:38:01 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_team_changed
+[10:38:01 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_team_changed
+[10:38:01 INF] API.MessageQueue.GameEventConsumer - Player john.doe changed team at game: OI3W9DE8
+[10:38:02 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:38:02 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_team_changed
+[10:38:02 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_team_changed
+[10:38:02 INF] API.MessageQueue.GameEventConsumer - Player jane.doe changed team at game: OI3W9DE8
+[10:38:05 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:38:05 INF] API.Hubs.GameHub - StartGame: OI3W9DE8
+[10:38:05 INF] API.Services.GameSessionService - Game started {"GameCode":"OI3W9DE8"}
+[10:38:05 INF] API.Hubs.GameHub - Game OI3W9DE8 has started
+[10:38:10 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:38:10 INF] API.Hubs.GameHub - GiveHint: dsa (2)
+[10:38:10 INF] API.Services.GameLogicService - GiveHint debug {"MindReaderId":3,"MindReaderUserId":2,"GameCode":"OI3W9DE8","AllPlayers":[{"Id":3,"UserId":2,"V":"john.doe"},{"Id":4,"UserId":3,"V":"jane.doe"}]}
+[10:38:11 WRN] Microsoft.EntityFrameworkCore.Query - Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+[10:38:11 ERR] Microsoft.EntityFrameworkCore.Database.Command - Failed executing DbCommand (17ms) [Parameters=[@p10='?' (DbType = Int32), @p0='?' (DbType = Int32), @p1='?', @p2='?' (DbType = DateTime), @p3='?', @p4='?' (DbType = DateTime), @p5='?' (DbType = Int32), @p6='?' (DbType = DateTime), @p7='?', @p8='?' (DbType = DateTime), @p9='?', @p11='?' (DbType = DateTime), @p12='?' (DbType = Int32), @p13='?' (DbType = Int32), @p14='?' (DbType = DateTime), @p15='?', @p16='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+UPDATE game_sessions SET "BlueTeamId" = @p0, "Code" = @p1, "CreatedAt" = @p2, "CurrentTeam" = @p3, "EndTime" = @p4, "RedTeamId" = @p5, "StartTime" = @p6, "Status" = @p7, "UpdatedAt" = @p8, "Winner" = @p9
+WHERE "Id" = @p10;
+INSERT INTO hints ("CreatedAt", "GameSessionId", "PlayerId", "UpdatedAt", "Word", "WordCount")
+VALUES (@p11, @p12, @p13, @p14, @p15, @p16)
+RETURNING "Id";
+[10:38:11 ERR] Microsoft.EntityFrameworkCore.Update - An exception occurred in the database while saving changes for context type 'Persistence.Data.MindLinkDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23503: insert or update on table "hints" violates foreign key constraint "FK_hints_players_PlayerId"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "hints" violates foreign key constraint "FK_hints_players_PlayerId"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: hints
+    ConstraintName: FK_hints_players_PlayerId
+    File: ri_triggers.c
+    Line: 2596
+    Routine: ri_ReportViolation
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23503: insert or update on table "hints" violates foreign key constraint "FK_hints_players_PlayerId"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "hints" violates foreign key constraint "FK_hints_players_PlayerId"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: hints
+    ConstraintName: FK_hints_players_PlayerId
+    File: ri_triggers.c
+    Line: 2596
+    Routine: ri_ReportViolation
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+[10:38:11 ERR] API.Hubs.GameHub - Error u GiveHint: An error occurred while saving the entity changes. See the inner exception for details.
+[10:42:44 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:42:44 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:42:44 INF] API.Hubs.GameHub - Client vV1scMxgZASWe8PtjIkWzw disconnected
+[10:42:44 INF] API.Hubs.GameHub - Client z2W2-oXKiFue5mpTOUfPlw disconnected
+[10:43:07 INF]  - Starting MindLink API
+[10:43:07 INF] API.MessageQueue.GameEventConsumer - GameEventConsumer started - listening to RabbitMQ...
+[10:43:07 INF] API.MessageQueue.GameEventConsumer - Queue 'game_events_queue' is binded
+[10:43:11 WRN] Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware - Failed to determine the https port for redirect.
+[10:43:12 WRN] Microsoft.EntityFrameworkCore.Model.Validation - The property 'BoardEntity.Cards' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+[10:43:15 INF] API.Services.GameSessionService - Game created {"GameCode":"O32AB3ML"}
+[10:43:15 INF] API.Services.GameSessionManager - Game added {"GameCode":"O32AB3ML","ActiveGames":1}
+[10:43:15 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:43:15 INF] API.Hubs.GameHub - Client hopdI929nP8tqab78x4DFQ connected
+[10:43:15 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:43:15 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_joined
+[10:43:15 INF] API.Hubs.GameHub - Player 2 joined game O32AB3ML
+[10:43:15 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_joined
+[10:43:17 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:43:17 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_team_changed
+[10:43:17 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_team_changed
+[10:43:17 INF] API.MessageQueue.GameEventConsumer - Player john.doe changed team at game: O32AB3ML
+[10:43:23 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:43:23 INF] API.Hubs.GameHub - Client INFA24x083kuvrdhA2TEuw connected
+[10:43:23 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:43:23 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_joined
+[10:43:23 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_joined
+[10:43:23 INF] API.Hubs.GameHub - Player 3 joined game O32AB3ML
+[10:43:23 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:43:23 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_team_changed
+[10:43:23 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_team_changed
+[10:43:23 INF] API.MessageQueue.GameEventConsumer - Player jane.doe changed team at game: O32AB3ML
+[10:43:26 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:43:26 INF] API.Hubs.GameHub - StartGame: O32AB3ML
+[10:43:26 INF] API.Services.GameSessionService - Game started {"GameCode":"O32AB3ML"}
+[10:43:26 INF] API.Hubs.GameHub - Game O32AB3ML has started
+[10:43:29 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:43:29 INF] API.Hubs.GameHub - GiveHint: dsa (2)
+[10:43:29 INF] API.Services.GameLogicService - GiveHint debug {"MindReaderId":5,"MindReaderUserId":2,"GameCode":"O32AB3ML","AllPlayers":[{"Id":5,"UserId":2,"V":"john.doe"},{"Id":6,"UserId":3,"V":"jane.doe"}]}
+[10:43:29 WRN] Microsoft.EntityFrameworkCore.Query - Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+[10:43:29 ERR] Microsoft.EntityFrameworkCore.Database.Command - Failed executing DbCommand (9ms) [Parameters=[@p10='?' (DbType = Int32), @p0='?' (DbType = Int32), @p1='?', @p2='?' (DbType = DateTime), @p3='?', @p4='?' (DbType = DateTime), @p5='?' (DbType = Int32), @p6='?' (DbType = DateTime), @p7='?', @p8='?' (DbType = DateTime), @p9='?', @p11='?' (DbType = DateTime), @p12='?' (DbType = Int32), @p13='?' (DbType = Int32), @p14='?' (DbType = DateTime), @p15='?', @p16='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+UPDATE game_sessions SET "BlueTeamId" = @p0, "Code" = @p1, "CreatedAt" = @p2, "CurrentTeam" = @p3, "EndTime" = @p4, "RedTeamId" = @p5, "StartTime" = @p6, "Status" = @p7, "UpdatedAt" = @p8, "Winner" = @p9
+WHERE "Id" = @p10;
+INSERT INTO hints ("CreatedAt", "GameSessionId", "PlayerId", "UpdatedAt", "Word", "WordCount")
+VALUES (@p11, @p12, @p13, @p14, @p15, @p16)
+RETURNING "Id";
+[10:43:29 ERR] Microsoft.EntityFrameworkCore.Update - An exception occurred in the database while saving changes for context type 'Persistence.Data.MindLinkDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23503: insert or update on table "hints" violates foreign key constraint "FK_hints_players_PlayerId"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "hints" violates foreign key constraint "FK_hints_players_PlayerId"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: hints
+    ConstraintName: FK_hints_players_PlayerId
+    File: ri_triggers.c
+    Line: 2596
+    Routine: ri_ReportViolation
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23503: insert or update on table "hints" violates foreign key constraint "FK_hints_players_PlayerId"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "hints" violates foreign key constraint "FK_hints_players_PlayerId"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: hints
+    ConstraintName: FK_hints_players_PlayerId
+    File: ri_triggers.c
+    Line: 2596
+    Routine: ri_ReportViolation
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+[10:43:29 ERR] API.Hubs.GameHub - Error u GiveHint: An error occurred while saving the entity changes. See the inner exception for details.
+[10:48:48 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:48:48 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:48:48 INF] API.Hubs.GameHub - Client INFA24x083kuvrdhA2TEuw disconnected
+[10:48:48 INF] API.Hubs.GameHub - Client hopdI929nP8tqab78x4DFQ disconnected
+[10:49:11 INF]  - Starting MindLink API
+[10:49:12 INF] API.MessageQueue.GameEventConsumer - GameEventConsumer started - listening to RabbitMQ...
+[10:49:12 INF] API.MessageQueue.GameEventConsumer - Queue 'game_events_queue' is binded
+[10:49:51 WRN] Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware - Failed to determine the https port for redirect.
+[10:49:54 WRN] Microsoft.EntityFrameworkCore.Model.Validation - The property 'BoardEntity.Cards' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+[10:49:56 INF] API.Services.GameSessionService - Game created {"GameCode":"HOBKI7IS"}
+[10:49:56 INF] API.Services.GameSessionManager - Game added {"GameCode":"HOBKI7IS","ActiveGames":1}
+[10:49:57 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:49:57 INF] API.Hubs.GameHub - Client Tib6ERjfaw-sm6gc5UcRXQ connected
+[10:49:57 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:49:57 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_joined
+[10:49:57 INF] API.Hubs.GameHub - Player 2 joined game HOBKI7IS
+[10:49:57 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_joined
+[10:50:04 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:50:04 INF] API.Hubs.GameHub - Client Yz0aBR3j1BUHQQEdrv9XXg connected
+[10:50:04 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:50:04 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_joined
+[10:50:04 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_joined
+[10:50:04 INF] API.Hubs.GameHub - Player 3 joined game HOBKI7IS
+[10:50:05 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:50:06 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_team_changed
+[10:50:06 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_team_changed
+[10:50:06 INF] API.MessageQueue.GameEventConsumer - Player jane.doe changed team at game: HOBKI7IS
+[10:50:07 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:50:07 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_team_changed
+[10:50:07 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_team_changed
+[10:50:07 INF] API.MessageQueue.GameEventConsumer - Player john.doe changed team at game: HOBKI7IS
+[10:50:10 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:50:10 INF] API.Hubs.GameHub - StartGame: HOBKI7IS
+[10:50:10 INF] API.Services.GameSessionService - Game started {"GameCode":"HOBKI7IS"}
+[10:50:10 INF] API.Hubs.GameHub - Game HOBKI7IS has started
+[10:50:15 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:50:15 INF] API.Hubs.GameHub - GiveHint: dsa (2)
+[10:50:15 INF] API.Services.GameLogicService - GiveHint debug {"MindReaderId":7,"MindReaderUserId":2,"GameCode":"HOBKI7IS","AllPlayers":[{"Id":7,"UserId":2,"V":"john.doe"},{"Id":8,"UserId":3,"V":"jane.doe"}]}
+[10:50:15 WRN] Microsoft.EntityFrameworkCore.Query - Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+[10:50:16 INF] API.Services.GameLogicService - Hint given {"GameCode":"HOBKI7IS","Player":"john.doe","Word":"dsa","WordCount":2}
+[10:50:16 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.hint_given
+[10:50:16 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.hint_given
+[10:50:16 INF] API.MessageQueue.GameEventConsumer - Raw json: {"PlayerId":7,"PlayerUsername":"john.doe","Word":"dsa","WordCount":2,"EventId":"b517c337-c48d-4dbe-9a0b-a1a872f5dda1","CorrelationId":"de043a8d-9e28-4911-8074-b4d6e0338007","GameCode":"HOBKI7IS","TimeStamp":"2026-03-10T09:50:16.0400392Z","Version":1}
+[10:50:16 INF] API.MessageQueue.GameEventConsumer - GameCode: HOBKI7IS
+[10:50:16 INF] API.MessageQueue.GameEventConsumer - Word: dsa
+[10:50:16 INF] API.MessageQueue.GameEventConsumer - Hint at game: HOBKI7IS
+[10:50:37 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:50:37 INF] API.Hubs.GameHub - ExecuteGuess: game=HOBKI7IS, cards=2,18
+[10:50:37 ERR] Microsoft.EntityFrameworkCore.Database.Command - Failed executing DbCommand (18ms) [Parameters=[@p1='?' (DbType = Int32), @p0='?' (DbType = Object), @p12='?' (DbType = Int32), @p2='?' (DbType = Int32), @p3='?', @p4='?' (DbType = DateTime), @p5='?', @p6='?' (DbType = DateTime), @p7='?' (DbType = Int32), @p8='?' (DbType = DateTime), @p9='?', @p10='?' (DbType = DateTime), @p11='?', @p13='?' (DbType = Int32), @p14='?' (DbType = DateTime), @p15='?' (DbType = DateTime), @p16='?' (DbType = Int32), @p17='?' (DbType = Int32), @p18='?' (DbType = Boolean), @p19='?' (DbType = Int32), @p20='?' (DbType = DateTime), @p21='?' (DbType = Int32), @p22='?' (DbType = DateTime), @p23='?' (DbType = DateTime), @p24='?' (DbType = Int32), @p25='?' (DbType = Int32), @p26='?' (DbType = Boolean), @p27='?' (DbType = Int32), @p28='?' (DbType = DateTime), @p30='?' (DbType = Int32), @p29='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+UPDATE boards SET "Cards" = @p0
+WHERE "Id" = @p1;
+UPDATE game_sessions SET "BlueTeamId" = @p2, "Code" = @p3, "CreatedAt" = @p4, "CurrentTeam" = @p5, "EndTime" = @p6, "RedTeamId" = @p7, "StartTime" = @p8, "Status" = @p9, "UpdatedAt" = @p10, "Winner" = @p11
+WHERE "Id" = @p12;
+INSERT INTO guesses ("CardPosition", "CreatedAt", "ExecutedAt", "GameSessionId", "Index", "IsCorrect", "PlayerId", "UpdatedAt")
+VALUES (@p13, @p14, @p15, @p16, @p17, @p18, @p19, @p20)
+RETURNING "Id";
+INSERT INTO guesses ("CardPosition", "CreatedAt", "ExecutedAt", "GameSessionId", "Index", "IsCorrect", "PlayerId", "UpdatedAt")
+VALUES (@p21, @p22, @p23, @p24, @p25, @p26, @p27, @p28)
+RETURNING "Id";
+UPDATE teams SET "Score" = @p29
+WHERE "Id" = @p30;
+[10:50:37 ERR] Microsoft.EntityFrameworkCore.Update - An exception occurred in the database while saving changes for context type 'Persistence.Data.MindLinkDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23503: insert or update on table "guesses" violates foreign key constraint "FK_guesses_players_PlayerId"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "guesses" violates foreign key constraint "FK_guesses_players_PlayerId"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: guesses
+    ConstraintName: FK_guesses_players_PlayerId
+    File: ri_triggers.c
+    Line: 2596
+    Routine: ri_ReportViolation
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23503: insert or update on table "guesses" violates foreign key constraint "FK_guesses_players_PlayerId"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "guesses" violates foreign key constraint "FK_guesses_players_PlayerId"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: guesses
+    ConstraintName: FK_guesses_players_PlayerId
+    File: ri_triggers.c
+    Line: 2596
+    Routine: ri_ReportViolation
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+[10:50:37 ERR] API.Hubs.GameHub - Error in ExecuteGuess: An error occurred while saving the entity changes. See the inner exception for details.
+[10:52:07 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:52:07 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:52:07 INF] API.Hubs.GameHub - Client Tib6ERjfaw-sm6gc5UcRXQ disconnected
+[10:52:07 INF] API.Hubs.GameHub - Client Yz0aBR3j1BUHQQEdrv9XXg disconnected
+[10:52:24 INF]  - Starting MindLink API
+[10:52:25 INF] API.MessageQueue.GameEventConsumer - GameEventConsumer started - listening to RabbitMQ...
+[10:52:25 INF] API.MessageQueue.GameEventConsumer - Queue 'game_events_queue' is binded
+[10:52:27 WRN] Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware - Failed to determine the https port for redirect.
+[10:52:28 WRN] Microsoft.EntityFrameworkCore.Model.Validation - The property 'BoardEntity.Cards' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+[10:52:30 INF] API.Services.GameSessionService - Game created {"GameCode":"AK6FFSYX"}
+[10:52:30 INF] API.Services.GameSessionManager - Game added {"GameCode":"AK6FFSYX","ActiveGames":1}
+[10:52:30 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:52:30 INF] API.Hubs.GameHub - Client N-cqTkZ_6C2Mc1WGVIZGQw connected
+[10:52:30 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:52:30 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_joined
+[10:52:30 INF] API.Hubs.GameHub - Player 2 joined game AK6FFSYX
+[10:52:30 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_joined
+[10:52:36 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:52:36 INF] API.Hubs.GameHub - Client pVpRe9FAH1SEm-rOUV3NVA connected
+[10:52:36 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:52:36 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_joined
+[10:52:36 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_joined
+[10:52:36 INF] API.Hubs.GameHub - Player 3 joined game AK6FFSYX
+[10:52:38 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:52:38 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_team_changed
+[10:52:38 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_team_changed
+[10:52:38 INF] API.MessageQueue.GameEventConsumer - Player jane.doe changed team at game: AK6FFSYX
+[10:52:39 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:52:39 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_team_changed
+[10:52:39 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_team_changed
+[10:52:39 INF] API.MessageQueue.GameEventConsumer - Player john.doe changed team at game: AK6FFSYX
+[10:52:41 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:52:41 INF] API.Hubs.GameHub - StartGame: AK6FFSYX
+[10:52:41 INF] API.Services.GameSessionService - Game started {"GameCode":"AK6FFSYX"}
+[10:52:41 INF] API.Hubs.GameHub - Game AK6FFSYX has started
+[10:52:48 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:52:48 INF] API.Hubs.GameHub - GiveHint: gfd (2)
+[10:52:48 INF] API.Services.GameLogicService - GiveHint debug {"MindReaderId":9,"MindReaderUserId":2,"GameCode":"AK6FFSYX","AllPlayers":[{"Id":9,"UserId":2,"V":"john.doe"},{"Id":10,"UserId":3,"V":"jane.doe"}]}
+[10:52:48 WRN] Microsoft.EntityFrameworkCore.Query - Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+[10:52:48 INF] API.Services.GameLogicService - Hint given {"GameCode":"AK6FFSYX","Player":"john.doe","Word":"gfd","WordCount":2}
+[10:52:48 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.hint_given
+[10:52:48 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.hint_given
+[10:52:48 INF] API.MessageQueue.GameEventConsumer - Raw json: {"PlayerId":9,"PlayerUsername":"john.doe","Word":"gfd","WordCount":2,"EventId":"9aca3fb2-2db3-41b6-9f85-6e56417eb6ea","CorrelationId":"3c901dc1-0e13-416e-953e-bbafdfc6fdfe","GameCode":"AK6FFSYX","TimeStamp":"2026-03-10T09:52:48.5665728Z","Version":1}
+[10:52:48 INF] API.MessageQueue.GameEventConsumer - GameCode: AK6FFSYX
+[10:52:48 INF] API.MessageQueue.GameEventConsumer - Word: gfd
+[10:52:48 INF] API.MessageQueue.GameEventConsumer - Hint at game: AK6FFSYX
+[10:53:03 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[10:53:03 INF] API.Hubs.GameHub - ExecuteGuess: game=AK6FFSYX, cards=2,7
+[10:53:03 INF] API.Services.GameLogicService - Guess executed {"GameCode":"AK6FFSYX","Player":"jane.doe","Cards":[2,7],"IsGameOver":false}
+[10:53:03 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.guess_executed
+[10:53:03 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.guess_executed
+[10:53:03 INF] API.MessageQueue.GameEventConsumer - Guess at game: AK6FFSYX
+[11:08:00 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[11:08:00 INF] API.Hubs.GameHub - Client N-cqTkZ_6C2Mc1WGVIZGQw disconnected
+[11:08:03 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[11:08:03 INF] API.Hubs.GameHub - Client pVpRe9FAH1SEm-rOUV3NVA disconnected
+[11:13:28 INF]  - Starting MindLink API
+[11:13:28 INF] API.MessageQueue.GameEventConsumer - GameEventConsumer started - listening to RabbitMQ...
+[11:13:28 INF] API.MessageQueue.GameEventConsumer - Queue 'game_events_queue' is binded
+[11:13:37 WRN] Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware - Failed to determine the https port for redirect.
+[11:13:38 WRN] Microsoft.EntityFrameworkCore.Model.Validation - The property 'BoardEntity.Cards' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+[11:13:40 INF] API.Services.GameSessionService - Game created {"GameCode":"I1CGTZ2I"}
+[11:13:40 INF] API.Services.GameSessionManager - Game added {"GameCode":"I1CGTZ2I","ActiveGames":1}
+[11:13:40 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[11:13:40 INF] API.Hubs.GameHub - Client CULYb--_AT2fj41jCSHnJQ connected
+[11:13:40 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[11:13:40 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_joined
+[11:13:40 INF] API.Hubs.GameHub - Player 2 joined game I1CGTZ2I
+[11:13:40 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_joined
+[11:13:42 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[11:13:42 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_team_changed
+[11:13:42 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_team_changed
+[11:13:42 INF] API.MessageQueue.GameEventConsumer - Player john.doe changed team at game: I1CGTZ2I
+[11:14:17 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[11:14:17 INF] API.Hubs.GameHub - Client CULYb--_AT2fj41jCSHnJQ disconnected
+[11:46:00 WRN] API.Services.GameSessionManager - Game not found {"GameCode":"121232DS"}
+[11:46:15 INF] API.Services.GameSessionService - Game created {"GameCode":"VKCEN33P"}
+[11:46:15 INF] API.Services.GameSessionManager - Game added {"GameCode":"VKCEN33P","ActiveGames":2}
+[11:46:15 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[11:46:15 INF] API.Hubs.GameHub - Client QNvC9YjIZs0eu7Ah4LR7eA connected
+[11:46:15 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[11:46:15 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_joined
+[11:46:15 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_joined
+[11:46:15 INF] API.Hubs.GameHub - Player 2 joined game VKCEN33P
+[11:46:20 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[11:46:20 INF] API.Hubs.GameHub - Client jyI_ZOJOireTqtpmGCtwzg connected
+[11:46:20 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[11:46:20 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_joined
+[11:46:20 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_joined
+[11:46:20 INF] API.Hubs.GameHub - Player 3 joined game VKCEN33P
+[11:46:22 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[11:46:22 INF] API.Hubs.GameHub - Client QNvC9YjIZs0eu7Ah4LR7eA disconnected
+[11:46:23 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[11:46:23 INF] API.Hubs.GameHub - Client jyI_ZOJOireTqtpmGCtwzg disconnected

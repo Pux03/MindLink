@@ -1,12 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Core.Models;
-using Core.Enums;
-using API.DTOs.Request;
 using API.DTOs.Response;
 using API.Services;
-using AutoMapper;
-using Microsoft.Extensions.Logging;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers

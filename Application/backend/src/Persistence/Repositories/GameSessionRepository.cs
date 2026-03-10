@@ -12,7 +12,7 @@ namespace Persistence.Repositories
         public async Task<GameSessionEntity?> GetGameWithBoardAndTeamsAsync(int gameId)
         {
             return await _dbSet
-                .Include(g => g.Board)  // ← Učitaj Board sa JSONB Cards
+                .Include(g => g.Board)
                 .Include(g => g.RedTeam)
                     .ThenInclude(t => t.Members)
                 .Include(g => g.BlueTeam)
@@ -73,9 +73,9 @@ namespace Persistence.Repositories
                 .Include(g => g.BlueTeam)
                     .ThenInclude(t => t.Members)
                 .Include(g => g.GuessHistory)
-                    .ThenInclude(gu => gu.Player)
+                    //.ThenInclude(gu => gu.Player)
                 .Include(g => g.Hints)
-                    .ThenInclude(h => h.Player)
+                    //.ThenInclude(h => h.Player)
                 .FirstOrDefaultAsync(g => g.Id == gameId);
         }
 

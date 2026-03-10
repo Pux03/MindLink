@@ -4,6 +4,7 @@ using Core.Models;
 using Persistence.Repositories;
 using AutoMapper;
 using Core.Events;
+using Persistence.Entities;
 
 namespace API.Services
 {
@@ -11,18 +12,18 @@ namespace API.Services
     {
         private readonly IGameSessionRepository _gameRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<GameLogicService> _logger;
 
         public GameLogicService(
             IGameSessionRepository gameRepository,
-            IMapper mapper
-            //ILogger<GameLogicService> logger
+            IMapper mapper,
+            ILogger<GameLogicService> logger
             )
         {
             _gameRepository = gameRepository;
             _mapper = mapper;
-            //_logger = logger;
+            _logger = logger;
         }
-
 
         public bool CanPlayerGuess(GameSession game, Player player)
         {
@@ -69,11 +70,6 @@ namespace API.Services
             foreach (var card in guessedCards)
             {
                 card.IsRevealed = true;
-            }
-
-            foreach (var card in guessedCards)
-            {
-                card.IsRevealed = true;
 
                 if (card.TeamColor == player.Team.Color)
                 {
@@ -104,7 +100,80 @@ namespace API.Services
 
             var (RedTeamRemainingCardsCount, BlueTeamRemainingCardsCount) = game.GetTeamPoints();
 
-            //await _gameRepository.UpdateAsync(game);
+            // var gameSessionEntity = await _gameRepository.GetFullGameDetailsAsync(game.Id);
+            
+            // if (gameSessionEntity != null)
+            // {
+            //     gameSessionEntity.Board.Cards = _mapper.Map<List<CardEntity>>(game.Board.Cards);
+
+            //     gameSessionEntity.RedTeam.Score = game.RedTeam.Score;
+            //     gameSessionEntity.BlueTeam.Score = game.BlueTeam.Score;
+
+            //     var existingPositions = gameSessionEntity.GuessHistory.Select(g => g.CardPosition).ToHashSet();
+            //     var newGuesses = game.GuessHistory
+            //         .Where(g => !existingPositions.Contains(g.CardPosition))
+            //         .Select(g =>
+            //         {
+            //             var guessEntity = _mapper.Map<GuessEntity>(g);
+            //             guessEntity.GameSessionId = gameSessionEntity.Id;
+            //             return guessEntity;
+            //         })
+            //         .ToList();
+
+            //     foreach (var guess in newGuesses)
+            //         gameSessionEntity.GuessHistory.Add(guess);
+
+            //     gameSessionEntity.CurrentTeam = game.CurrentTeam;
+            //     gameSessionEntity.Status = game.Status;
+            //     gameSessionEntity.Winner = game.Winner;
+            //     gameSessionEntity.EndTime = game.EndTime;
+
+            //     await _gameRepository.UpdateAsync(gameSessionEntity);
+            //     await _gameRepository.SaveChangesAsync();
+            // }
+
+            var gameSessionEntity = await _gameRepository.GetFullGameDetailsAsync(game.Id);
+
+            if (gameSessionEntity != null)
+            {
+                gameSessionEntity.Board.Cards = _mapper.Map<List<CardEntity>>(game.Board.Cards);
+
+                gameSessionEntity.RedTeam.Score = game.RedTeam.Score;
+                gameSessionEntity.BlueTeam.Score = game.BlueTeam.Score;
+
+                var existingPositions = gameSessionEntity.GuessHistory.Select(g => g.CardPosition).ToHashSet();
+                var newGuesses = game.GuessHistory
+                    .Where(g => !existingPositions.Contains(g.CardPosition))
+                    .Select(g => new GuessEntity
+                    {
+                        PlayerId = g.PlayerId,
+                        GameSessionId = gameSessionEntity.Id,
+                        CardPosition = g.CardPosition,
+                        IsCorrect = g.IsCorrect,
+                        ExecutedAt = g.Timestamp,
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow
+                    })
+                    .ToList();
+
+                foreach (var guess in newGuesses)
+                    gameSessionEntity.GuessHistory.Add(guess);
+
+                gameSessionEntity.CurrentTeam = game.CurrentTeam;
+                gameSessionEntity.Status = game.Status;
+                gameSessionEntity.Winner = game.Winner;
+                gameSessionEntity.EndTime = game.EndTime;
+
+                await _gameRepository.SaveChangesAsync();
+            }
+
+            _logger.LogInformation("Guess executed {@Data}", new 
+            { 
+                GameCode = game.Code, 
+                Player = player.GetUsername(),
+                Cards = cardPositions,
+                IsGameOver = isGameOver
+            });
 
             return new GuessExecutedEvent
             {
@@ -120,8 +189,16 @@ namespace API.Services
             };
         }
 
-        public Task<HintGivenEvent> GiveHintAsync(GameSession game, Player mindReader, string word, int wordCount)
+        public async Task<HintGivenEvent> GiveHintAsync(GameSession game, Player mindReader, string word, int wordCount)
         {
+            _logger.LogInformation("GiveHint debug {@Data}", new 
+            { 
+                MindReaderId = mindReader.Id,
+                MindReaderUserId = mindReader.UserId,
+                GameCode = game.Code,
+                AllPlayers = game.Players.Select(p => new { p.Id, p.UserId, V = p.GetUsername() })
+            });
+
             game.AddHint(new Hint
             {
                 PlayerId = mindReader.Id,
@@ -129,14 +206,53 @@ namespace API.Services
                 WordCount = wordCount
             });
 
-            return Task.FromResult(new HintGivenEvent
+            var entity = await _gameRepository.GetFullGameDetailsAsync(game.Id);
+            
+            if (entity != null)
+            {
+                // var hintEntity = _mapper.Map<HintEntity>(new Hint
+                // {
+                //     PlayerId = mindReader.Id,
+                //     Word = word,
+                //     WordCount = wordCount
+                // });
+                // hintEntity.GameSessionId = entity.Id;
+                // entity.Hints.Add(hintEntity);
+
+                // await _gameRepository.UpdateAsync(entity);
+                // await _gameRepository.SaveChangesAsync();
+            
+                var hintEntity = new HintEntity
+                {
+                    PlayerId = mindReader.Id,
+                    GameSessionId = entity.Id,
+                    Word = word,
+                    WordCount = wordCount,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
+                };
+
+                entity.Hints.Add(hintEntity);
+
+                await _gameRepository.SaveChangesAsync();
+            }
+
+            _logger.LogInformation("Hint given {@Data}", new 
+            { 
+                GameCode = game.Code, 
+                Player = mindReader.GetUsername(),
+                Word = word,
+                WordCount = wordCount
+            });
+
+            return new HintGivenEvent
             {
                 GameCode = game.Code,
                 PlayerId = mindReader.Id,
                 PlayerUsername = mindReader.GetUsername(),
                 Word = word,
                 WordCount = wordCount
-            });
+            };
         }
 
         public Task<PlayerTeamChangedEvent> UpdatePlayerTeam(GameSession game, int userId, string teamColor, bool isMindreader)
@@ -147,7 +263,10 @@ namespace API.Services
             var player = game.Players.FirstOrDefault(p => p.UserId == userId);
 
             if (player == null)
-                throw new Exception("Player not found");
+            {
+                _logger.LogWarning("Player not found {@Data}", new { UserId = userId, GameCode = game.Code });
+                throw new InvalidOperationException("Player not found");
+            }
 
             game.RedTeam.Members.Remove(player);
             game.BlueTeam.Members.Remove(player);

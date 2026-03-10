@@ -13,20 +13,21 @@ namespace API.Services
     {
         private readonly IGameSessionRepository _gameRepository;
         private readonly IGameSessionManager _gameSessionManager;
-        private static readonly Random _random = new();
+        private readonly ILogger<GameSessionService> _logger;
         private readonly IMapper _mapper;
+        private static readonly Random _random = new();
     
         public GameSessionService(
             IGameSessionRepository gameRepository,
             IGameSessionManager gameSessionManager,
-            IMapper mapper
-            //ILogger<GameSessionService> logger
+            IMapper mapper,
+            ILogger<GameSessionService> logger
             )
         {
             _gameRepository = gameRepository;
             _gameSessionManager = gameSessionManager;
             _mapper = mapper;
-            //_logger = logger;
+            _logger = logger;
         }
 
         public async Task<GameSession> CreateGameAsync(string? Code = null, string? RedTeamName = null, string? BlueTeamName = null)
@@ -53,14 +54,14 @@ namespace API.Services
 
                 var gameSession = new GameSession
                 {
-                    Code = Code ?? GenerateGameCode(),
+                    Code = Code ?? await GenerateGameCode(),
                     Status = GameStatus.Waiting,
                     RedTeam = redTeam,
                     BlueTeam = blueTeam,
                     CurrentTeam = TeamColor.Red,
                     Board = board,
                     StartTime = DateTime.UtcNow,
-                    Players = [], // TODO razmisli da dodas ovo radi lakse logike
+                    Players = [],
                     GuessHistory = [],
                     HintHistory = []
                 };
@@ -69,10 +70,13 @@ namespace API.Services
                 await _gameRepository.AddAsync(gameEntity);
                 await _gameRepository.SaveChangesAsync();
 
-                //var createdGame = await _gameRepository.GetByIdAsync(gameSession.Id); // TODO
-                //var result = _mapper.Map<GameSession>(createdGame);
+                gameSession.Id = gameEntity.Id;
+                gameSession.RedTeam.Id = gameEntity.RedTeamId;
+                gameSession.BlueTeam.Id = gameEntity.BlueTeamId;
+                gameSession.Board.Id = gameEntity.Board?.Id ?? 0;
 
-                //return result;
+                _logger.LogInformation("Game created {@Data}", new { GameCode = gameSession.Code });
+
                 return gameSession;
             }
             catch(Exception ex)
@@ -102,6 +106,8 @@ namespace API.Services
 
                 // Remove from game session manager
                 _gameSessionManager.RemoveActiveGame(gameCode);
+
+                _logger.LogInformation("Game ended {@Data}", new { GameCode = gameCode });
 
                 return game;
             }
@@ -177,6 +183,8 @@ namespace API.Services
                     await _gameRepository.UpdateAsync(gameEntity);
                     await _gameRepository.SaveChangesAsync();
                 }
+
+                _logger.LogInformation("Game started {@Data}", new { GameCode = gameCode });
 
                 return game;
             }
@@ -256,25 +264,26 @@ namespace API.Services
             return board;
         }
     
-        private String GenerateGameCode()
+        private async Task<String> GenerateGameCode()
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
+            string code = string.Empty;
     
-            return new string(Enumerable
-                .Repeat(chars, 8)
-                .Select(s => s[_random.Next(s.Length)])
-                .ToArray());
+            // return new string(Enumerable
+            //     .Repeat(chars, 8)
+            //     .Select(s => s[_random.Next(s.Length)])
+            //     .ToArray());
                 
+            do
+            {
+                code = new string(Enumerable
+                    .Repeat(chars, 8)
+                    .Select(s => s[_random.Next(s.Length)])
+                    .ToArray());
+            }
+            while (await _gameRepository.GetGameByCodeAsync(code) != null);
 
-            // TODO
-            // string code;
-            // do
-            // {
-            //     code = GenerateGameCode();
-            // }
-            // while (await _context.Games.AnyAsync(g => g.Code == code));
-
-            // return code;
+            return code;
         }
             
     }

@@ -14,6 +14,10 @@ publish/
 
 *.log
 
+*.txt
+
+logs/
+
 .DS_Store
 Thumbs.db
 

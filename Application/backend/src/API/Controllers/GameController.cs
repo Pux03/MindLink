@@ -136,14 +136,16 @@ namespace API.Controllers
                 var game = await _gameSessionService.CreateGameAsync(request.Code, request.RedTeamName, request.BlueTeamName);
                 game.CreatedByUserId = currentUserId;
 
-                var player = new Player
-                {   
-                    User = new User { Id = GetCurrentUserId(), Username = GetCurrentUsername() },
-                    UserId = currentUserId,
-                    IsPlaying = true,
-                    Team = null,
-                    IsMindreader = false
-                };
+                // var player = new Player
+                // {   
+                //     User = new User { Id = GetCurrentUserId(), Username = GetCurrentUsername() },
+                //     UserId = currentUserId,
+                //     IsPlaying = true,
+                //     Team = null,
+                //     IsMindreader = false
+                // };
+
+                var player = await _playerService.CreatePlayerAsync(currentUserId);
 
                 game.Players.Add(player);
                 _gameSessionManager.AddActiveGame(game);
@@ -208,14 +210,16 @@ namespace API.Controllers
                     });
                 }
 
-                var player = new Player
-                {
-                    User = new User { Id = GetCurrentUserId(), Username = GetCurrentUsername() },
-                    UserId = GetCurrentUserId(),
-                    IsPlaying = true,
-                    Team = null,
-                    IsMindreader = false
-                };
+                // var player = new Player
+                // {
+                //     User = new User { Id = GetCurrentUserId(), Username = GetCurrentUsername() },
+                //     UserId = GetCurrentUserId(),
+                //     IsPlaying = true,
+                //     Team = null,
+                //     IsMindreader = false
+                // };
+
+                var player = await _playerService.CreatePlayerAsync(GetCurrentUserId());
 
                 game.Players.Add(player);
 
