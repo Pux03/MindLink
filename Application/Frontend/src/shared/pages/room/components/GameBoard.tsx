@@ -11,8 +11,6 @@ interface GameBoardProps {
   onCardClick: (card: CardData) => void;
 }
 
-// ── Board ─────────────────────────────────────────────────────────────────────
-
 export const GameBoard = ({
   cards,
   selectedCards,

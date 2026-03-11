@@ -7,13 +7,11 @@ interface HowToPlayProps {
   onClose: () => void;
 }
 
-// ── Demo sets ─────────────────────────────────────────────────────────────────
-
 interface DemoSet {
   hint: string;
   count: number;
   words: string[]; // 9 words
-  correct: number[]; // indices that match the hint (will be teamColor "Red")
+  correct: number[];
 }
 
 const DEMO_SETS: DemoSet[] = [
@@ -114,15 +112,11 @@ const STEPS = [
   },
 ];
 
-// ── Build CardData from demo set + current state ──────────────────────────────
-
-// Spymaster color map — correct = Red, others cycle through Neutral/Blue for variety
 const getSpymasterColor = (
   i: number,
   correct: number[],
 ): CardData["teamColor"] => {
   if (correct.includes(i)) return "Red";
-  // Sprinkle in a Blue and a Bomb for realism, rest Neutral
   const extras: Record<number, CardData["teamColor"]> = {
     1: "Blue",
     3: "Blue",
@@ -154,14 +148,11 @@ const buildCards = (
       word,
       position: i,
       isRevealed: false,
-      // Spymaster sees all colors; operatives see null on unrevealed
       teamColor: isSpymasterView ? getSpymasterColor(i, set.correct) : null,
     };
   });
 
-// ── Component ─────────────────────────────────────────────────────────────────
-
-const BOMB_POSITION = 7; // matches getSpymasterColor extras index
+const BOMB_POSITION = 7;
 
 export const HowToPlay = ({ isOpen, onClose }: HowToPlayProps) => {
   const [step, setStep] = useState(0);

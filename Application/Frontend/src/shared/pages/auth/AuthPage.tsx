@@ -252,8 +252,6 @@ export const AuthPage = () => {
   );
 };
 
-// ── Balatro Field ─────────────────────────────────────────────────────────────
-
 interface BalatroFieldProps {
   name: string;
   placeholder: string;

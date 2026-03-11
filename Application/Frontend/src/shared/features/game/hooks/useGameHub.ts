@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import * as signalR from "@microsoft/signalr";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
 
 export interface Player {
     id: number;
@@ -25,8 +24,6 @@ export interface RevealedCard {
     teamColor: string;
     isRevealed: boolean;
 }
-
-// ── SignalR payload shapes (camelCase - .NET default serialization) ───────────
 
 interface PlayerJoinedPayload {
     userId: number;
@@ -63,7 +60,6 @@ interface GuessExecutedPayload {
     blueTeamRemainingCardsCount?: number | null;
 }
 
-// ── Public types ──────────────────────────────────────────────────────────────
 
 export type LogEntry = {
     id: number;
@@ -80,7 +76,6 @@ export interface GameState {
     ended: boolean;
 }
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 const now = () =>
     new Date().toLocaleTimeString("en-US", {
@@ -96,8 +91,7 @@ const mkLog = (type: LogEntry["type"], message: string): LogEntry => ({
 
 const HUB_URL = "/hubs/game";
 
-// ─── Hook ─────────────────────────────────────────────────────────────────────
-
+//hook
 interface UseGameHubOptions {
     gameCode: string | undefined;
     onPlayerTeamChanged: (playerName: string, newTeam: string, isMindreader: boolean) => void;
@@ -135,7 +129,6 @@ export const useGameHub = ({
     useEffect(() => {
         if (!gameCode) return;
 
-        // Guard against React StrictMode double-invoke in dev
         let cancelled = false;
 
         const connection = new signalR.HubConnectionBuilder()
@@ -242,9 +235,9 @@ export const useGameHub = ({
             cancelled = true;
             connection.stop();
         };
-    }, [gameCode, addLog]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [gameCode, addLog]);
 
-    // ── Exposed actions ───────────────────────────────────────────────────────
+
 
     const startGame = async (code: string) => {
         if (!connectionRef.current) return;

@@ -1,4 +1,3 @@
-// ─── Shared room types ────────────────────────────────────────────────────────
 
 export interface Player {
     id: number;

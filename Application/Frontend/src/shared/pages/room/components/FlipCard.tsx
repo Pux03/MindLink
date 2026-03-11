@@ -39,7 +39,6 @@ export const FlipCard = ({
 }: FlipCardProps) => {
   const wasRevealed = useRef(card.isRevealed);
 
-  // flipped = true means card shows its revealed face
   const [flipped, setFlipped] = useState(card.isRevealed);
   const [animating, setAnimating] = useState(false);
 
@@ -48,9 +47,8 @@ export const FlipCard = ({
       wasRevealed.current = true;
       setAnimating(true);
 
-      // Swap face at midpoint so the colour appears as card faces away
       const mid = setTimeout(() => setFlipped(true), 220);
-      // Mark animation done
+
       const end = setTimeout(() => setAnimating(false), 600);
 
       return () => {
@@ -63,23 +61,16 @@ export const FlipCard = ({
   const tc = card.teamColor ?? "Neutral";
   const canClick = isMyTurnToGuess && !card.isRevealed;
 
-  // Unrevealed face classes
   const frontClass = [
     "balatro-card-unrevealed",
     isSelected ? "balatro-card-selected" : "",
     !isMyTurnToGuess ? "opacity-60 !cursor-not-allowed" : "",
   ].join(" ");
 
-  // Revealed face classes
   const backClass = revealedClass[tc] ?? "balatro-card-neutral";
 
   return (
     <div style={{ perspective: "900px", minHeight: "72px" }}>
-      {/*
-        Flip container — rotates around Y axis.
-        At 0deg  → front (unrevealed) faces viewer.
-        At 180deg → back (revealed) faces viewer.
-      */}
       <div
         style={{
           position: "relative",
@@ -92,7 +83,6 @@ export const FlipCard = ({
             : "none",
         }}
       >
-        {/* ── Front face — unrevealed ───────────────────────────────────────── */}
         <button
           onClick={canClick ? onClick : undefined}
           disabled={!canClick}

@@ -9,8 +9,6 @@ interface GameLogProps {
   onLeave: () => void;
 }
 
-// ── Parse log messages into structured history entries ────────────────────────
-
 interface HistoryEntry {
   id: number;
   kind: "game_start" | "hint" | "guess" | "win" | "join" | "error";
@@ -81,7 +79,6 @@ const parseEntry = (log: LogEntry): HistoryEntry | null => {
 
   // Hint: "WORD × N"
   if (log.type === "hint") {
-    // Regex sada traži: "username WORD × count"
     const match = msg.match(/^(\S+)\s+(.+)\s×\s(\d+)$/);
 
     if (match) {
@@ -221,7 +218,6 @@ const parseEntry = (log: LogEntry): HistoryEntry | null => {
     };
   }
 
-  // Skip technical/noise messages
   return null;
 };
 
@@ -242,8 +238,6 @@ const kindBg: Record<HistoryEntry["kind"], string> = {
   join: "transparent",
   error: "rgba(239,68,68,0.07)",
 };
-
-// ── Component ─────────────────────────────────────────────────────────────────
 
 export const GameLog = ({
   logs,

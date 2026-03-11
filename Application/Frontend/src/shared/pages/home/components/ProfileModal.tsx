@@ -19,8 +19,6 @@ const getCurrentUser = (): { username: string } => {
   return { username: "Player" };
 };
 
-// ── Sub-components ────────────────────────────────────────────────────────────
-
 const StatCard = ({
   label,
   value,
@@ -304,8 +302,6 @@ const LeaderboardSection = ({
   </div>
 );
 
-// ── Tabs ──────────────────────────────────────────────────────────────────────
-
 type Tab = "stats" | "leaderboard" | "username" | "password";
 
 const TABS: { id: Tab; label: string; icon: string }[] = [
@@ -314,8 +310,6 @@ const TABS: { id: Tab; label: string; icon: string }[] = [
   { id: "username", label: "Username", icon: "♦" },
   { id: "password", label: "Password", icon: "♥" },
 ];
-
-// ── Main component ────────────────────────────────────────────────────────────
 
 export const ProfileModal = ({ isOpen, onClose }: ProfileModalProps) => {
   const navigate = useNavigate();
@@ -365,7 +359,6 @@ export const ProfileModal = ({ isOpen, onClose }: ProfileModalProps) => {
     });
   }, [isOpen]);
 
-  // Lazy-load leaderboard only when that tab is first opened
   useEffect(() => {
     if (tab !== "leaderboard" || leaderboardLoaded) return;
     setLeaderboardError(false);

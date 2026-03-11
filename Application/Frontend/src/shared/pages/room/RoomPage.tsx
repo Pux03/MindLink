@@ -20,8 +20,6 @@ import { GameLog } from "./components/GameLog";
 import { TeamPanel } from "./components/TeamPanel";
 import { WinnerOverlay } from "./components/WinnerOverlay";
 
-// ─── Mappers ──────────────────────────────────────────────────────────────────
-
 const mapGameStatus = (s: GameSessionDTO["status"]): GameRoom["status"] => {
   if (s === "Active") return "Playing";
   if (s === "GameOver") return "Ended";
@@ -76,14 +74,10 @@ const mapToGameRoom = (dto: GameSessionDTO): GameRoom => ({
     : { id: 0, size: 25, cards: [] },
 });
 
-// ─── Component ────────────────────────────────────────────────────────────────
-
 export const RoomPage = () => {
   const { roomCode } = useParams<{ roomCode: string }>();
   const navigate = useNavigate();
   const { getGame } = useGetGame();
-
-  // ── State ─────────────────────────────────────────────────────────────────
 
   const [game, setGame] = useState<GameRoom | null>(() => {
     try {
@@ -99,11 +93,8 @@ export const RoomPage = () => {
   const [joinError, setJoinError] = useState<string | null>(null);
   const [isCopied, setIsCopied] = useState(false);
 
-  // ── Current user ──────────────────────────────────────────────────────────
-
   const currentUsername = (() => {
     try {
-      // Prefer localStorage.user (updated on changeUsername) over JWT token (stale after rename)
       const userJson = localStorage.getItem("user");
       if (userJson) {
         const user = JSON.parse(userJson);
@@ -118,16 +109,12 @@ export const RoomPage = () => {
     }
   })();
 
-  // ── Initial fetch ─────────────────────────────────────────────────────────
-
   useEffect(() => {
     if (!roomCode) return;
     getGame(roomCode).then((res) => {
       if (res?.data) setGame(mapToGameRoom(res.data));
     });
   }, []);
-
-  // ── SignalR ───────────────────────────────────────────────────────────────
 
   const {
     connStatus,
@@ -215,7 +202,6 @@ export const RoomPage = () => {
       setGame((g) => {
         if (!g) return g;
 
-        // Map numeric TeamColor enum to string (backend may serialize as int via RabbitMQ)
         const teamColorMap: Record<number, CardData["teamColor"]> = {
           0: "Red",
           1: "Blue",
@@ -232,9 +218,6 @@ export const RoomPage = () => {
           return null;
         };
 
-        // Merge revealed card data into board.
-        // For operatives: before guess their card had teamColor=null.
-        // After guess, backend sends real teamColor in RevealedCard — apply it.
         const cards = g.board.cards.map((c) => {
           const revealed = revealedCards.find((r) => r.position === c.position);
           if (!revealed) return c;
@@ -256,18 +239,14 @@ export const RoomPage = () => {
         };
       });
 
-      // Turn is over after guess is submitted — clear selections
       setSelectedCards([]);
     },
   });
-
-  // ── Side effects ──────────────────────────────────────────────────────────
 
   useEffect(() => {
     if (game) localStorage.setItem("game", JSON.stringify(game));
   }, [game]);
 
-  // Auto-enable spymaster view when I am spymaster
   const myPlayer =
     game?.players.find((p) => p.playerName === currentUsername) ?? null;
   const myIsMindreader = myPlayer?.isMindreader ?? false;
@@ -275,12 +254,9 @@ export const RoomPage = () => {
     if (myIsMindreader && game?.status === "Playing") setIsSpymasterView(true);
   }, [myIsMindreader, game?.status]);
 
-  // Clear selections when hint changes (new turn started)
   useEffect(() => {
     setSelectedCards([]);
   }, [gameState.currentHint?.word, game?.currentTeam]);
-
-  // ── Derived ───────────────────────────────────────────────────────────────
 
   const myTeam = myPlayer?.teamColor ?? null;
   const isMyTeamsTurn = game?.currentTeam === myTeam;
@@ -291,7 +267,6 @@ export const RoomPage = () => {
     isMyTeamsTurn &&
     !gameState.currentHint;
 
-  // Operative can select exactly wordCount cards, then confirm once
   const wordCount = gameState.currentHint?.count ?? 0;
   const isMyTurnToGuess =
     game?.status === "Playing" &&
@@ -299,9 +274,6 @@ export const RoomPage = () => {
     isMyTeamsTurn &&
     !!gameState.currentHint;
 
-  // Use backend-provided remaining counts when available (sent after each GuessExecuted).
-  // Fall back to counting from board for initial load (spymasters see all colors,
-  // operatives fall back to revealed cards only with 9/8 defaults).
   const cards = game?.board.cards ?? [];
   const totalRed = cards.filter((c) => c.teamColor === "Red").length || 9;
   const totalBlue = cards.filter((c) => c.teamColor === "Blue").length || 8;
@@ -314,8 +286,6 @@ export const RoomPage = () => {
   const redRemaining = game?.redRemaining ?? totalRed - revealedRed;
   const blueRemaining = game?.blueRemaining ?? totalBlue - revealedBlue;
   const canStart = game?.status === "Waiting" && connStatus === "Connected";
-
-  // ── Actions ───────────────────────────────────────────────────────────────
 
   const [, copy] = useCopyToClipboard();
   const handleCopy = async () => {
@@ -362,7 +332,7 @@ export const RoomPage = () => {
     setSelectedCards((prev) => {
       if (prev.includes(card.position))
         return prev.filter((p) => p !== card.position);
-      if (prev.length >= wordCount) return prev; // can't select more than wordCount
+      if (prev.length >= wordCount) return prev; // cant select more than wordCount
       return [...prev, card.position];
     });
   };
@@ -378,8 +348,6 @@ export const RoomPage = () => {
     if (!game) return;
     await giveHint(game.code, word, count).catch(console.error);
   };
-
-  // ── Render ────────────────────────────────────────────────────────────────
 
   return (
     <div

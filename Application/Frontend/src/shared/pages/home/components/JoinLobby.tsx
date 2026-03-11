@@ -18,12 +18,10 @@ export const JoinLobby = ({ isOpen, onClose }: JoinLobbyModalProps) => {
   const [shaking, setShaking] = useState(false);
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
 
-  // Reset state when modal opens
   useEffect(() => {
     if (isOpen) {
       setCode(Array(CODE_LENGTH).fill(""));
       setError(null);
-      // Focus first input after mount
       setTimeout(() => inputsRef.current[0]?.focus(), 50);
     }
   }, [isOpen]);

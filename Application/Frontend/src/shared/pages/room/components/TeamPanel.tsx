@@ -102,7 +102,6 @@ export const TeamPanel = ({
   const iAmSpymaster = spymasters.some((p) => p.playerName === currentUsername);
   const iAmInThisTeam = iAmOperative || iAmSpymaster;
 
-  // Slot taken = someone else occupies it (max 1 per role)
   const operativeTaken = operatives.some(
     (p) => p.playerName !== currentUsername,
   );
@@ -145,12 +144,10 @@ export const TeamPanel = ({
     </div>
   );
 
-  // ── Operative slot CTA ─────────────────────────────────────────────────────
   const renderOperativeCTA = () => {
     if (!isWaiting) return null;
     if (iAmOperative) return <YourSlot isRed={isRed} />;
     if (operativeTaken) return <SlotTaken />;
-    // slot is free
     if (iAmSpymaster)
       return (
         <GlowJoinBtn
@@ -161,7 +158,6 @@ export const TeamPanel = ({
     return <GlowJoinBtn label="+ Operative" onClick={() => onJoin(false)} />;
   };
 
-  // ── Spymaster slot CTA ─────────────────────────────────────────────────────
   const renderSpymasterCTA = () => {
     if (!isWaiting) return null;
     if (iAmSpymaster) return <YourSlot isRed={isRed} />;

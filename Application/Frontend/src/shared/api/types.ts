@@ -106,7 +106,7 @@ export interface GameSessionDTO {
 
     winner: TeamColor | null;
 
-    startTime: string;   // ISO date string
+    startTime: string;
 
     endTime: string | null;
 
