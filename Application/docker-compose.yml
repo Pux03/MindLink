@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  # --- INFRASTRUKTURA ---
+  postgres:
+    image: postgres:15
+    container_name: mindlink-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: mindlink
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mindlinkdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: mindlink-rabbitmq
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+  seq:
+    image: datalust/seq:latest
+    container_name: mindlink-seq
+    ports:
+      - "5341:5341"
+      - "8081:80" # Promenio sam port na 8081 jer će tvoj .NET ili Nginx možda hteti 8080
+    environment:
+      ACCEPT_EULA: Y
+      SEQ_FIRSTRUN_ADMINPASSWORD: "password"
+
+  # --- TVOJE APLIKACIJE ---
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: mindlink-backend
+    restart: always
+    ports:
+      - "5000:8080" # Pristupaš backendu na portu 5000 (mapira se na 8080 unutar .NET-a)
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      # Ovde unesi ConnectionString-ove da gađaju kontejnere po imenu (npr. Host=postgres umesto localhost)
+    depends_on:
+      - postgres
+      - rabbitmq
+      - seq
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: mindlink-frontend
+    restart: always
+    ports:
+      - "3000:80" # Tvoj sajt će biti dostupan na http://IP-SERVERA:3000
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  rabbitmq_data:
