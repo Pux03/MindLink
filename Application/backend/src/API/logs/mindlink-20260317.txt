@@ -1,0 +1,59 @@
+[13:51:42 INF]  - Starting MindLink API
+[13:51:42 INF] API.MessageQueue.GameEventConsumer - GameEventConsumer started - listening to RabbitMQ...
+[13:51:42 INF] API.MessageQueue.GameEventConsumer - Queue 'game_events_queue' is binded
+[13:56:58 INF]  - Starting MindLink API
+[13:56:59 INF] API.MessageQueue.GameEventConsumer - GameEventConsumer started - listening to RabbitMQ...
+[13:56:59 INF] API.MessageQueue.GameEventConsumer - Queue 'game_events_queue' is binded
+[13:58:21 WRN] Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware - Failed to determine the https port for redirect.
+[13:58:23 WRN] Microsoft.EntityFrameworkCore.Model.Validation - The property 'BoardEntity.Cards' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
+[14:00:32 WRN] Microsoft.EntityFrameworkCore.Query - Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+[14:00:37 WRN] Microsoft.EntityFrameworkCore.Query - Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+[14:00:52 INF] API.Services.GameSessionService - Game created {"GameCode":"PNVKVJ6S"}
+[14:00:52 INF] API.Services.GameSessionManager - Game added {"GameCode":"PNVKVJ6S","ActiveGames":1}
+[14:00:53 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[14:00:53 INF] API.Hubs.GameHub - Client LLAJH6VUZHAU6zxGnFhULg connected
+[14:00:53 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[14:00:53 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_joined
+[14:00:53 INF] API.Hubs.GameHub - Player 1 joined game PNVKVJ6S
+[14:00:53 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_joined
+[14:00:54 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[14:00:55 INF] API.Services.GameLogicService - Player team updated {"GameCode":"PNVKVJ6S","Player":"pux03","Team":"Red","IsMindreader":true}
+[14:00:55 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_team_changed
+[14:00:55 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_team_changed
+[14:00:55 INF] API.MessageQueue.GameEventConsumer - Player pux03 changed team at game: PNVKVJ6S
+[14:01:57 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[14:01:57 INF] API.Hubs.GameHub - Client nzjHX08cL3Ic4Tb9XkvLfQ connected
+[14:01:57 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[14:01:57 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_joined
+[14:01:57 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_joined
+[14:01:57 INF] API.Hubs.GameHub - Player 2 joined game PNVKVJ6S
+[14:01:59 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[14:01:59 INF] API.Services.GameLogicService - Player team updated {"GameCode":"PNVKVJ6S","Player":"john_doe","Team":"Red","IsMindreader":false}
+[14:01:59 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.player_team_changed
+[14:01:59 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.player_team_changed
+[14:01:59 INF] API.MessageQueue.GameEventConsumer - Player john_doe changed team at game: PNVKVJ6S
+[14:02:10 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[14:02:10 INF] API.Hubs.GameHub - StartGame: PNVKVJ6S
+[14:02:10 INF] API.Services.GameSessionService - Game started {"GameCode":"PNVKVJ6S"}
+[14:02:10 INF] API.Hubs.GameHub - Game PNVKVJ6S has started
+[14:02:22 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[14:02:22 INF] API.Hubs.GameHub - GiveHint: axe (2)
+[14:02:22 INF] API.Services.GameLogicService - GiveHint debug {"MindReaderId":41,"MindReaderUserId":1,"GameCode":"PNVKVJ6S","AllPlayers":[{"Id":41,"UserId":1,"V":"pux03"},{"Id":42,"UserId":2,"V":"john_doe"}]}
+[14:02:22 WRN] Microsoft.EntityFrameworkCore.Query - Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+[14:02:22 INF] API.Services.GameLogicService - Hint given {"GameCode":"PNVKVJ6S","Player":"pux03","Word":"axe","WordCount":2}
+[14:02:22 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.hint_given
+[14:02:22 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.hint_given
+[14:02:22 INF] API.MessageQueue.GameEventConsumer - Raw json: {"PlayerId":41,"PlayerUsername":"pux03","Word":"axe","WordCount":2,"EventId":"1dc5f141-d2a1-4d85-b83a-8ba370901f20","CorrelationId":"14babddc-c490-4da9-aa4e-43a1b6a5bf3e","GameCode":"PNVKVJ6S","TimeStamp":"2026-03-17T13:02:22.8767594Z","Version":1}
+[14:02:22 INF] API.MessageQueue.GameEventConsumer - GameCode: PNVKVJ6S
+[14:02:22 INF] API.MessageQueue.GameEventConsumer - Word: axe
+[14:02:22 INF] API.MessageQueue.GameEventConsumer - Hint at game: PNVKVJ6S
+[14:02:32 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[14:02:32 INF] API.Hubs.GameHub - ExecuteGuess: game=PNVKVJ6S, cards=15,20
+[14:02:32 INF] API.Services.GameLogicService - Guess executed {"GameCode":"PNVKVJ6S","Player":"john_doe","Cards":[15,20],"IsGameOver":false}
+[14:02:32 INF] API.MessageQueue.RabbitMqGameEventPublisher - Event published: game.guess_executed
+[14:02:32 INF] API.MessageQueue.GameEventConsumer - Event accepted: game.guess_executed
+[14:02:32 INF] API.MessageQueue.GameEventConsumer - Guess at game: PNVKVJ6S
+[14:02:52 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[14:02:52 INF] API.Hubs.GameHub - Client LLAJH6VUZHAU6zxGnFhULg disconnected
+[14:05:20 INF] API.MessageQueue.RabbitMqGameEventPublisher - Exchange 'mindlink.games' is ready
+[14:05:20 INF] API.Hubs.GameHub - Client nzjHX08cL3Ic4Tb9XkvLfQ disconnected
