@@ -41,7 +41,7 @@ services:
   # --- TVOJE APLIKACIJE ---
   backend:
     build:
-      context: ./backend
+      context: ./backend/src
       dockerfile: Dockerfile
     container_name: mindlink-backend
     restart: always
@@ -57,7 +57,7 @@ services:
 
   frontend:
     build:
-      context: ./frontend
+      context: ./Frontend
       dockerfile: Dockerfile
     container_name: mindlink-frontend
     restart: always
